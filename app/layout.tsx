@@ -5,10 +5,8 @@ import "./globals.css";
 import Header from "@/components/layout/Header/Header";
 import Footer from "@/components/layout/Footer/Footer";
 import ProHeader from "@/components/layout/ProHeader/ProHeader";
-import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+import "lenis/dist/lenis.css";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -29,14 +27,13 @@ export default function RootLayout({
         jetbrainsMono.variable,
         sfPro.className,
         "font-sans",
-        inter.variable,
       )}
     >
       <body className="min-h-full flex flex-col">
         {/* <Header /> */}
         <ProHeader />
         {children}
-        {/* <Footer /> */}
+        <Footer />
       </body>
     </html>
   );

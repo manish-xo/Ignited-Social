@@ -82,6 +82,12 @@ export interface Accordion {
   answer: string;
 }
 
+export interface ComparisonFeature {
+  label: string;
+  grow: string | boolean;
+  scale: string | boolean;
+}
+
 export const badges: Badge[] = [
   {
     icon: "ri-star-s-fill",
@@ -378,4 +384,27 @@ export const accordionData: Accordion[] = [
     answer:
       "Your growth manager builds a targeting profile based on your niche, industry, and ideal customer — so new followers are people actually likely to engage, not random accounts.",
   },
+];
+
+export const comparisonFeatures: ComparisonFeature[] = [
+  { label: "Monthly follower growth", grow: "150–500+", scale: "250–800+" },
+  {
+    label: "Growth manager",
+    grow: "Dedicated Growth Manager",
+    scale: "Dedicated Senior Growth Manager",
+  },
+  {
+    label: "Support channels",
+    grow: "Email, phone, video call",
+    scale: "Email, phone, video call",
+  },
+  {
+    label: "Audience targeting",
+    grow: "Core targeting",
+    scale: "Advanced targeting",
+  },
+  { label: "Content strategy review", grow: false, scale: true },
+  { label: "Real-time reporting dashboard", grow: true, scale: true },
+  { label: "30-day money-back guarantee", grow: true, scale: true },
+  { label: "Cancel anytime", grow: true, scale: true },
 ];

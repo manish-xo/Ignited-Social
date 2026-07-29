@@ -15,6 +15,8 @@ import {
 import ComparisonTable from "@/components/ui/ComparisonTable";
 import CornerFrame from "@/components/ui/CornerFrame";
 import { Check, X } from "lucide-react";
+import PlanComparison from "./PlanComparison";
+import Comparison from "@/app/secondary/page";
 
 const Pricing = () => {
   const left = ComparisonBento.filter((card) => !card.recommendation).slice(
@@ -229,6 +231,9 @@ const Pricing = () => {
           })}
         </div>
       </div>
+      <PlanComparison />
+
+      {/* <Comparison /> */}
 
       <div className="features mt-20 bg-subtle-bg mx-auto pt-16">
         <div className="eyebrow flex items-center justify-center mb-3">
