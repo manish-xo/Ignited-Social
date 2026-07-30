@@ -232,9 +232,7 @@ const Pricing = () => {
         </div>
       </div>
       <PlanComparison />
-
       {/* <Comparison /> */}
-
       <div className="features mt-20 bg-subtle-bg mx-auto pt-16">
         <div className="eyebrow flex items-center justify-center mb-3">
           <CornerFrame className="bg-action-tint-bg">
@@ -297,7 +295,6 @@ const Pricing = () => {
           })}
         </div>
       </div>
-
       <div className="difference mx-auto pt-16 pb-10">
         <div className="eyebrow flex items-center justify-center mb-3">
           <CornerFrame className="bg-action-tint-bg">
@@ -318,7 +315,6 @@ const Pricing = () => {
 
         <ComparisonTable data={pricingComparisonData} />
       </div>
-
       <div className="comparison bg-subtle-bg mx-auto pt-16 pb-10">
         <div className="eyebrow flex items-center justify-center mb-3">
           <CornerFrame className="bg-action-tint-bg">
