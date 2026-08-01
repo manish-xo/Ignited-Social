@@ -93,7 +93,7 @@ export const features: Feature[] = [
     title: "A dedicated growth manager",
     description:
       "You get strategy that adapts to your brand, not a generic playbook running on autopilot.",
-    className: "sm:row-span-2 sm:col-span-1",
+    className: "md:row-span-2 md:col-span-1",
   },
   {
     tag: "TARGET",
@@ -101,7 +101,7 @@ export const features: Feature[] = [
     title: "Real, active followers",
     description:
       "Every new follower is someone likely to engage, buy, or convert — not a bot padding your count.",
-    className: "sm:row-span-1 sm:col-span-2",
+    className: "md:row-span-1 md:col-span-2",
   },
   {
     tag: "SAFETY",
@@ -109,7 +109,7 @@ export const features: Feature[] = [
     title: "Safe, compliant growth",
     description:
       "Your account stays protected — no shadowbans, no risky automation, no surprises.",
-    className: "sm:row-span-1 sm:col-span-1",
+    className: "md:row-span-1 md:col-span-1",
   },
   {
     tag: "REPORT",
@@ -117,7 +117,7 @@ export const features: Feature[] = [
     title: "Transparent reporting",
     description:
       "You always know exactly what you're paying for — no guesswork, no vague monthly PDFs.",
-    className: "sm:row-span-1 sm:col-span-1",
+    className: "md:row-span-1 md:col-span-1",
   },
 ];
 
@@ -180,15 +180,29 @@ export default function Comparison() {
     <section>
       <div
         ref={sectionRef}
-        className="bg-subtle-bg w-full  mx-auto py-24 sm:py-32"
+        className="bg-subtle-bg w-full overflow-hidden mx-auto py-32 sm:py-32"
       >
         <div className="eyebrow flex items-center justify-center mb-3">
           <CornerFrame className="bg-action-tint-bg">
-            <p className="font-mono uppercase text-xs">Weighing your options</p>
+            <p className="font-mono uppercase text-[0.6em] sm:text-xs">
+              Weighing your options
+            </p>
           </CornerFrame>
         </div>
-        <Heading className="text-center">Comparison with other options</Heading>
-        <p className="mx-auto mt-5 max-w-xs text-center text-sm leading-6 font-[400] text-secondary tracking-tight sm:max-w-2xl sm:text-lg md:text-xl lg:text-[1.12rem]">
+
+        <div>
+          <Heading className="text-center hidden lg:block">
+            Comparison with other options
+          </Heading>
+          <Heading className="text-center text-[9vw] sm:text-[7vw] lg:hidden">
+            Comparison with
+          </Heading>
+          <Heading className="text-center text-[9vw] sm:text-[7vw] lg:hidden">
+            other options
+          </Heading>
+        </div>
+
+        <p className="mx-auto mt-5 max-w-xs text-center text-md leading-5 font-[400] text-secondary tracking-tight sm:max-w-2xl sm:text-lg md:text-xl lg:text-[1.12rem]">
           Four ways businesses try to grow — and the one that actually holds up.
         </p>
         {/* ladder layout */}
@@ -283,7 +297,7 @@ export default function Comparison() {
         <div>
           <div className="eyebrow flex items-center justify-center mb-3">
             <CornerFrame className="bg-action-tint-bg">
-              <p className="font-mono uppercase text-xs tracking-widest">
+              <p className="font-mono uppercase text-[0.6em] sm:text-xs tracking-widest">
                 Why it works
               </p>
             </CornerFrame>
@@ -303,7 +317,7 @@ export default function Comparison() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:auto-rows-[minmax(170px,auto)] md:gap-5">
+        <div className="px-4 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:auto-rows-[minmax(170px,auto)] md:gap-5">
           {features.map((feature, i) => {
             const Icon = feature.icon;
 
