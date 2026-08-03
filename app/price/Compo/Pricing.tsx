@@ -88,15 +88,22 @@ const Pricing = () => {
           <div className="mb-2 sm:mb-6 flex justify-center eyebrow">
             <div className="relative inline-flex items-center justify-center gap-1.5 border-1.5 border-dashed rounded-full font-mono font-[600] uppercase bg-subtle-bg border border-border-strong text-ink/70 px-3 py-1.5 text-[10px] sm:px-4 sm:py-2 sm:text-xs md:px-5 md:py-2.5 md:text-sm lg:px-6 lg:py-3 lg:text-sm xl:px-4 xl:py-1 xl:text-[0.7em]">
               <span className="w-1.5 h-1.5 rounded-full bg-ink" />
-              <span className="">Simple, Transparent Pricing</span>
+              <span className="text-[0.8em] sm:text-xs ">
+                Simple, Transparent Pricing
+              </span>
             </div>
           </div>
           {/* HEADING */}
           <div className="">
-            <Heading className="text-center">
+            <Heading className="text-center hidden sm:block">
               Affordable plans for every
             </Heading>
-            <Heading className="text-center">Budget</Heading>
+            <Heading className="text-center hidden sm:block">Budget</Heading>
+
+            <Heading className="text-center sm:hidden">
+              Affordable plans for
+            </Heading>
+            <Heading className="text-center sm:hidden">every budget</Heading>
           </div>
           {/* SUBTEXTING */}
           <div>
