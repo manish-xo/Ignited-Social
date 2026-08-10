@@ -12,7 +12,7 @@ const renderCell = (value: string | boolean) => {
       <Minus size={16} className="mx-auto text-muted" />
     );
   }
-  return <span className="text-sm text-ink/90">{value}</span>;
+  return <span className="text-xs md:text-sm text-ink/90">{value}</span>;
 };
 
 const PlanComparison = () => {
@@ -21,15 +21,22 @@ const PlanComparison = () => {
       <div className="mx-auto max-w-2xl text-center">
         <div className="eyebrow flex items-center justify-center mb-3">
           <CornerFrame className="bg-action-tint-bg">
-            <p className="font-mono font-[600] uppercase text-xs">
+            <p className="font-mono uppercase text-[0.6em] sm:text-xs">
               Side by Side
             </p>
           </CornerFrame>
         </div>
 
         <div className="heading">
-          <Heading className="text-center">Not sure which plan fits?</Heading>
-          {/* <Heading className="text-center">to know</Heading> */}
+          <Heading className="text-center hidden sm:block">
+            Not sure which plan fits?
+          </Heading>
+          <Heading className="text-center text-[9vw] sm:hidden">
+            Not sure which
+          </Heading>
+          <Heading className="text-center text-[9vw] sm:hidden">
+            plan fits?
+          </Heading>
         </div>
 
         <div className="subHeading">
@@ -48,45 +55,47 @@ const PlanComparison = () => {
         </p> */}
       </div>
 
-      <div className="mx-auto mt-14 max-w-3xl overflow-x-auto rounded-2xl border border-border bg-white shadow-sm">
-        <div className="min-w-[560px]">
-          <div className="flex items-center bg-subtle-bg">
-            <div className="flex-1 px-6 py-4 text-md font-semibold text-ink">
-              Feature
+      <div className="mx-4 md:mx-auto mt-14 max-w-3xl overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
+        {/* header */}
+        <div className="flex items-center bg-subtle-bg">
+          <div className="flex-1 px-2 py-3 text-xs font-semibold text-ink sm:px-6 sm:py-4 sm:text-sm">
+            Feature
+          </div>
+          <div className="flex-1 px-2 py-3 text-center text-[11px] font-semibold text-ink sm:text-sm sm:px-4 sm:py-4">
+            Grow
+            <p className="mt-0.5 text-[9px] font-normal text-muted sm:text-xs">
+              $139/mo
+            </p>
+          </div>
+          <div className="flex-1 border-l border-action/20 bg-action-tint-bg px-2 py-3 text-center text-[11px] font-semibold text-action sm:text-sm sm:px-4 sm:py-4">
+            Scale
+            <p className="mt-0.5 text-[9px] font-normal text-action/70 sm:text-xs">
+              $199/mo
+            </p>
+          </div>
+        </div>
+
+        {/* rows */}
+        {comparisonFeatures.map((row, i) => (
+          <div
+            key={row.label}
+            className={`flex items-center border-t border-hairline ${
+              i % 2 === 0 ? "bg-white" : "bg-subtle-bg/40"
+            }`}
+          >
+            <div className="flex-1 px-2 py-3 text-xs font-medium leading-snug text-ink sm:px-6 sm:py-4 sm:text-sm">
+              {row.label}
             </div>
-            <div className="w-44 px-4 py-4 text-center text-md font-semibold text-ink">
-              Grow
-              <p className="mt-0.5 text-xs font-normal text-muted">$139/mo</p>
+            <div className="flex-1 px-2 py-3 text-center text-[11px] sm:text-sm sm:px-4 sm:py-4">
+              {renderCell(row.grow)}
             </div>
-            <div className="w-44 border-l border-action/20 bg-action-tint-bg px-4 py-4 text-center text-md font-semibold text-action">
-              Scale
-              <p className="mt-0.5 text-xs font-normal text-action/70">
-                $199/mo
-              </p>
+            <div className="flex-1 border-l border-action/20 bg-action-tint-bg/30 px-2 py-3 text-center text-[11px] sm:text-sm sm:px-4 sm:py-4">
+              {renderCell(row.scale)}
             </div>
           </div>
-
-          {/* row */}
-          {comparisonFeatures.map((row, i) => (
-            <div
-              key={row.label}
-              className={`flex items-center border-t border-hairline ${
-                i % 2 === 0 ? "bg-white" : "bg-subtle-bg/40"
-              }`}
-            >
-              <div className="flex-1 px-6 py-4 text-sm font-medium text-ink">
-                {row.label}
-              </div>
-              <div className="w-44 px-4 py-4 text-center">
-                {renderCell(row.grow)}
-              </div>
-              <div className="w-44 border-l border-action/20 bg-action-tint-bg/30 px-4 py-4 text-center">
-                {renderCell(row.scale)}
-              </div>
-            </div>
-          ))}
-        </div>
+        ))}
       </div>
+
       <p className="mt-6 text-center text-xs text-muted">
         Still unsure?{" "}
         <a

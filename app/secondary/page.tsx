@@ -55,15 +55,13 @@ const cards: BentoCard[] = [
     ],
   },
   {
-    tag: "DEDICATED GROWTH MANAGER",
-    title: "Your Dedicated GM",
+    tag: "PAID ADS",
+    title: "Facebook Ads",
     description: [
-      "Personalized growth strategy",
-      "Daily execution & optimization",
-      "Transparent reporting",
-      "Sustainable, real growth",
+      "Rising advertising costs",
+      "Results stop when spending stops",
+      "No long-term organic growth",
     ],
-    recommended: true,
   },
   {
     tag: "GROWTH TOOLS",
@@ -75,13 +73,15 @@ const cards: BentoCard[] = [
     ],
   },
   {
-    tag: "PAID ADS",
-    title: "Facebook Ads",
+    tag: "DEDICATED GROWTH MANAGER",
+    title: "Your Dedicated GM",
     description: [
-      "Rising advertising costs",
-      "Results stop when spending stops",
-      "No long-term organic growth",
+      "Personalized growth strategy",
+      "Daily execution & optimization",
+      "Transparent reporting",
+      "Sustainable, real growth",
     ],
+    recommended: true,
   },
 ];
 
@@ -136,7 +136,7 @@ export default function Comparison() {
         {
           opacity: 0,
           x: isRecommended ? 0 : i % 2 === 0 ? -40 : 40,
-          y: isRecommended ? 40 : 0,
+          y: isRecommended ? 60 : 0,
           scale: isRecommended ? 0.92 : 1,
         },
         {
@@ -180,7 +180,7 @@ export default function Comparison() {
     <section>
       <div
         ref={sectionRef}
-        className="bg-subtle-bg w-full overflow-hidden mx-auto py-32 sm:py-32"
+        className="bg-subtle-bg w-full overflow-hidden mx-auto py-32 sm:py-20"
       >
         <div className="eyebrow flex items-center justify-center mb-3">
           <CornerFrame className="bg-action-tint-bg">
@@ -213,6 +213,7 @@ export default function Comparison() {
           <div className="flex flex-col gap-6">
             {cards.map((card, i) => {
               const isRecommended = !!card.recommended;
+              console.log(card.recommended, isRecommended);
 
               return (
                 <div
@@ -304,8 +305,17 @@ export default function Comparison() {
           </div>
 
           <div>
-            <Heading className="text-center">Explains Features as</Heading>
-            <Heading className="text-center">Benefits</Heading>
+            <Heading className="text-center hidden sm:block">
+              Explains Features as
+            </Heading>
+            <Heading className="text-center hidden sm:block">Benefits</Heading>
+
+            <Heading className="text-center text-[9vw] sm:hidden">
+              Explain Features as
+            </Heading>
+            <Heading className="text-center text-[9vw] sm:hidden">
+              Benefits
+            </Heading>
           </div>
 
           <div>

@@ -4,6 +4,7 @@ import CornerFrame from "@/components/ui/CornerFrame";
 import Heading from "@/components/ui/Heading";
 import { testimonials, stats } from "@/data/pricing";
 import { Quote, Star, BadgeCheck } from "lucide-react";
+import Head from "next/head";
 const Proof = () => {
   return (
     <section>
@@ -14,8 +15,17 @@ const Proof = () => {
           </CornerFrame>
         </div>
         <div className="heading text-center flex flex-col items-center justify-center text-canvas font-heading text-4xl sm:text-[6vw] md:text-[7vw] lg:text-6xl font-[700] leading-[0.98] -tracking-[0.04em]">
-          <Heading className="">Trusted by creators</Heading>
-          <Heading>who value real growth.</Heading>
+          <Heading className="hidden sm:block">Trusted by creators</Heading>
+          <Heading className="text-center text-[8.5vw] sm:hidden">
+            Trusted by creators
+          </Heading>
+          <Heading className="hidden sm:block">Who value real growth.</Heading>
+          <Heading className="text-center text-[8.5vw] sm:hidden">
+            Who value real
+          </Heading>
+          <Heading className="text-center text-[8.5vw] sm:hidden">
+            growth.
+          </Heading>
         </div>
 
         <div className="subHeading">

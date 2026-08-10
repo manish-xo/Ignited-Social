@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { bricolage, jetbrainsMono, sfPro } from "./fonts";
 import "remixicon/fonts/remixicon.css";
 import "./globals.css";
-import Header from "@/components/layout/Header/Header";
 import Footer from "@/components/layout/Footer/Footer";
 import ProHeader from "@/components/layout/ProHeader/ProHeader";
+import { LenisProvider } from "@/components/providers/lenis-provider";
 import { cn } from "@/lib/utils";
 import "lenis/dist/lenis.css";
 
@@ -32,7 +32,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         {/* <Header /> */}
         <ProHeader />
-        {children}
+        <LenisProvider>{children}</LenisProvider>
         <Footer />
       </body>
     </html>
