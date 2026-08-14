@@ -4,7 +4,7 @@ import CornerFrame from "@/components/ui/CornerFrame";
 import Heading from "@/components/ui/Heading";
 import { testimonials, stats } from "@/data/pricing";
 import { Quote, Star, BadgeCheck } from "lucide-react";
-import Head from "next/head";
+
 const Proof = () => {
   return (
     <section>
