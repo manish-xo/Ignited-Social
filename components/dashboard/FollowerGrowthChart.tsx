@@ -270,34 +270,60 @@ function ChartMenu() {
 // ============================================================
 // MAIN COMPONENT
 // ============================================================
-export default function FollowerGrowthChart() {
+interface FollowerGrowthChartProps {
+  transparent?: boolean;
+  compact?: boolean;
+}
+
+export default function FollowerGrowthChart({
+  transparent = false,
+  compact = false,
+}: FollowerGrowthChartProps) {
   const stats = buildStats(growthData);
 
   return (
-    <div className="mx-auto w-full max-w-5xl">
-      <Card className="w-full bg-transparent shadow-none lg:max-w-4xl mx-auto">
-        <CardHeader className="min-h-auto border-0 pb-6 pt-6">
-          <CardTitle className="text-base font-semibold text-ink">
+    <div className={`mx-auto w-full ${compact ? "max-w-md" : "max-w-5xl"}`}>
+      <Card
+        className={`mx-auto w-full ${compact ? "" : "lg:max-w-4xl"} ${
+          transparent
+            ? "border-0 bg-transparent shadow-none"
+            : "border border-border bg-white shadow-sm"
+        }`}
+      >
+        <CardHeader
+          className={`min-h-auto border-0 ${compact ? "pb-3 pt-4" : "pb-6 pt-6"}`}
+        >
+          <CardTitle
+            className={
+              compact
+                ? "text-sm font-semibold text-ink"
+                : "text-base font-semibold text-ink"
+            }
+          >
             Follower Growth
           </CardTitle>
           <CardToolbar>
-            <div className="flex items-center gap-4 text-sm">
+            <div className="flex items-center gap-3 text-xs sm:gap-4 sm:text-sm">
               <ChartLabel
                 label="Followers"
                 color={chartConfig.followers.color}
               />
               <ChartLabel label="Goal" color={chartConfig.goal.color} />
             </div>
-            <ChartMenu />
+            {!compact && <ChartMenu />}
           </CardToolbar>
         </CardHeader>
 
-        <StatsBar stats={stats} />
+        {!compact && <StatsBar stats={stats} />}
 
-        <CardContent className="flex flex-col items-end px-2.5 pt-6">
+        <CardContent
+          className={`flex flex-col items-end ${compact ? "px-2 pb-4 pt-3" : "px-2.5 pt-6"}`}
+        >
           <ChartContainer
             config={chartConfig}
-            className="h-[320px] w-full [&_.recharts-curve.recharts-tooltip-cursor]:stroke-initial"
+            className={`w-full [&_.recharts-curve.recharts-tooltip-cursor]:stroke-initial ${
+              compact ? "h-[160px]" : "h-[320px]"
+            }`}
           >
             <ComposedChart
               data={growthData}
