@@ -16,8 +16,7 @@ const problems = [
   {
     icon: UserX,
     title: "The wrong audience",
-    description:
-      "More followers mean little when they don't care about what you do.",
+    description: `More followers mean little when they don't care about what you do.`,
   },
   {
     icon: Compass,
@@ -56,37 +55,33 @@ export default function ProblemSection() {
   return (
     <section className="bg-subtle-bg px-6 py-16">
       <div className="mx-auto max-w-7xl rounded-3xl border border-border bg-canvas px-6 py-12 sm:px-10 sm:py-14">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.85fr_2fr] lg:items-start lg:gap-10">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.9fr_2fr] lg:items-start lg:gap-12">
           {/* LEFT — intro */}
           <div>
             <CornerFrame className="inline-flex bg-action-tint-bg">
-              <p className="px-1 font-mono text-xs uppercase tracking-[0.1em] text-action">
+              <p className="font-mono uppercase text-[0.6em] sm:text-xs tracking-widest text-action">
                 02 · The real problem
               </p>
             </CornerFrame>
 
-            <div className="heading mt-5 max-w-xs font-heading text-3xl font-[700] leading-[1.05] -tracking-[0.02em] sm:text-4xl">
-              <Heading className="text-left">
-                Growing shouldn&apos;t feel{" "}
-              </Heading>
-              <Heading className="text-left">like guessing.</Heading>
+            <div className="-space-y-1.5 mt-6">
+              <Heading as="h2">Growing shouldn't</Heading>
+              <Heading as="h2">feel like guessing.</Heading>
             </div>
 
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-secondary">
+            <p className="mt-2 max-w-xs text-sm leading-relaxed text-secondary">
               Posting more, chasing numbers, and hoping something sticks
               isn&apos;t a growth strategy.
             </p>
           </div>
 
-          {/* RIGHT — problem grid */}
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {/* RIGHT — problem grid (2 up, 2 below) */}
+          <div className="grid grid-cols-1 gap-x-8 gap-y-9 sm:grid-cols-2">
             {problems.map(({ icon, title, description }) => (
               <div key={title}>
                 <ProblemIcon icon={icon} />
-                <h3 className="mt-4 font-heading text-sm font-bold text-ink">
-                  {title}
-                </h3>
-                <p className="mt-2 text-xs leading-relaxed text-secondary">
+                <h3 className="mt-4 text-lg font-bold text-ink">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-secondary">
                   {description}
                 </p>
               </div>

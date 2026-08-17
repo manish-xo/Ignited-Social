@@ -4,6 +4,16 @@
 
 @custom-variant dark (&:is(.dark *));
 
+::selection {
+  background-color: #dad6f2;
+  color: #221f1b;
+}
+
+::-moz-selection {
+  background-color: #dad6f2;
+  color: #221f1b;
+}
+
 :root {
   --canvas: #faf9f6;
   --ink: #221f1b;

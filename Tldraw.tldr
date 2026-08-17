@@ -82,9 +82,9 @@
 			"meta": {}
 		},
 		{
-			"x": -99.88234624037007,
-			"y": -351.76759367662936,
-			"z": 0.665850626775083,
+			"x": -63.26245776589809,
+			"y": -305.4832746332115,
+			"z": 0.6171762664733634,
 			"meta": {},
 			"id": "camera:page:page",
 			"typeName": "camera"
@@ -133,8 +133,8 @@
 			"screenBounds": {
 				"x": 0,
 				"y": 0,
-				"w": 711.6666259765625,
-				"h": 513.3333129882812
+				"w": 1091,
+				"h": 601
 			},
 			"insets": [
 				false,
@@ -149,7 +149,7 @@
 			"isChatting": false,
 			"highlightedUserIds": [],
 			"isFocused": true,
-			"devicePixelRatio": 1.2000000476837158,
+			"devicePixelRatio": 1,
 			"isCoarsePointer": false,
 			"isHoveringCanvas": true,
 			"openMenus": [],

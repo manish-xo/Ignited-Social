@@ -64,7 +64,9 @@ export default function ServicesHero() {
         <div className="mx-auto pt-20">
           <div className="eyebrow mb-5">
             <CornerFrame className="bg-action-tint-bg">
-              <p className="font-mono uppercase text-xs">What we do</p>
+              <p className="font-mono uppercase text-[0.6em] sm:text-xs tracking-widest text-action">
+                What we do
+              </p>
             </CornerFrame>
           </div>
 
