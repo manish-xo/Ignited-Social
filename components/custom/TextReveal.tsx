@@ -69,11 +69,11 @@ const TextReveal = React.memo(function TextReveal({
     "aria-label": text,
   };
 
-  if (Component === "a") {
-    rootProps.href = href ?? "#";
-    if (target) rootProps.target = target;
-    if (target === "_blank") rootProps.rel = "noopener noreferrer";
+  if (href) {
+    rootProps.href = href;
   }
+  if (target) rootProps.target = target;
+  if (target === "_blank") rootProps.rel = "noopener noreferrer";
 
   return (
     <Component {...rootProps}>

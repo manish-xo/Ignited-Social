@@ -9,7 +9,7 @@ import ProblemSection from "./Compo/ProblemSection";
 import ServicesHero from "./Compo/ServiceHero";
 import ProofNumbers from "./ProofNumbers";
 
-const page = () => {
+const Home = () => {
   return (
     <>
       <ServicesHero />
@@ -24,4 +24,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Home;

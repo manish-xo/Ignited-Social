@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react";
 import "./style.css";
 import Hamburger from "@/components/ui/Hamburger";
-import { MobileIcon } from "@radix-ui/react-icons";
 import MobileMenu from "@/components/custom/MobileMenu";
 import { TextReveal } from "@/components/custom/TextReveal";
+import Link from "next/link";
 
 interface NavLink {
   name: string;
@@ -15,15 +15,15 @@ interface NavLink {
 const navLinks: NavLink[] = [
   {
     name: "Services",
-    href: "#services",
+    href: "/service",
   },
   {
     name: "Pricing",
-    href: "#pricing",
+    href: "/price",
   },
   {
     name: "Contact",
-    href: "#contact",
+    href: "/contact",
   },
 ];
 
@@ -62,7 +62,7 @@ const ProHeader = () => {
               <div className="text-ink flex items-center gap-1 rounded-full px-4 font-light tracking-wider text-sm sm:text-base md:text-[0.95] lg:text-[1.08em] overflow-hidden">
                 {/* {link.name} */}
                 <TextReveal
-                  as="a"
+                  as={Link}
                   href={link.href}
                   hoverColor="var(--color-action)"
                   className="text-sm font-[300] tracking-wide text-ink"
