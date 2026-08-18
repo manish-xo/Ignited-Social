@@ -17,6 +17,7 @@ import CornerFrame from "@/components/ui/CornerFrame";
 import { Check, X } from "lucide-react";
 import PlanComparison from "./PlanComparison";
 import Comparison from "@/app/secondary/page";
+import { BothPlan } from "@/lib/plans";
 
 const Pricing = () => {
   const left = ComparisonBento.filter((card) => !card.recommendation).slice(
@@ -182,7 +183,7 @@ const Pricing = () => {
               </p>
 
               <a
-                href="#contact"
+                href={`/signup?plan=${plan.title.toLowerCase()}`}
                 className={`mt-8 block w-full rounded-full px-6 py-3 text-center text-sm font-semibold transition-colors ${
                   plan.popular
                     ? "bg-action text-white hover:bg-action-hover"
