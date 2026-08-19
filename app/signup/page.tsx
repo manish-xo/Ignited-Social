@@ -11,6 +11,7 @@ import {
 import { getPlan } from "@/lib/plans";
 import Link from "next/link";
 import { instagramService } from "@/service/instagram.service";
+import InstagramUsernameInput from "@/components/signup/InstagramUsernameInput";
 
 interface SignupPageProps {
   searchParams: Promise<{ plan?: string }>;
@@ -187,19 +188,7 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
           </p>
 
           <form className="mt-8 space-y-5">
-            <div>
-              <label className="text-xs font-semibold text-ink">
-                Instagram username
-              </label>
-              <div className="mt-1.5 flex items-center rounded-xl border border-border bg-white px-3.5">
-                <span className="text-sm text-muted">@</span>
-                <input
-                  type="text"
-                  placeholder="yourhandle"
-                  className="w-full bg-transparent px-2 py-3 text-sm text-ink placeholder:text-placeholder focus:outline-none"
-                />
-              </div>
-            </div>
+            <InstagramUsernameInput />
 
             <div>
               <label className="text-xs font-semibold text-ink">

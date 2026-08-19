@@ -1,24 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { instagramService } from "@/service/instagram.service";
+import { type InstagramProfile } from "@/service/types";
 
 export async function GET(req: NextRequest) {
-  const username = req.nextUrl.searchParams.get("username");
+  const username = req.nextUrl.searchParams.get("username")?.trim();
 
-  if (!username) {
-    return NextResponse.json(
-      { error: "Username is required" },
-      { status: 400 },
-    );
+  if (!username || username.length < 2) {
+    return NextResponse.json({
+      success: true,
+      data: { data: [] },
+    });
   }
 
   try {
-    const profile = await instagramService.getProfile(username);
-    return NextResponse.json({ ok: true, profile });
+    const result = await instagramService.suggestInstagramUsername(username);
+    return NextResponse.json(result);
   } catch (error) {
-    // Never let scraper failures look like a hard error to the client —
-    // this is a nice-to-have preview, not a blocking dependency.
     return NextResponse.json(
-      { ok: false, error: "Could not verify this username" },
+      { success: false, message: "Could not verify this username" },
       { status: 200 },
     );
   }

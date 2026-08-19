@@ -8,6 +8,31 @@ export interface RawTimelineMedia {
   page_info: { has_next_page: boolean; end_cursor: string | null };
 }
 
+export interface InstagramProfile {
+  pk: number;
+  id: string;
+  username: string;
+  full_name: string;
+  profile_pic_url: string;
+  profile_pic_url_hd: string | null;
+  is_private: boolean | null;
+  is_verified: boolean | null;
+  account_badges: unknown | null;
+  is_business: boolean;
+  account_type: number;
+}
+
+export interface InstagramSuggestions {
+  statusCode: number;
+  message: string;
+  data: InstagramProfile[];
+}
+
+export interface InstagramSuggestionsResponse {
+  ok: boolean;
+  suggestions: InstagramSuggestions;
+}
+
 export interface RawProfileUser {
   id: string;
   username: string;
@@ -46,4 +71,13 @@ export interface ProfileData {
   externalUrl?: string;
   profilePicUrl?: string;
   profilePicUrlHd?: string;
+}
+
+export interface InstagramUser {
+  id: string;
+  username: string;
+  fullname?: string;
+  profilePicUrl?: string;
+  isVerified?: boolean;
+  isPrivate?: boolean;
 }

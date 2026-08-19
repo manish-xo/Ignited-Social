@@ -8,8 +8,15 @@ import {
   WEB_PROFILE_INFO_URL,
 } from "./constants";
 import { log } from "./logger";
-import type { ProfileData, ProfileInfoResponse, RawProfileUser } from "./types";
+import type {
+  ProfileData,
+  ProfileInfoResponse,
+  RawProfileUser,
+  InstagramUser,
+  InstagramSuggestionsResponse,
+} from "./types";
 import { InstagramScraperError, normalizeUsername } from "./utils";
+import { ScrapeDoService } from "./ScrapeDo.service";
 
 /**
  * Options for {@link getProfile}. The scrape.do token defaults to the configured
@@ -55,7 +62,7 @@ function mapRawProfile(user: RawProfileUser): ProfileData {
  * `ig_user_id` used to drive follower/following scraping.
  */
 
-class InstagramService {
+class InstagramService extends ScrapeDoService {
   async getProfile(
     username: string,
     options: GetProfileOptions = {},
@@ -136,6 +143,125 @@ class InstagramService {
           : "."),
     );
     return profile;
+  }
+
+  async searchUsernames(
+    query: string,
+    options: GetProfileOptions = {},
+  ): Promise<InstagramUser[]> {
+    const normalized = query.trim().replace(/^@/, "");
+
+    if (!normalized || normalized.length < 2) {
+      return [];
+    }
+
+    const token = options.token ?? SCRAPE_DO_TOKEN;
+
+    if (!token) {
+      throw new InstagramScraperError(
+        "INPUT",
+        "A scrape.do token is required (pass options.token or set SCRAPE_DO_TOKEN).",
+      );
+    }
+
+    // Instagram's web username search endpoint
+    const searchUrl =
+      `https://www.instagram.com/web/search/topsearch/` +
+      `?context=user&query=${encodeURIComponent(normalized)}`;
+
+    log.info(`Searching Instagram users for "${normalized}" via scrape.do…`);
+
+    let response: AxiosResponse<any>;
+
+    try {
+      response = await axios.get(SCRAPE_DO_BASE_URL, {
+        params: {
+          token,
+          url: searchUrl,
+        },
+        timeout: REQUEST_TIMEOUT_MS,
+        validateStatus: () => true,
+        headers: {
+          "X-IG-App-ID": IG_APP_ID,
+        },
+      });
+    } catch (error) {
+      if (error instanceof AxiosError && !error.response) {
+        throw new InstagramScraperError(
+          "NETWORK",
+          `Network failure contacting scrape.do: ${
+            error.code ?? error.message
+          }`,
+        );
+      }
+
+      throw new InstagramScraperError(
+        "NETWORK",
+        `Failed to search Instagram users for "${normalized}".`,
+      );
+    }
+
+    if (response.status === 401 || response.status === 403) {
+      throw new InstagramScraperError(
+        "AUTH",
+        `scrape.do rejected the request (HTTP ${response.status}) — check the scrape.do token.`,
+        response.status,
+      );
+    }
+
+    if (response.status === 429) {
+      throw new InstagramScraperError(
+        "RATE_LIMIT",
+        `scrape.do returned 429 — proxy/credit rate limit reached.`,
+        429,
+      );
+    }
+
+    if (response.status < 200 || response.status >= 300) {
+      throw new InstagramScraperError(
+        "HTTP",
+        `scrape.do returned HTTP ${response.status} while searching Instagram.`,
+        response.status,
+      );
+    }
+
+    const users = response.data?.users;
+
+    if (!Array.isArray(users)) {
+      log.warn(`Instagram search for "${normalized}" returned no users.`);
+
+      return [];
+    }
+
+    return users
+      .map((item: any): InstagramUser | null => {
+        const user = item?.user;
+
+        if (!user?.username || !user?.pk) {
+          return null;
+        }
+
+        return {
+          id: String(user.pk),
+          username: user.username,
+          fullname: user.full_name,
+          profilePicUrl: user.profile_pic_url,
+          isVerified: user.is_verified,
+          isPrivate: user.is_private,
+        };
+      })
+      .filter(
+        (user: InstagramUser | null): user is InstagramUser => user !== null,
+      )
+      .slice(0, 8);
+  }
+
+  async suggestInstagramUsername(username: string) {
+    const url = `https://api.socialboost.co/api/customer/instagram-suggestions?username=${username}`;
+    const result =
+      await this.scrapeWithScrapeDo<InstagramSuggestionsResponse>(url);
+
+    return result;
   }
 }
 
