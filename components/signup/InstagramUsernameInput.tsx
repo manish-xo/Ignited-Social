@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { Loader2, AlertCircle } from "lucide-react";
+import { getInstagramImageUrl } from "@/lib/utils";
 
 interface Suggestion {
   username: string;
@@ -51,6 +52,8 @@ export default function InstagramUsernameInput({
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [selectedSuggestion, setSelectedSuggestion] =
+    useState<Suggestion | null>(null);
   const [open, setOpen] = useState(false);
 
   const abortRef = useRef<AbortController | null>(null);
@@ -130,12 +133,15 @@ export default function InstagramUsernameInput({
 
   const handleChange = (raw: string) => {
     const cleaned = raw.replace(/\s/g, "").replace(/^@+/, "");
+
+    setSelectedSuggestion(null);
     setQuery(cleaned);
   };
 
   const handleSelect = (s: Suggestion) => {
     setQuery(s.username);
     setOpen(false);
+    setSelectedSuggestion(s);
     onSelect?.(s.username, s);
   };
 
@@ -152,7 +158,17 @@ export default function InstagramUsernameInput({
             : "border-border focus-within:border-action/50"
         }`}
       >
-        <span className="text-sm text-muted">@</span>
+        {selectedSuggestion?.profilePicUrl ? (
+          <img
+            src={getInstagramImageUrl(selectedSuggestion.profilePicUrl)}
+            alt={selectedSuggestion.username}
+            className="h-7 w-7 shrink-0 rounded-full object-cover"
+          />
+        ) : (
+          <span>@</span>
+        )}
+
+        {/* <span className="text-sm text-muted">@</span> */}
         <input
           type="text"
           value={query}
@@ -186,7 +202,7 @@ export default function InstagramUsernameInput({
             >
               {s.profilePicUrl ? (
                 <img
-                  src={`/api/instagram/image?url=${encodeURIComponent(s.profilePicUrl ?? "")}`}
+                  src={getInstagramImageUrl(s.profilePicUrl)}
                   alt=""
                   className="h-9 w-9 shrink-0 rounded-full object-cover"
                 />
