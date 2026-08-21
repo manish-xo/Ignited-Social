@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import InstagramUsernameInput from "@/components/signup/InstagramUsernameInput";
 import { useDispatch, UseDispatch, useSelector } from "react-redux";
