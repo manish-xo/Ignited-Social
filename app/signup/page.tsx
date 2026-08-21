@@ -24,8 +24,6 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
     ? Math.round(((plan.originalPrice - plan.price) / plan.originalPrice) * 100)
     : null;
 
-  console.log(instagramService);
-
   return (
     <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
       {/* ===== LEFT — dark plan summary panel ===== */}
