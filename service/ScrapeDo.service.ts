@@ -7,6 +7,9 @@ export class ScrapeDoService {
     try {
       const targetUrl = encodeURIComponent(url);
 
+      console.log("SCRAPE_DO_TOKEN value:", SCRAPE_DO_TOKEN);
+      console.log("SCRAPE_DO_TOKEN length:", SCRAPE_DO_TOKEN?.length);
+
       const config = {
         method: "GET",
         url: `https://api.scrape.do/?token=${SCRAPE_DO_TOKEN}&url=${targetUrl}`,

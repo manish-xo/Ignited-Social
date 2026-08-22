@@ -36,11 +36,11 @@ const PageError = ({
             {code}
           </span>
 
-          <h1 className="mt-4 text-3xl sm:text-4xl md:text-5xl font-heading font-semibold tracking-tight text-ink">
+          <h1 className="mt-4 text-3xl sm:text-4xl md:text-5xl font-heading font-semibold -tracking-[3px] text-ink">
             {title}
           </h1>
 
-          <p className="mt-5 max-w-lg mx-auto md:mx-0 text-base sm:text-lg leading-relaxed text-ink/60">
+          <p className="mt-5 max-w-lg mx-auto md:mx-0 text-base sm:text-lg leading-relaxed -tracking-[0.04rem] text-ink/60">
             {description}
           </p>
 

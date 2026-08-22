@@ -15,6 +15,7 @@ type Status = "idle" | "invalid" | "checking" | "results" | "empty";
 
 interface InstagramUsernameInputProps {
   onSelect?: (username: string, suggestion: Suggestion | null) => void;
+  invalid?: boolean;
 }
 
 const cache = new Map<string, Suggestion[]>();
@@ -23,8 +24,6 @@ function isValidFormat(value: string) {
   return /^[a-zA-Z0-9._]{1,30}$/.test(value) && !value.includes("..");
 }
 
-// Confirmed exact shape from a real response (2026-08-19):
-// { success: true, data: { statusCode, message, data: InstagramProfile[] } }
 function normalizeSuggestions(raw: any): Suggestion[] {
   if (raw?.success === false) return [];
 
@@ -37,7 +36,6 @@ function normalizeSuggestions(raw: any): Suggestion[] {
     isVerified: u.is_verified ?? false,
   }));
 
-  // API sometimes returns duplicate usernames — dedupe so keys stay unique
   const seen = new Set<string>();
   return mapped.filter((s) => {
     if (seen.has(s.username)) return false;
@@ -48,6 +46,7 @@ function normalizeSuggestions(raw: any): Suggestion[] {
 
 export default function InstagramUsernameInput({
   onSelect,
+  invalid = false,
 }: InstagramUsernameInputProps) {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState<Status>("idle");
@@ -68,6 +67,7 @@ export default function InstagramUsernameInput({
       setStatus("idle");
       setSuggestions([]);
       setOpen(false);
+      onSelect?.("", null);
       return;
     }
 
@@ -75,8 +75,16 @@ export default function InstagramUsernameInput({
       setStatus("invalid");
       setSuggestions([]);
       setOpen(false);
+      onSelect?.("", null);
       return;
     }
+
+    //! ----->>>>>>>>>>>>>>>>
+    onSelect?.(
+      query,
+      selectedSuggestion?.username === query ? selectedSuggestion : null,
+    );
+    //! ----->>>>>>>>>>>>>>>>
 
     if (cache.has(query)) {
       const cached = cache.get(query)!;
@@ -99,7 +107,6 @@ export default function InstagramUsernameInput({
           { signal: controller.signal },
         );
         const data = await res.json();
-        console.log(data);
         const results = normalizeSuggestions(data);
 
         cache.set(query, results);
@@ -133,7 +140,6 @@ export default function InstagramUsernameInput({
 
   const handleChange = (raw: string) => {
     const cleaned = raw.replace(/\s/g, "").replace(/^@+/, "");
-
     setSelectedSuggestion(null);
     setQuery(cleaned);
   };
@@ -145,6 +151,8 @@ export default function InstagramUsernameInput({
     onSelect?.(s.username, s);
   };
 
+  const showDanger = status === "invalid" || invalid;
+
   return (
     <div ref={containerRef} className="relative">
       <label className="text-xs font-semibold text-ink">
@@ -153,8 +161,8 @@ export default function InstagramUsernameInput({
 
       <div
         className={`mt-1.5 flex items-center rounded-xl border bg-white px-3.5 transition-colors ${
-          status === "invalid"
-            ? "border-danger/40"
+          showDanger
+            ? "border-danger focus-within:ring-2 focus-within:ring-danger/30"
             : "border-border focus-within:border-action/50"
         }`}
       >
@@ -165,10 +173,9 @@ export default function InstagramUsernameInput({
             className="h-7 w-7 shrink-0 rounded-full object-cover"
           />
         ) : (
-          <span>@</span>
+          <span className="text-sm text-muted">@</span>
         )}
 
-        {/* <span className="text-sm text-muted">@</span> */}
         <input
           type="text"
           value={query}
@@ -180,9 +187,7 @@ export default function InstagramUsernameInput({
         {status === "checking" && (
           <Loader2 size={16} className="animate-spin text-muted" />
         )}
-        {status === "invalid" && (
-          <AlertCircle size={16} className="text-danger/70" />
-        )}
+        {showDanger && <AlertCircle size={16} className="text-danger/70" />}
       </div>
 
       {status === "invalid" && (

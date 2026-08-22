@@ -1,11 +1,11 @@
 import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/libs/prisma";
 
-const POST = async (req: NextRequest) => {
+export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
 
-    const { instagramUsername, email, plan, instagramProfilePicUrl } = body;
+    const { instagramUsername, email, plan, instagramProfilePic } = body;
 
     if (!instagramUsername || !email || !plan) {
       return NextResponse.json(
@@ -47,10 +47,10 @@ const POST = async (req: NextRequest) => {
     const signup = await prisma.signup.create({
       data: {
         email: normalizedEmail,
-        instagramUsername: instagramUsername,
-        instagramProfilePicUrl: instagramProfilePicUrl,
+        instagramUsername,
+        instagramProfilePic: instagramProfilePic || null,
         plan,
-        status: "PENDING_PAYMENT",
+        // status: "PENDING_PAYMENT",
       },
     });
 

@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { instagramService } from "@/service/instagram.service";
-import { type InstagramProfile } from "@/service/types";
+import { SCRAPE_DO_TOKEN } from "@/service/constants";
 
 export async function GET(req: NextRequest) {
+  console.log(
+    "Token loaded:",
+    SCRAPE_DO_TOKEN ? "yes, length " + SCRAPE_DO_TOKEN.length : "MISSING",
+  );
   const username = req.nextUrl.searchParams.get("username")?.trim();
 
   if (!username || username.length < 2) {

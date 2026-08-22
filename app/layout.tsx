@@ -7,6 +7,7 @@ import ProHeader from "@/components/layout/ProHeader/ProHeader";
 import { LenisProvider } from "@/components/providers/lenis-provider";
 import { cn } from "@/lib/utils";
 import "lenis/dist/lenis.css";
+import Providers from "@/libs/ReduxProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -31,9 +32,12 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         {/* <Header /> */}
-        <ProHeader />
-        <LenisProvider>{children}</LenisProvider>
-        <Footer />
+
+        <Providers>
+          <ProHeader />
+          <LenisProvider>{children}</LenisProvider>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

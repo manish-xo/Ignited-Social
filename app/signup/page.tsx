@@ -12,6 +12,7 @@ import { getPlan } from "@/lib/plans";
 import Link from "next/link";
 import { instagramService } from "@/service/instagram.service";
 import InstagramUsernameInput from "@/components/signup/InstagramUsernameInput";
+import Signupform from "./signupform";
 
 interface SignupPageProps {
   searchParams: Promise<{ plan?: string }>;
@@ -185,45 +186,7 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
             should contact you.
           </p>
 
-          <form className="mt-8 space-y-5">
-            <InstagramUsernameInput />
-
-            <div>
-              <label className="text-xs font-semibold text-ink">
-                Email{" "}
-                <span className="font-normal text-muted">
-                  — for receipts &amp; updates
-                </span>
-              </label>
-              <input
-                type="email"
-                placeholder="you@company.com"
-                className="mt-1.5 w-full rounded-xl border border-border bg-white px-3.5 py-3 text-sm text-ink placeholder:text-placeholder focus:outline-none focus:ring-2 focus:ring-action/30"
-              />
-            </div>
-
-            {/* hidden field carries the selected plan through to your backend/payment step */}
-            <input type="hidden" name="plan" value={plan.slug} />
-
-            <button
-              type="submit"
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-action py-3.5 text-sm font-semibold text-white transition-colors hover:bg-action-hover"
-            >
-              Continue to payment <ArrowRight size={15} />
-            </button>
-
-            <p className="text-center text-xs text-muted">
-              By continuing, you agree to our{" "}
-              <a href="/terms" className="text-action underline">
-                Terms
-              </a>{" "}
-              and{" "}
-              <a href="/privacy" className="text-action underline">
-                Privacy Policy
-              </a>
-              .
-            </p>
-          </form>
+          <Signupform plan={plan.slug as "grow" | "scale"} />
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] text-muted">
             <span className="flex items-center gap-1">
