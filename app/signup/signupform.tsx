@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSignup, setStatus, setError } from "@/libs/dataslice";
 import { RootState } from "@/libs/store";
 import { signupSchema, SignupFormValues } from "@/schema/signup.schema";
-import axios from "axios";
+import { useSignup } from "@/hook/useSignup";
 import {
   Field,
   FieldDescription,
@@ -18,6 +18,9 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { isValid } from "zod/v3";
+import { toast } from "sonner";
+import { showSuccessToast } from "@/components/custom/Toaster/SuccessToast";
+import { showErrorToast } from "@/components/custom/Toaster/ErrorToast";
 
 interface SignupFormProps {
   plan: "grow" | "scale";
@@ -45,29 +48,28 @@ const Signupform = ({ plan }: SignupFormProps) => {
     },
   });
 
-  const onSubmit = async (values: SignupFormValues) => {
-    dispatch(setStatus("submitting"));
-    dispatch(setError(null));
+  const { signup } = useSignup();
 
-    try {
-      const res = await axios.post("/api/signup", {
-        instagramUsername: values.username,
-        instagramProfilePic: values.profilePicUrl,
-        email: values.email,
-        plan,
+  const onSubmit = async (values: SignupFormValues) => {
+    const result = await signup({
+      username: values.username,
+      profilePicUrl: values.profilePicUrl,
+      email: values.email,
+      plan,
+    });
+    if (result.success) {
+      showSuccessToast({
+        title: "Signup successful",
+        description:
+          "Your account has been created. Let's continue to payment.",
       });
-      console.log(res);
-      dispatch(setSignup(res.data.data));
-      dispatch(setStatus("success"));
 
       router.push(`/payment?plan=${plan}`);
-    } catch (err: any) {
-      dispatch(setStatus("error"));
-
-      const message =
-        err.response?.data?.message || err.message || "Something went wrong";
-
-      dispatch(setError(message));
+    } else {
+      showErrorToast({
+        title: "Signup failed",
+        description: result.error || "Something went wrong. Please try again.",
+      });
     }
   };
 

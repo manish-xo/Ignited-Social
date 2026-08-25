@@ -8,6 +8,7 @@ import { LenisProvider } from "@/components/providers/lenis-provider";
 import { cn } from "@/lib/utils";
 import "lenis/dist/lenis.css";
 import Providers from "@/libs/ReduxProvider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -35,7 +36,10 @@ export default function RootLayout({
 
         <Providers>
           <ProHeader />
-          <LenisProvider>{children}</LenisProvider>
+          <LenisProvider>
+            {children}
+            <Toaster />
+          </LenisProvider>
           <Footer />
         </Providers>
       </body>
