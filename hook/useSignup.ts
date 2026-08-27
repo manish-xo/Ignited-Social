@@ -2,6 +2,7 @@
 import { useDispatch, UseDispatch } from "react-redux";
 import { supabase } from "@/libs/supabase";
 import { setSignup, setStatus, setError } from "@/libs/dataslice";
+import { profile } from "console";
 
 interface SignupPayload {
   username: string;
@@ -18,23 +19,31 @@ export const useSignup = () => {
     dispatch(setError(null));
 
     try {
-      const { data, error } = await supabase
-        .from("Signup")
-        .insert({
-          instagram_username: values.username,
-          instagram_profile_pic: values.profilePicUrl || null,
-          email: values.email.trim().toLowerCase(),
-          plan: values.plan,
-        })
-        .select()
-        .single();
+      const uid = crypto.randomUUID();
 
+      const signupData = {
+        uid,
+        instagram_username: values.username,
+        instagram_profile_pic: values.profilePicUrl || null,
+        email: values.email.trim().toLowerCase(),
+        plan: values.plan,
+      };
+
+      const { error } = await supabase.from("Signup").insert(signupData);
       if (error) throw error;
 
-      dispatch(setSignup(data));
+      const reduxSignupData = {
+        signupId: uid,
+        username: values.username,
+        profilePicUrl: values.profilePicUrl || "",
+        email: values.email.trim().toLowerCase(),
+        plan: values.plan,
+      };
+
+      dispatch(setSignup(reduxSignupData));
       dispatch(setStatus("success"));
 
-      return { success: true, data };
+      return { success: true, data: reduxSignupData };
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Something went wrong";

@@ -57,6 +57,7 @@ const Signupform = ({ plan }: SignupFormProps) => {
       email: values.email,
       plan,
     });
+    console.log(result);
     if (result.success) {
       showSuccessToast({
         title: "Signup successful",
