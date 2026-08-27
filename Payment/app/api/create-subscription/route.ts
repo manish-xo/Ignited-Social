@@ -3,7 +3,7 @@
 // import { STRIPE_PRICE_IDS } from "@/lib/plan-prices";
 
 // const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-//   apiVersion: "2024-06-20",
+//   apiVersion: "2026-07-29.dahlia",
 // });
 
 // export async function POST(req: NextRequest) {
