@@ -86,7 +86,6 @@ import { NextResponse, NextRequest } from "next/server";
 // import { supabase } from "@/libs/supabase";
 import { supabaseServer } from "@/lib/supabaseServer";
 import { _success } from "zod/v4/core";
-import { setupDevBundler } from "next/dist/server/lib/router-utils/setup-dev-bundler";
 
 export const POST = async (req: NextRequest) => {
   try {
