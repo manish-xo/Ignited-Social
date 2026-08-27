@@ -18,6 +18,7 @@ import { Check, X } from "lucide-react";
 import PlanComparison from "./PlanComparison";
 import Comparison from "@/app/secondary/page";
 import { BothPlan } from "@/lib/plans";
+import ComparisonPlan from "./Comparison";
 
 const Pricing = () => {
   const left = ComparisonBento.filter((card) => !card.recommendation).slice(
@@ -97,22 +98,30 @@ const Pricing = () => {
           {/* HEADING */}
           <div className="Heading">
             <Heading className="text-center hidden sm:block">
-              Affordable plans for every
+              {/* Affordable plans for every */}
+              Choose how fast
             </Heading>
-            <Heading className="text-center hidden sm:block">Budget</Heading>
+            <Heading className="text-center hidden sm:block">
+              {/* Budget */}
+              you want to grow.
+            </Heading>
 
             <Heading className="text-center text-[9vw] sm:hidden">
-              Affordable plans for
+              {/* Affordable plans for */}
+              Choose how fast
             </Heading>
             <Heading className="text-center text-[9vw] sm:hidden">
-              every budget
+              {/* every budget */}
+              you want to grow.
             </Heading>
           </div>
           {/* SUBTEXTING */}
           <div>
             <p className="mx-auto mt-5 max-w-xs text-center text-sm leading-5 font-[400] text-secondary tracking-tight sm:max-w-2xl sm:text-lg md:text-xl lg:text-[1.12rem]">
-              Choose a plan that fits your needs with transparent pricing,
-              powerful features, and the to grow at your own pace.
+              {/* Choose a plan that fits your needs with transparent pricing,
+              powerful features, and the to grow at your own pace. */}
+              Two plans. Your account. Run by a dedicated growth manager. Who
+              understands your offer. Your audience. And you.
             </p>
           </div>
 
@@ -241,7 +250,8 @@ const Pricing = () => {
           })}
         </div>
       </div>
-      <PlanComparison />
+      {/* <PlanComparison /> */}
+      <ComparisonPlan />
       <Comparison />
       <div className="difference mx-auto pt-16 pb-10">
         <div className="eyebrow flex items-center justify-center mb-3">

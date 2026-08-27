@@ -97,22 +97,22 @@ export const badges: Badge[] = [
   },
   {
     icon: "ri-add-line",
-    value: "51M",
-    label: "Followers",
+    value: "25M",
+    label: "Followers grown",
   },
   {
     icon: "ri-add-line",
-    value: "140",
-    label: "Countries Served",
+    value: "110",
+    label: "Countries served",
   },
   {
     icon: "ri-add-line",
     value: "20K",
-    label: "Total Accounts",
+    label: "Accounts managed",
   },
   {
     icon: "ri-add-line",
-    value: "1.5K",
+    value: "1.1K",
     label: "Active User",
   },
 ];
@@ -126,10 +126,12 @@ export const plans: Plan[] = [
       { text: "Consistent, organic follower growth" },
       { text: "Estimated 150–500+ followers per month" },
       {
-        text: "Dedicated Growth Manager",
-        note: "Support via email, phone, or video call",
+        text: "A dedicated Growth Manager",
+        // note: "Support via email, phone, or video call",
+        note: "reach them by email, phone, or video call",
       },
       { text: "Core audience targeting" },
+      { text: "Basic content review" },
       { text: "30-day money-back guarantee" },
     ],
     cta: "Start with Grow",
@@ -142,11 +144,12 @@ export const plans: Plan[] = [
       { text: "Accelerated, higher-volume growth" },
       { text: "Estimated 250–800+ followers per month" },
       {
-        text: "Dedicated Senior Growth Manager",
-        note: "Support via email, phone, or video call",
+        text: "A dedicated Senior Growth Manager",
+        note: "reach them by email, phone, or video",
       },
       { text: "Advanced audience targeting" },
-      { text: "Strategic content review" },
+      { text: "Deep + Strategic content review" },
+      { text: "Offer funnel review" },
       { text: "30-day money-back guarantee" },
     ],
     cta: "Start with Scale",
@@ -350,39 +353,76 @@ export const testimonials: Testimonial[] = [
 export const accordionData: Accordion[] = [
   {
     value: "item-1",
-    question: "How fast will I see results?",
+    // question: "How fast will I see results?",
+    question: "What happens during the trial period?",
     answer:
       "Most clients start seeing new followers within 2–3 days. Meaningful, sustained growth typically builds over the first 3–4 weeks as your growth manager fine-tunes targeting.",
   },
   {
     value: "item-2",
-    question: "Are the followers real people?",
+    // question: "Are the followers real people?",
+    question: "What if it doesn't work?",
     answer:
       "Yes. We never use bots or purchased followers. Every follower comes from targeted, organic outreach to real, active accounts in your niche.",
   },
   {
     value: "item-3",
-    question: "Is this safe for my account? Will I get banned or shadowbanned?",
+    // question: "Is this safe for my account? Will I get banned or shadowbanned?",
+    question: "How many followers will I actually get?",
     answer:
       "Yes, it's safe. We follow platform guidelines closely and use manual, compliant growth methods — no automation tools that put your account at risk.",
   },
   {
     value: "item-4",
-    question: "What's the difference between Grow and Scale?",
+    // question: "What's the difference between Grow and Scale?",
+    question: "Is my account safe?",
     answer:
       "Grow is built for steady, sustainable growth (150–500+ followers/month). Scale is for faster results with a Senior Growth Manager, advanced targeting, and strategic content review (250–800+ followers/month).",
   },
   {
     value: "item-5",
-    question: "Can I cancel anytime?",
+    // question: "Can I cancel anytime?",
+    question: "Do you need my password?",
     answer:
       "Yes — there are no contracts or long-term commitments. Cancel whenever you'd like, no questions asked.",
   },
   {
     value: "item-6",
-    question: "How is my growth targeted to the right audience?",
+    // question: "How is my growth targeted to the right audience?",
+    question: "Are the followers real people? Will they actually engage?",
     answer:
       "Your growth manager builds a targeting profile based on your niche, industry, and ideal customer — so new followers are people actually likely to engage, not random accounts.",
+  },
+  {
+    value: "item-7",
+    question: "Do I keep my followers if I cancel?",
+    answer: "Nothing",
+  },
+  {
+    value: "item-8",
+    question: "Can I keep posting and using my account normally?",
+    answer: "Nothing",
+  },
+  {
+    value: "item-9",
+    question:
+      "I've been burned by a service like this before — why are you different?",
+    answer: "Nothing",
+  },
+  {
+    value: "item-10",
+    question: "Couldn't I just do this myself?",
+    answer: "Nothing",
+  },
+  {
+    value: "item-11",
+    question: "Will you turn followers into actual customers?",
+    answer: "Nothing",
+  },
+  {
+    value: "item-12",
+    question: "What do you need from me to start?",
+    answer: "Nothing",
   },
 ];
 

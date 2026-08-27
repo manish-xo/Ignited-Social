@@ -24,6 +24,7 @@ interface BentoCard {
   tag: string;
   title: string;
   description: string[];
+  price: string;
   recommended?: boolean;
 }
 
@@ -43,7 +44,9 @@ const cards: BentoCard[] = [
       "High salary & hiring costs",
       "Time-consuming recruitment",
       "Employee turnover risks",
+      "Expensive long-term commitment",
     ],
+    price: "$3000-5000/mo",
   },
   {
     tag: "FREELANCE AGENCY",
@@ -53,6 +56,7 @@ const cards: BentoCard[] = [
       "Generic growth strategies",
       "Slow communication",
     ],
+    price: "$800-2500/mo",
   },
   {
     tag: "PAID ADS",
@@ -62,6 +66,7 @@ const cards: BentoCard[] = [
       "Results stop when spending stops",
       "No long-term organic growth",
     ],
+    price: "$300-1500/mo",
   },
   {
     tag: "GROWTH TOOLS",
@@ -71,6 +76,7 @@ const cards: BentoCard[] = [
       "No strategic guidance",
       "Tools don't replace expertise",
     ],
+    price: "$50-200/mo",
   },
   {
     tag: "DEDICATED GROWTH MANAGER",
@@ -81,6 +87,7 @@ const cards: BentoCard[] = [
       "Transparent reporting",
       "Sustainable, real growth",
     ],
+    price: "$130/mo",
     recommended: true,
   },
 ];
@@ -100,7 +107,7 @@ export const features: Feature[] = [
     icon: Target,
     title: "Real, active followers",
     description:
-      "Every new follower is someone likely to engage, buy, or convert — not a bot padding your count.",
+      "Every new follower is someone likely to engage, buy, or convert — not a bot padding your follower count.",
     className: "md:row-span-1 md:col-span-2",
   },
   {
@@ -108,7 +115,7 @@ export const features: Feature[] = [
     icon: ShieldCheck,
     title: "Safe, compliant growth",
     description:
-      "Your account stays protected — no shadowbans, no risky automation, no surprises.",
+      "Your account stays protected — no shadowbans, no suspensions, no surprises.",
     className: "md:row-span-1 md:col-span-1",
   },
   {
@@ -185,13 +192,33 @@ export default function Comparison() {
         <div className="eyebrow flex items-center justify-center mb-3">
           <CornerFrame className="bg-action-tint-bg">
             <p className="font-mono uppercase text-[0.6em] sm:text-xs">
-              Weighing your options
+              {/* Weighing your options */}
+              Ignited vs. Alternatives
             </p>
           </CornerFrame>
         </div>
 
         <div>
           <Heading className="text-center hidden lg:block">
+            Real growth, for
+          </Heading>
+
+          <Heading className="text-center text-[9vw] sm:text-[7vw] lg:hidden">
+            Real growth, for
+          </Heading>
+          <Heading className="text-center text-[9vw] sm:text-[7vw] md:hidden">
+            less than the
+          </Heading>
+          <Heading className="text-center text-[9vw] sm:text-[7vw] md:hidden">
+            alternatives
+          </Heading>
+          <Heading className="text-center hidden md:block">
+            less than the alternatives.
+          </Heading>
+          {/* <Heading className="text-center text-[9vw] hidden sm:text-[7vw]">
+            less than the alternatives.
+          </Heading> */}
+          {/* <Heading className="text-center hidden lg:block">
             Comparison with other options
           </Heading>
           <Heading className="text-center text-[9vw] sm:text-[7vw] lg:hidden">
@@ -199,11 +226,13 @@ export default function Comparison() {
           </Heading>
           <Heading className="text-center text-[9vw] sm:text-[7vw] lg:hidden">
             other options
-          </Heading>
+          </Heading> */}
         </div>
 
         <p className="mx-auto mt-5 max-w-xs text-center text-md leading-5 font-[400] text-secondary tracking-tight sm:max-w-2xl sm:text-lg md:text-xl lg:text-[1.12rem]">
-          Four ways businesses try to grow — and the one that actually holds up.
+          {/* Four ways businesses try to grow — and the one that actually holds up. */}
+          Five ways businesses try to grow. A real comparison to see what you're
+          actually paying for.
         </p>
         {/* ladder layout */}
         <div className="relative mx-auto mt-20 max-w-3xl px-4 md:px-0">
@@ -254,6 +283,9 @@ export default function Comparison() {
                           </li>
                         ))}
                       </ul>
+                      <div className="font-[700] text-action text-xl mt-10">
+                        {card.price}
+                      </div>
                     </div>
                   ) : (
                     // normal row — quiet, flat, minimal
@@ -274,6 +306,9 @@ export default function Comparison() {
                           {card.description.join(" · ")}
                         </p>
                       </div>
+                      <div className="ml-10 text-ink font-[600] text-sm">
+                        {card.price}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -287,9 +322,12 @@ export default function Comparison() {
               <span className="text-secondary">All the Expertise.</span>
               <span className="text-ink">None of the Overhead</span>
             </h2>
-            <p className="mx-auto mt-2 max-w-xs text-center text-sm leading-6 font-[400] text-secondary tracking-tight sm:max-w-2xl sm:text-lg md:text-xl lg:text-[1.12rem]">
-              One person, doing the job of a full team — strategist, executor,
-              and marketer in one.
+            <p className="mx-auto mt-2 max-w-xs text-center leading-5 text-secondary sm:max-w-2xl text-md">
+              {/* One person, doing the job of a full team — strategist, executor,
+              and marketer in one. */}
+              No hiring. No managing. No retainers. Just one person, who
+              understands your business, and your audience, and what to do next.
+              Then does it, without you asking.
             </p>
           </div>
         </div>
@@ -320,9 +358,12 @@ export default function Comparison() {
 
           <div>
             <p className="mx-auto mt-5 max-w-xs text-center text-sm leading-6 font-[400] text-secondary tracking-tight sm:max-w-2xl sm:text-lg md:text-xl lg:text-[1.12rem]">
-              Both plans include a real human Growth Manager — the difference is
+              {/* Both plans include a real human Growth Manager — the difference is
               pace, depth, and the seniority of the person working on your
-              account.
+              account. */}
+              Think of us as hiring a great social media manager — at 5% of the
+              cost, with none of the overhead and zero risk thanks to our 30-day
+              guarantee
             </p>
           </div>
         </div>
@@ -339,6 +380,7 @@ export default function Comparison() {
                 }`}
               >
                 <DotPattern />
+
                 {/* top: index + icon */}
                 <div className="flex items-center justify-between">
                   <span className="font-mono text-[11px] tracking-[0.14em] text-muted">
@@ -354,7 +396,7 @@ export default function Comparison() {
 
                 {/* middle: title + description */}
                 <div className="mt-4">
-                  <h3 className="font-heading font-bold leading-tight tracking-tight text-ink text-lg md:text-xl">
+                  <h3 className="font-heading font-bold leading-tight tracking-tighter text-ink text-lg md:text-xl">
                     {feature.title}
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-secondary">

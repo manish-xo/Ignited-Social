@@ -7,7 +7,7 @@ type HeadingProps = {
 };
 
 const sizeMap: Record<string, string> = {
-  h1: "text-4xl sm:text-[6vw] md:text-[7vw] lg:text-6xl font-[700] leading-[0.98] -tracking-[0.04em]",
+  h1: "text-4xl sm:text-[6vw] md:text-[7vw] lg:text-6xl font-[700] leading-[0.98] -tracking-[0.05em]",
   h2: "text-4xl sm:text-3xl md:text-4xl font-bold leading-tight tracking-tight",
   h3: "text-4xl sm:text-2xl md:text-3xl font-semibold leading-snug",
 };
