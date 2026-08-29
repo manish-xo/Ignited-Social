@@ -46,7 +46,7 @@ const cards: BentoCard[] = [
       "Employee turnover risks",
       "Expensive long-term commitment",
     ],
-    price: "$3000-5000/mo",
+    price: "$3k-5k/mo",
   },
   {
     tag: "FREELANCE AGENCY",
@@ -56,7 +56,7 @@ const cards: BentoCard[] = [
       "Generic growth strategies",
       "Slow communication",
     ],
-    price: "$800-2500/mo",
+    price: "$0.8k-2.5k/mo",
   },
   {
     tag: "PAID ADS",
@@ -66,7 +66,7 @@ const cards: BentoCard[] = [
       "Results stop when spending stops",
       "No long-term organic growth",
     ],
-    price: "$300-1500/mo",
+    price: "$0.3k-1.5k/mo",
   },
   {
     tag: "GROWTH TOOLS",
@@ -76,7 +76,7 @@ const cards: BentoCard[] = [
       "No strategic guidance",
       "Tools don't replace expertise",
     ],
-    price: "$50-200/mo",
+    price: "$0.05k-0.2k/mo",
   },
   {
     tag: "DEDICATED GROWTH MANAGER",
@@ -87,7 +87,7 @@ const cards: BentoCard[] = [
       "Transparent reporting",
       "Sustainable, real growth",
     ],
-    price: "$130/mo",
+    price: "$0.13k/mo",
     recommended: true,
   },
 ];
@@ -289,11 +289,14 @@ export default function Comparison() {
                     </div>
                   ) : (
                     // normal row — quiet, flat, minimal
-                    <div className="flex items-center gap-4 rounded-xl border border-border bg-white/60 px-6 py-4">
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-danger/10">
+                    <div className="relative sm:flex sm:items-center gap-4 rounded-xl border border-border bg-white/60 px-6 py-4">
+                      <span className="flex mb-4 sm:mb-0 h-6 w-6 shrink-0 items-center justify-center rounded-full bg-danger/10">
                         <X size={12} className="text-danger" />
                       </span>
-                      <div className="min-w-0 flex-1">
+                      <div className="absolute top-5 right-5 ml-10 text-ink font-[600] block sm:hidden text-xs sm:text-[0.9rem]">
+                        {card.price}
+                      </div>
+                      <div className="relative min-w-0 flex-1">
                         <div className="flex items-center gap-2">
                           <span className="font-mono text-[10px] tracking-[0.1em] text-muted">
                             {card.tag}
@@ -302,12 +305,19 @@ export default function Comparison() {
                         <h3 className="font-heading font-semibold text-base text-ink">
                           {card.title}
                         </h3>
-                        <p className="mt-1 text-xs text-secondary">
-                          {card.description.join(" · ")}
-                        </p>
-                      </div>
-                      <div className="ml-10 text-ink font-[600] text-sm">
-                        {card.price}
+                        <div className="mt-1 text-xs text-secondary">
+                          <div className="hidden sm:block">
+                            {card.description.join(" · ")}
+                          </div>
+                          {card.description.map((des, i) => (
+                            <ul className="sm:hidden" key={i}>
+                              <li className="list-disc ml-4">{des}</li>
+                            </ul>
+                          ))}
+                        </div>
+                        <div className="absolute right-0 top-0 ml-10 text-ink font-[600] hidden sm:block text-xs sm:text-[0.9rem]">
+                          {card.price}
+                        </div>
                       </div>
                     </div>
                   )}

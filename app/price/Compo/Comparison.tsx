@@ -128,12 +128,25 @@ const ComparisonPlan = () => {
       </div>
 
       {/* shared strip */}
-      <div className="mx-auto mt-10 flex max-w-4xl flex-wrap items-center justify-center gap-x-3 gap-y-2 rounded-full border-2 border-border border-dashed bg-subtle-bg px-6 py-3 text-center">
+      {/* <div className="mx-auto mt-10 flex max-w-4xl flex-wrap items-center justify-center gap-x-3 gap-y-2 rounded-full border-2 border-border border-dashed bg-subtle-bg px-6 py-3 text-center">
         {sharedStrip.map((item, i) => (
           <React.Fragment key={item}>
             <span className="text-xs font-medium text-secondary">{item}</span>
             {i < sharedStrip.length - 1 && (
               <span className="text-border">·</span>
+            )}
+          </React.Fragment>
+        ))}
+      </div> */}
+      {/* shared strip */}
+      <div className="mx-auto mt-10 flex max-w-4xl flex-wrap items-center justify-center gap-x-3 gap-y-2.5 rounded-2xl border-2 border-dashed border-border bg-subtle-bg px-5 py-4 text-center sm:rounded-full sm:px-6 sm:py-3">
+        {sharedStrip.map((item, i) => (
+          <React.Fragment key={item}>
+            <span className="text-[11px] font-medium leading-snug text-secondary sm:text-xs">
+              {item}
+            </span>
+            {i < sharedStrip.length - 1 && (
+              <span className="hidden text-ink sm:inline">•</span>
             )}
           </React.Fragment>
         ))}
