@@ -1,4 +1,3 @@
-"use client";
 import {
   Field,
   FieldDescription,
@@ -6,7 +5,7 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { Controller, useForm } from "react-hook-form";
+// import { Controller, useForm } from "react-hook-form";
 import zosResolver from "@hookform/resolvers/zod";
 
 interface CompletePageProps {
@@ -46,7 +45,7 @@ const Setup = async ({ searchParams }: CompletePageProps) => {
             your campaign progress.
           </p>
 
-          <form onSubmit={onSubmit} className="mt-8">
+          {/* <form onSubmit={onSubmit} className="mt-8">
             <FieldGroup>
               <Controller
                 // control={form.control}
@@ -54,7 +53,7 @@ const Setup = async ({ searchParams }: CompletePageProps) => {
                 render={({ field }) => <Field></Field>}
               />
             </FieldGroup>
-          </form>
+          </form> */}
 
           {/* <Link
             href={dashboardSetupUrl}
