@@ -35,12 +35,12 @@ export default function RootLayout({
         {/* <Header /> */}
 
         <Providers>
-          <ProHeader />
+          {/* <ProHeader /> */}
           <LenisProvider>
             {children}
             <Toaster />
           </LenisProvider>
-          <Footer />
+          {/* <Footer /> */}
         </Providers>
       </body>
     </html>

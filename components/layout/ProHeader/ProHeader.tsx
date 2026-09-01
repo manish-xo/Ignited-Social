@@ -5,6 +5,7 @@ import Hamburger from "@/components/ui/Hamburger";
 import MobileMenu from "@/components/custom/MobileMenu";
 import { TextReveal } from "@/components/custom/TextReveal";
 import Link from "next/link";
+import Logo from "@/components/Logo/Logo";
 
 interface NavLink {
   name: string;
@@ -53,7 +54,8 @@ const ProHeader = () => {
           href="#"
           className="font-heading font-semibold text-ink text-xl justify-self-start"
         >
-          STS
+          {/* STS */}
+          <Logo width={100} height={40} />
         </a>
         {/* CENTER LINKS */}
         <div className="hidden gap-1 md:flex items-center justify-center">

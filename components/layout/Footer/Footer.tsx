@@ -1,5 +1,6 @@
 "use client";
 import { TextReveal } from "@/components/custom/TextReveal";
+import Logo from "@/components/Logo/Logo";
 // import { Instagram, Twitter, Linkedin } from "lucide-react";
 import React from "react";
 
@@ -39,10 +40,11 @@ const Footer = () => {
           {/* BRAND */}
           <div className="brand-col space-y-3 sm:col-span-1">
             <a href="#" className="block font-heading text-ink">
-              <span className="text-5xl font-extrabold tracking-tighter text-action">
+              {/* <span className="text-5xl font-extrabold tracking-tighter text-action">
                 Ignited
               </span>
-              <span className="text-base font-medium">Social</span>
+              <span className="text-base font-medium">Social</span> */}
+              <Logo />
             </a>
             <p className="max-w-[220px] text-sm font-light tracking-wide text-secondary">
               Real growth, real people, real results.

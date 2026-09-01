@@ -28,8 +28,8 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
   return (
     <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
       {/* ===== LEFT — dark plan summary panel ===== */}
-      <div className="bg-ink px-6 py-10 text-white sm:px-10 lg:px-14 lg:py-14">
-        <div className="mx-auto max-w-xl mt-24 sm:mt-16">
+      <div className="bg-ink px-6 text-white sm:px-10 lg:px-14 lg:py-6">
+        <div className="mx-auto max-w-xl sm:mt-0">
           <p className="mt-10 font-mono text-xs uppercase tracking-[0.14em] text-white/50">
             Your Plan
           </p>
@@ -173,8 +173,8 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
       </div>
 
       {/* ===== RIGHT — form ===== */}
-      <div className="bg-canvas relative px-6 py-10 sm:px-10 lg:px-14 lg:py-14">
-        <div className="mx-auto sticky top-48 max-w-md">
+      <div className="bg-canvas relative px-6 py-10 sm:px-10 lg:px-14 lg:py-6">
+        <div className="mx-auto sticky top-32 max-w-md">
           <p className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
             Your Details
           </p>

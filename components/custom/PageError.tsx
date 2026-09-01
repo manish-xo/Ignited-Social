@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface PageErrorProps {
   code?: string;
@@ -14,6 +15,8 @@ const PageError = ({
   title = "Page not found",
   description = "Sorry, the page you're looking for doesn't exist or is currently unavailable.",
 }: PageErrorProps) => {
+  const router = useRouter();
+
   return (
     <main className="min-h-screen flex items-center justify-center px-6 py-24 bg-background">
       <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 items-center gap-12">
@@ -36,21 +39,28 @@ const PageError = ({
             {code}
           </span>
 
-          <h1 className="mt-4 text-3xl sm:text-4xl md:text-5xl font-heading font-semibold -tracking-[3px] text-ink">
+          <h1 className="mt-4 text-3xl sm:text-4xl md:text-5xl font-heading font-semibold -tracking-[0.2rem] text-ink">
             {title}
           </h1>
 
-          <p className="mt-5 max-w-lg mx-auto md:mx-0 text-base sm:text-lg leading-relaxed -tracking-[0.04rem] text-ink/60">
+          <p className="mt-5 max-w-lg mx-auto md:mx-0 text-base sm:text-lg leading-relaxed text-ink/60">
             {description}
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row items-center md:justify-start justify-center gap-3">
-            <Link
+            {/* <Link
               href="/"
               className="inline-flex items-center justify-center rounded-xl bg-action px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-action-hover"
             >
               Back to Home
-            </Link>
+            </Link> */}
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="inline-flex items-center justify-center rounded-xl bg-action px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-action-hover"
+            >
+              Back to Previous Page
+            </button>
 
             <Link
               href="/service"
