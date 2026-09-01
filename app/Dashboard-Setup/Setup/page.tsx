@@ -49,7 +49,7 @@ const Setup = async ({ searchParams }: CompletePageProps) => {
           <form onSubmit={onSubmit} className="mt-8">
             <FieldGroup>
               <Controller
-                control={form.control}
+                // control={form.control}
                 name="email"
                 render={({ field }) => <Field></Field>}
               />
