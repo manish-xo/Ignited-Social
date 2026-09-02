@@ -9,8 +9,8 @@ import {
   UserCheck,
   ShieldCheck,
   BarChart3,
-  FileText,
-  Undo2,
+  Clock,
+  Lightbulb,
 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -99,7 +99,7 @@ export const features: Feature[] = [
     icon: UserCheck,
     title: "A dedicated growth manager",
     description:
-      "You get strategy that adapts to your brand, not a generic playbook running on autopilot.",
+      "An expert who knows what works in your niche, today. They bring a proven playbook and tune it to your brand.",
     className: "md:row-span-2 md:col-span-1",
   },
   {
@@ -107,7 +107,7 @@ export const features: Feature[] = [
     icon: Target,
     title: "Real, active followers",
     description:
-      "Every new follower is someone likely to engage, buy, or convert — not a bot padding your follower count.",
+      "Get real followers who engage, ask and buy. Not a number that looks good and does nothing.",
     className: "md:row-span-1 md:col-span-2",
   },
   {
@@ -115,7 +115,7 @@ export const features: Feature[] = [
     icon: ShieldCheck,
     title: "Safe, compliant growth",
     description:
-      "Your account stays protected — no shadowbans, no suspensions, no surprises.",
+      "Your account stays protected. No shadowbans, no suspensions, no surprises.",
     className: "md:row-span-1 md:col-span-1",
   },
   {
@@ -124,6 +124,22 @@ export const features: Feature[] = [
     title: "Transparent reporting",
     description:
       "You always know exactly what you're paying for — no guesswork, no vague monthly PDFs.",
+    className: "md:row-span-1 md:col-span-1",
+  },
+  {
+    tag: "TIME",
+    icon: Clock,
+    title: "The busywork is handled.",
+    description:
+      "No daily grind. Your growth goes on autopilot. So you can focus on your life & business.",
+    className: "md:row-span-1 md:col-span-2",
+  },
+  {
+    tag: "STRATEGY",
+    icon: Lightbulb,
+    title: "Content & Business Growth Strategy",
+    description:
+      "Content, outreach, and offer – When these align, the results don’t add up. They multiply.",
     className: "md:row-span-1 md:col-span-1",
   },
 ];

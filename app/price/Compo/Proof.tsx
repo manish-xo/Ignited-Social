@@ -15,7 +15,7 @@ const Proof = () => {
           </CornerFrame>
         </div>
         <div className="heading text-center flex flex-col items-center justify-center text-canvas font-heading text-4xl sm:text-[6vw] md:text-[7vw] lg:text-6xl font-[700] leading-[0.98] -tracking-[0.04em]">
-          <Heading className="hidden sm:block">Trusted by creators</Heading>
+          {/* <Heading className="hidden sm:block">Trusted by creators</Heading>
           <Heading className="text-center text-[8.5vw] sm:hidden">
             Trusted by creators
           </Heading>
@@ -25,14 +25,23 @@ const Proof = () => {
           </Heading>
           <Heading className="text-center text-[8.5vw] sm:hidden">
             growth.
+          </Heading> */}
+          <Heading className="hidden sm:block">
+            We've done this 20,000 times.
           </Heading>
+          <Heading className="block text-[8vw] sm:hidden">
+            We've done this 20,000
+          </Heading>
+          <Heading className="block text-[8vw] sm:hidden">times.</Heading>
         </div>
 
         <div className="subHeading">
           <p className="mx-auto mt-5 max-w-xs text-center text-sm leading-6 font-[300] tracking-normal text-ink/80 sm:max-w-2xl sm:text-lg md:text-xl lg:text-[1.12rem]">
-            Thousands of creators, businesses, and brands trust us to grow their
+            {/* Thousands of creators, businesses, and brands trust us to grow their
             Instagram with real people, transparent reporting, and strategies
-            designed for long-term success.
+            designed for long-term success. */}
+            Six years in. We know what works on Instagram, across every niche
+            you can name.
           </p>
         </div>
 

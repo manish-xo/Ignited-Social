@@ -8,15 +8,23 @@ import DarkGradientSection from "@/components/ui/DarkGradientSection";
 export default function CTA() {
   return (
     <DarkGradientSection className="px-6 py-24 sm:py-24">
-      <div className="mx-auto max-w-2xl text-center">
+      <div className="mx-auto max-w-5xl text-center">
         <p className="eyebrow text-action-on-dark">Ready when you are</p>
-        <h2 className="heading text-center flex flex-col items-center justify-center text-canvas font-heading text-4xl sm:text-[6vw] md:text-[7vw] lg:text-6xl font-[700] leading-[0.98] tracking-tighter">
-          Your next 500 followers <br className="hidden sm:block" />
-          start this week
-        </h2>
+        {/* <h2 className="heading text-center flex flex-col items-center justify-center text-canvas font-heading text-4xl sm:text-[6vw] md:text-[7vw] lg:text-6xl font-[700] leading-[0.98] tracking-tighter">
+          <span>Start today. See followers</span>
+          <span> by [dynamic weekday]</span>
+        </h2> */}
+        <div className="heading text-center flex flex-col items-center justify-center text-canvas font-heading text-[8vw] sm:text-[8vw] md:text-[7vw] lg:text-6xl font-[700] leading-[0.88] tracking-tighter">
+          {/* Your next 500 followers <br className="hidden sm:block" />
+          start this week */}
+          <span>Start today. See followers</span>
+          <span> by [dynamic weekday]</span>
+        </div>
+
         <p className="mt-5 text-base text-action-on-dark max-w-lg mx-auto">
-          No contracts, no risk — just real growth, backed by a 30-day
-          money-back guarantee.
+          {/* No contracts, no risk — just real growth, backed by a 30-day
+          money-back guarantee. */}
+          Seven days free, and you keep the audit even if you walk.
         </p>
 
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -24,7 +32,7 @@ export default function CTA() {
             href="#pricing"
             className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-semibold text-ink transition-colors hover:bg-white/90"
           >
-            Get started
+            Start free trial
             <ArrowRight size={16} />
           </a>
           <a
@@ -36,7 +44,7 @@ export default function CTA() {
         </div>
 
         <p className="mt-6 text-sm text-action-on-dark/70">
-          Cancel anytime · No credit card required to inquire
+          Ten minutes to set up · Cancel anytime
         </p>
       </div>
     </DarkGradientSection>

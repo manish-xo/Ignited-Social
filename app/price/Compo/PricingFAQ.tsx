@@ -15,8 +15,15 @@ const PricingFAQ = () => {
       </div>
 
       <div className="heading">
-        <Heading className="text-center">Everything you need</Heading>
-        <Heading className="text-center">to know</Heading>
+        {/* <Heading className="text-center">Everything you need</Heading>
+        <Heading className="text-center">to know</Heading> */}
+        <Heading className="text-[8vw] text-center">Before you decide</Heading>
+      </div>
+      <div className="subHeading">
+        <p className="mx-auto mt-5 max-w-xs text-center text-sm leading-6 font-[400] text-secondary tracking-tight sm:max-w-2xl sm:text-lg md:text-xl lg:text-[1.12rem]">
+          Twelve things worth knowing. We’d rather answer them now, then after
+          you’ve paid.
+        </p>
       </div>
 
       <div className="mx-auto mt-12 max-w-4xl">
@@ -27,7 +34,7 @@ const PricingFAQ = () => {
         <p className="text-center space-x-1">
           <span>Still have questions?</span>
           <span className="font-[700] cursor-pointer text-action underline underline-offset-4">
-            Use live chat
+            Ask us on chat.
           </span>
         </p>
       </div>

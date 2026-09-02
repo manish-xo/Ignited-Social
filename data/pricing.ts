@@ -299,33 +299,38 @@ export const ComparisonBento: ComparisonCard[] = [
 export const riskPoints: RiskPoint[] = [
   {
     icon: ShieldCheck,
-    title: "30-day money-back guarantee",
-    description:
-      "Not seeing real growth? Get a full refund, no questions asked.",
+    // title: "30-day money-back guarantee",
+    // description:
+    //   "Not seeing real growth? Get a full refund, no questions asked.",
+    title: "Hassle Free",
+    description: "Cancel and your last payment is refunded. No claim to file.",
   },
   {
     icon: XCircle,
     title: "Cancel anytime",
     description:
-      "No contracts, no lock-in. Leave whenever you want, hassle-free.",
+      //   "No contracts, no lock-in. Leave whenever you want, hassle-free.",
+      "No contracts, no lock-in, no minimum term",
   },
   {
     icon: RotateCcw,
-    title: "No risk, just results",
+    // title: "No risk, just results",
+    title: "Keep your followers",
     description:
-      "You only stay because it's working — not because you're stuck.",
+      // "You only stay because it's working — not because you're stuck.",
+      "Everything you’ve gained stays yours after you leave",
   },
 ];
 
 export const stats: Stat[] = [
-  { value: "1,600", suffix: "ri-add-line", label: "Account managed" },
+  { value: "20k", suffix: "ri-add-line", label: "Account managed" },
   {
-    value: "98",
+    value: "300-500",
     suffix: "ri-percent-line",
-    label: "Real, active followers",
+    label: "average new followers per month",
     highlight: true,
   },
-  { value: "0", label: "Bans or shadowbans reported" },
+  { value: "2-3", label: "days to first signs of growth" },
 ];
 
 export const testimonials: Testimonial[] = [
@@ -356,73 +361,79 @@ export const accordionData: Accordion[] = [
     // question: "How fast will I see results?",
     question: "What happens during the trial period?",
     answer:
-      "Most clients start seeing new followers within 2–3 days. Meaningful, sustained growth typically builds over the first 3–4 weeks as your growth manager fine-tunes targeting.",
+      "Fill in a short onboarding form and your growth manager sets up your targeting within 24–48 hours — Monday if you sign up over the weekend. You also get a full audit of your account: audience, offer, content, positioning, and where you can improve. It's yours to keep either way. Most accounts see their first followers within 2–3 days.",
   },
   {
     value: "item-2",
     // question: "Are the followers real people?",
     question: "What if it doesn't work?",
     answer:
-      "Yes. We never use bots or purchased followers. Every follower comes from targeted, organic outreach to real, active accounts in your niche.",
+      "Two options. Cancel and your last payment is refunded, no questions asked. Or talk to your growth manager first — they'll usually retarget your audience or take another look at your content. Not clicking with your manager? Ask for a different one. We don't leave anyone stuck.",
   },
   {
     value: "item-3",
     // question: "Is this safe for my account? Will I get banned or shadowbanned?",
     question: "How many followers will I actually get?",
     answer:
-      "Yes, it's safe. We follow platform guidelines closely and use manual, compliant growth methods — no automation tools that put your account at risk.",
+      "Between 150 and 800+ a month, depending on your plan. If we ever cost you more than $1 per follower, you're overpaying — and we'd rather refund you than let that happen.",
   },
   {
     value: "item-4",
     // question: "What's the difference between Grow and Scale?",
     question: "Is my account safe?",
     answer:
-      "Grow is built for steady, sustainable growth (150–500+ followers/month). Scale is for faster results with a Senior Growth Manager, advanced targeting, and strategic content review (250–800+ followers/month).",
+      "Yes. 20,000 accounts, zero bans. We grow inside Instagram's limits, which is the boring answer, but it's why you'll never get a warning because of us.",
   },
   {
     value: "item-5",
     // question: "Can I cancel anytime?",
     question: "Do you need my password?",
     answer:
-      "Yes — there are no contracts or long-term commitments. Cancel whenever you'd like, no questions asked.",
+      "Yes — we log in to work on your account. You enter it through an encrypted wizard, so nobody here ever sees it, and we don't store it. Same for your 2FA code.",
   },
   {
     value: "item-6",
     // question: "How is my growth targeted to the right audience?",
     question: "Are the followers real people? Will they actually engage?",
     answer:
-      "Your growth manager builds a targeting profile based on your niche, industry, and ideal customer — so new followers are people actually likely to engage, not random accounts.",
+      "Yes, real accounts. They engage because of how they're picked — people already following accounts like yours, in your niche, in your area. A person already following three photographers will care about the fourth. Someone random won't.",
   },
   {
     value: "item-7",
     question: "Do I keep my followers if I cancel?",
-    answer: "Nothing",
+    answer:
+      "Yes. Every follower is a real person who chose to follow you. They don't know we exist, and they don't leave when you do.",
   },
   {
     value: "item-8",
     question: "Can I keep posting and using my account normally?",
-    answer: "Nothing",
+    answer:
+      "Yes — and you should. Your posts are what convert a profile visit into a follow. We bring people to your profile; your content is what makes them stay.",
   },
   {
     value: "item-9",
     question:
       "I've been burned by a service like this before — why are you different?",
-    answer: "Nothing",
+    answer:
+      "Fair. So don't trust us — test us. You get the audit in week one, and if you cancel, your last payment comes back. The only thing you're risking is the time it takes to fill in a form.",
   },
   {
     value: "item-10",
     question: "Couldn't I just do this myself?",
-    answer: "Nothing",
+    answer:
+      "Sure. It's 2–3 hours a day, every day. Call it 75 hours a month. If an hour of your time is worth more than $1.85, you're already losing money doing it yourself.",
   },
   {
     value: "item-11",
     question: "Will you turn followers into actual customers?",
-    answer: "Nothing",
+    answer:
+      "We get the right people to your profile. Whether they buy comes down to your offer and your content — the audit covers both in week one, and on Scale your manager keeps working on them with you. Nobody converts an audience they never had, though. That's the part we solve first.",
   },
   {
     value: "item-12",
     question: "What do you need from me to start?",
-    answer: "Nothing",
+    answer:
+      "A short form about your brand and who you want to reach, plus your login. Takes about ten minutes. Your growth manager takes it from there — targeting built within 48 hours, first followers usually inside 2–3 days.",
   },
 ];
 
