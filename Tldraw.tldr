@@ -226,20 +226,20 @@
 			"meta": {}
 		},
 		{
-			"x": -109.78911509198244,
-			"y": -27.62713744156948,
-			"z": 0.6272023344395808,
+			"x": -127.96945876336451,
+			"y": -957.7493805723295,
+			"z": 0.9364237416898018,
 			"meta": {},
 			"id": "camera:page:page",
 			"typeName": "camera"
 		},
 		{
-			"editingShapeId": null,
+			"editingShapeId": "shape:cnDNwzTwIs-rnDQT47S1w",
 			"croppingShapeId": null,
 			"selectedShapeIds": [
-				"shape:hXNQL0vkqCMkUmR8gemGo"
+				"shape:cnDNwzTwIs-rnDQT47S1w"
 			],
-			"hoveredShapeId": null,
+			"hoveredShapeId": "shape:cnDNwzTwIs-rnDQT47S1w",
 			"erasingShapeIds": [],
 			"hintingShapeIds": [],
 			"focusedGroupId": null,
@@ -249,8 +249,50 @@
 			"typeName": "instance_page_state"
 		},
 		{
-			"x": 764.3299416784307,
-			"y": 132.21858488669903,
+			"x": -79.71728420212992,
+			"y": 1077.5575683649706,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:2xvC21rJZOhTd0VRhE3eI",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "xl",
+				"w": 608.203125,
+				"font": "mono",
+				"textAlign": "middle",
+				"autoSize": true,
+				"scale": 1.5214802987008829,
+				"richText": {
+					"type": "doc",
+					"attrs": {
+						"dir": "auto"
+					},
+					"content": [
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "Reusable stepper engine"
+								}
+							]
+						}
+					]
+				}
+			},
+			"parentId": "page:page",
+			"index": "a5AiU",
+			"typeName": "shape"
+		},
+		{
+			"x": 762.4667243242768,
+			"y": 150.85075842823744,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -445,11 +487,14 @@
 		{
 			"followingUserId": null,
 			"opacityForNextShape": 1,
-			"stylesForNextShape": {},
+			"stylesForNextShape": {
+				"tldraw:size": "xl",
+				"tldraw:font": "serif"
+			},
 			"brush": null,
 			"scribbles": [],
 			"cursor": {
-				"type": "move",
+				"type": "default",
 				"rotation": 0
 			},
 			"isFocusMode": false,
@@ -459,8 +504,8 @@
 			"screenBounds": {
 				"x": 0,
 				"y": 0,
-				"w": 1345,
-				"h": 560
+				"w": 1324,
+				"h": 471
 			},
 			"insets": [
 				false,
@@ -477,7 +522,7 @@
 			"isFocused": true,
 			"devicePixelRatio": 1,
 			"isCoarsePointer": false,
-			"isHoveringCanvas": null,
+			"isHoveringCanvas": true,
 			"openMenus": [],
 			"isChangingStyle": false,
 			"isReadonly": false,
@@ -487,6 +532,48 @@
 			"id": "instance:instance",
 			"currentPageId": "page:page",
 			"typeName": "instance"
+		},
+		{
+			"x": -77.32523485460331,
+			"y": 1185.0572843960326,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:cnDNwzTwIs-rnDQT47S1w",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "xl",
+				"w": 1441.4375,
+				"font": "serif",
+				"textAlign": "middle",
+				"autoSize": true,
+				"scale": 1,
+				"richText": {
+					"type": "doc",
+					"attrs": {
+						"dir": "auto"
+					},
+					"content": [
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "(context + shell + GSAP slide transitions + per-step validation gating)"
+								}
+							]
+						}
+					]
+				}
+			},
+			"parentId": "page:page",
+			"index": "a6XlQ",
+			"typeName": "shape"
 		},
 		{
 			"name": "",

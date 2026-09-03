@@ -5,6 +5,7 @@ import { Leaf, UserCheck, BarChart3, ArrowRight } from "lucide-react";
 import CornerFrame from "@/components/ui/CornerFrame";
 import Heading from "@/components/ui/Heading";
 import FollowerGrowthChart from "@/components/dashboard/FollowerGrowthChart";
+import ProHeader from "@/components/layout/ProHeader/ProHeader";
 
 const trustPoints = [
   { icon: Leaf, label: "Organic growth" },
