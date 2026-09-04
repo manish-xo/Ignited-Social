@@ -9,6 +9,9 @@ import {
 import { PlaceholderStep } from "./steps/PlaceholderStep";
 import InstagramGoalsStep from "./steps/InstagramGoalsStep";
 import AudienceStep from "./steps/AudienceStep";
+import LocationTargetingStep from "./steps/LocationTargetingStep";
+import SimilarAccountsStep from "./steps/SimilarAccountsStep";
+import TargetHashtagsStep from "./steps/TargetHashtagsStep";
 import Logo from "@/components/Logo/Logo";
 
 // ── Add your steps here, in order. ──────────────────────────────────────
@@ -21,9 +24,9 @@ const STEPS: StepDefinition[] = [
   { id: "audience", Component: AudienceStep },
   // Steps 3–14: replace these placeholders one at a time as you build
   // each real step component.
-  { id: "step-3", Component: () => <PlaceholderStep title="Step 3" /> },
-  { id: "step-4", Component: () => <PlaceholderStep title="Step 4" /> },
-  { id: "step-5", Component: () => <PlaceholderStep title="Step 5" /> },
+  { id: "step-3", Component: SimilarAccountsStep },
+  { id: "step-4", Component: TargetHashtagsStep },
+  { id: "step-5", Component: LocationTargetingStep },
   { id: "step-6", Component: () => <PlaceholderStep title="Step 6" /> },
   { id: "step-7", Component: () => <PlaceholderStep title="Step 7" /> },
   { id: "step-8", Component: () => <PlaceholderStep title="Step 8" /> },
