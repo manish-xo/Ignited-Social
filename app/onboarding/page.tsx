@@ -12,6 +12,10 @@ import AudienceStep from "./steps/AudienceStep";
 import LocationTargetingStep from "./steps/LocationTargetingStep";
 import SimilarAccountsStep from "./steps/SimilarAccountsStep";
 import TargetHashtagsStep from "./steps/TargetHashtagsStep";
+import TargetGenderStep from "./steps/TargetGenderStep";
+import FollowingLimitStep from "./steps/FollowingLimitStep";
+import GrowthActivityStep from "./steps/GrowthActivityStep";
+import FinalDetailsStep from "./steps/FinalDetailsStep";
 import Logo from "@/components/Logo/Logo";
 
 // ── Add your steps here, in order. ──────────────────────────────────────
@@ -27,10 +31,10 @@ const STEPS: StepDefinition[] = [
   { id: "step-3", Component: SimilarAccountsStep },
   { id: "step-4", Component: TargetHashtagsStep },
   { id: "step-5", Component: LocationTargetingStep },
-  { id: "step-6", Component: () => <PlaceholderStep title="Step 6" /> },
-  { id: "step-7", Component: () => <PlaceholderStep title="Step 7" /> },
-  { id: "step-8", Component: () => <PlaceholderStep title="Step 8" /> },
-  { id: "step-9", Component: () => <PlaceholderStep title="Step 9" /> },
+  { id: "step-6", Component: TargetGenderStep },
+  { id: "step-7", Component: FollowingLimitStep },
+  { id: "step-8", Component: GrowthActivityStep },
+  { id: "step-9", Component: FinalDetailsStep },
   { id: "step-10", Component: () => <PlaceholderStep title="Step 10" /> },
   { id: "step-11", Component: () => <PlaceholderStep title="Step 11" /> },
   { id: "step-12", Component: () => <PlaceholderStep title="Step 12" /> },
