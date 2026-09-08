@@ -49,13 +49,17 @@ const Signupform = ({ plan }: SignupFormProps) => {
   const { signup } = useSignup();
 
   const onSubmit = async (values: SignupFormValues) => {
+    console.log("FORM VALUES:", values);
+    console.log("PLAN:", plan);
+
     const result = await signup({
       username: values.username,
       profilePicUrl: values.profilePicUrl,
       email: values.email,
       plan,
     });
-    console.log(result);
+    console.log("SIGNUP RESULT:", result);
+
     if (result.success) {
       showSuccessToast({
         title: "Signup successful",

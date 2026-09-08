@@ -2,10 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import {
-  StepperShell,
-  type StepDefinition,
-} from "./components/stepper/StepperShell";
+import { type StepDefinition } from "./components/stepper/StepperShell";
+import StepperShell from "./components/stepper/StepperShell";
 import { PlaceholderStep } from "./steps/PlaceholderStep";
 import InstagramGoalsStep from "./steps/InstagramGoalsStep";
 import AudienceStep from "./steps/AudienceStep";
@@ -16,6 +14,11 @@ import TargetGenderStep from "./steps/TargetGenderStep";
 import FollowingLimitStep from "./steps/FollowingLimitStep";
 import GrowthActivityStep from "./steps/GrowthActivityStep";
 import FinalDetailsStep from "./steps/FinalDetailsStep";
+import ConnectInstagramStep from "./steps/ConnectInstagramStep";
+import HowHeardStep from "./steps/HowHeardStep";
+import GrowthNoteStep from "./steps/GrowthNoteStep";
+import LaunchCallStep from "./steps/LaunchCallStep";
+import RedirectStep from "./steps/RedirectStep";
 import Logo from "@/components/Logo/Logo";
 
 // ── Add your steps here, in order. ──────────────────────────────────────
@@ -35,11 +38,11 @@ const STEPS: StepDefinition[] = [
   { id: "step-7", Component: FollowingLimitStep },
   { id: "step-8", Component: GrowthActivityStep },
   { id: "step-9", Component: FinalDetailsStep },
-  { id: "step-10", Component: () => <PlaceholderStep title="Step 10" /> },
-  { id: "step-11", Component: () => <PlaceholderStep title="Step 11" /> },
-  { id: "step-12", Component: () => <PlaceholderStep title="Step 12" /> },
-  { id: "step-13", Component: () => <PlaceholderStep title="Step 13" /> },
-  { id: "step-14", Component: () => <PlaceholderStep title="Step 14" /> },
+  { id: "step-10", Component: ConnectInstagramStep },
+  { id: "step-11", Component: HowHeardStep },
+  { id: "step-12", Component: GrowthNoteStep },
+  { id: "step-13", Component: LaunchCallStep },
+  { id: "step-14", Component: RedirectStep },
 ];
 // ─────────────────────────────────────────────────────────────────────────
 
@@ -47,14 +50,14 @@ export default function OnboardingPage() {
   const router = useRouter();
 
   const handleComplete = async (formData: Record<string, unknown>) => {
-    try {
-      await axios.post("/api/onboarding/complete", formData);
-    } catch (err) {
-      console.error("Failed to save onboarding answers:", err);
-      // Non-blocking on purpose — don't strand the user on a finished
-      // wizard just because the save call failed. Swap this for whatever
-      // error handling fits once the endpoint is real.
-    }
+    // try {
+    //   await axios.post("/api/onboarding/complete", formData);
+    // } catch (err) {
+    //   console.error("Failed to save onboarding answers:", err);
+    //   // Non-blocking on purpose — don't strand the user on a finished
+    //   // wizard just because the save call failed. Swap this for whatever
+    //   // error handling fits once the endpoint is real.
+    // }
     router.push("/dashboard");
   };
 

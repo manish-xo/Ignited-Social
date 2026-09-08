@@ -178,10 +178,10 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
           <p className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
             Your Details
           </p>
-          <h1 className="mt-3 font-heading text-4xl font-bold tracking-tight text-ink">
+          <h1 className="mt-3 text-4xl font-[700] tracking-tighter text-ink sm:text-4xl">
             Let&apos;s start growing
           </h1>
-          <p className="mt-2 text-sm text-secondary">
+          <p className="mt-2 text-md mt-3 text-secondary">
             Tell us which account you&apos;d like to grow, and how our team
             should contact you.
           </p>

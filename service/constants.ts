@@ -3,6 +3,9 @@ export const SCRAPE_DO_TOKEN = process.env.SCRAPE_DO_TOKEN;
 export const WEB_PROFILE_INFO_URL =
   "https://www.instagram.com/api/v1/users/web_profile_info/";
 export const REQUEST_TIMEOUT_MS = 60_000;
-// Required for web_profile_info on anonymous requests; without it IG returns
-// a schema-resolution error instead of profile data.
+
 export const IG_APP_ID = "936619743392459";
+
+export const INSTAGRAM_GRAPHQL_URL = "https://www.instagram.com/api/graphql";
+export const INSTAGRAM_GRAPHQL_DOC_ID = "27706427925724183";
+export const INSTAGRAM_GRAPHQL_QUERY = "PolarisSearchBoxRefetchableQuery";

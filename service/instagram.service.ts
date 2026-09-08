@@ -17,6 +17,7 @@ import type {
 } from "./types";
 import { InstagramScraperError, normalizeUsername } from "./utils";
 import { ScrapeDoService } from "./ScrapeDo.service";
+import { success } from "zod";
 
 /**
  * Options for {@link getProfile}. The scrape.do token defaults to the configured
@@ -256,12 +257,110 @@ class InstagramService extends ScrapeDoService {
       .slice(0, 8);
   }
 
-  async suggestInstagramUsername(username: string) {
-    const url = `https://api.socialboost.co/api/customer/instagram-suggestions?username=${username}`;
-    const result =
-      await this.scrapeWithScrapeDo<InstagramSuggestionsResponse>(url);
+  // async suggestInstagramUsername(username: string) {
+  //   const url = `https://api.socialboost.co/api/customer/instagram-suggestions?username=${username}`;
+  //   const result =
+  //     await this.scrapeWithScrapeDo<InstagramSuggestionsResponse>(url);
 
-    return result;
+  //   return result;
+  // }
+
+  // async suggestInstagramUsername(username: string) {
+  //   const normalized = username.trim().replace(/^@/, "");
+
+  //   if (!normalized || normalized.length < 2) {
+  //     return {
+  //       success: true,
+  //       data: {
+  //         data: [],
+  //       },
+  //     };
+  //   }
+
+  //   const variables = {
+  //     data: {
+  //       context: "blended",
+  //       include_reel: "true",
+  //       query: normalized,
+  //       rank_token:
+  //         "1788843026272|42518361dd43b9f2d88a0c62235c6bcc93d314f244a25d17ed0970b1f2336bf2",
+  //       search_session_id: "96723812-97d5-48e8-b1fb-d53422a03c77",
+  //       search_surface: "web_top_search",
+  //     },
+  //     hasQuery: true,
+  //   };
+
+  //   const body = new URLSearchParams({
+  //     av: process.env.INSTAGRAM_AV ?? "",
+  //     __user: "0",
+  //     __a: "1",
+  //     dpr: "1",
+
+  //     lsd: process.env.INSTAGRAM_LSD ?? "",
+  //     fb_dtsg: process.env.INSTAGRAM_FB_DTSG ?? "",
+  //     jazoest: process.env.INSTAGRAM_JAZOEST ?? "",
+
+  //     fb_api_caller_class: "RelayModern",
+  //     fb_api_req_friendly_name: "PolarisSearchBoxRefetchableQuery",
+
+  //     server_timestamps: "true",
+
+  //     variables: JSON.stringify(variables),
+
+  //     doc_id: "27706427925724183",
+  //   });
+  //   const response = await axios.post(
+  //     "https://www.instagram.com/api/graphql",
+  //     body.toString(),
+  //     {
+  //       timeout: REQUEST_TIMEOUT_MS,
+
+  //       headers: {
+  //         accept: "*/*",
+  //         "content-type": "application/x-www-form-urlencoded",
+
+  //         origin: "https://www.instagram.com",
+
+  //         referer: "https://www.instagram.com/explore/search/",
+
+  //         "user-agent":
+  //           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36",
+
+  //         "x-fb-friendly-name": "PolarisSearchBoxRefetchableQuery",
+
+  //         "x-fb-lsd": process.env.INSTAGRAM_LSD ?? "",
+
+  //         "x-csrftoken": process.env.INSTAGRAM_CSRF_TOKEN ?? "",
+
+  //         "x-ig-app-id": IG_APP_ID,
+
+  //         cookie: process.env.INSTAGRAM_COOKIE ?? "",
+  //       },
+  //     },
+  //   );
+  //   return response.data;
+  // }
+
+  async suggestInstagramUsername(username: string) {
+    const normalized = username.trim().replace(/^@/, "");
+
+    if (!normalized || normalized.length < 2) {
+      return {
+        success: true,
+        data: {
+          data: [],
+        },
+      };
+    }
+    const url =
+      `https://api.socialboost.co/api/customer/instagram-suggestions` +
+      `?username=${encodeURIComponent(normalized)}`;
+
+    const response = await axios.get<InstagramSuggestionsResponse>(url, {
+      timeout: REQUEST_TIMEOUT_MS,
+    });
+
+    return response.data;
   }
 }
 

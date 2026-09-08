@@ -14,7 +14,7 @@ import Footer from "@/components/layout/Footer/Footer";
 const Home = () => {
   return (
     <>
-      <ProHeader />
+      {/* <ProHeader /> */}
       <ServicesHero />
       <ProblemSection />
       <OurApproach />
@@ -23,7 +23,7 @@ const Home = () => {
       <GrowthManagerSpotlight />
       <MonthlyService />
       <ProofNumbers />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };
