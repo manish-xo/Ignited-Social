@@ -97,20 +97,20 @@ const Pricing = () => {
           </div>
           {/* HEADING */}
           <div className="Heading">
-            <Heading className="text-center hidden sm:block">
+            <Heading className="text-center hidden sm:block -tracking-[0.06em]">
               {/* Affordable plans for every */}
               Choose how fast
             </Heading>
-            <Heading className="text-center hidden sm:block">
+            <Heading className="text-center hidden sm:block -tracking-[0.06em]">
               {/* Budget */}
               you want to grow.
             </Heading>
 
-            <Heading className="text-center text-[9vw] sm:hidden">
+            <Heading className="text-center text-[9vw] sm:hidden -tracking-[0.06em]">
               {/* Affordable plans for */}
               Choose how fast
             </Heading>
-            <Heading className="text-center text-[9vw] sm:hidden">
+            <Heading className="text-center text-[9vw] sm:hidden -tracking-[0.06em]">
               {/* every budget */}
               you want to grow.
             </Heading>
