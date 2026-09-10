@@ -19,8 +19,8 @@ export async function createPayPalOrder(amount: string): Promise<string> {
       purchaseUnits: [
         {
           amount: {
-            currencyCode: "USD",
-            value: amount,
+            currencyCode: "INR",
+            value: "100",
           },
         },
       ],
