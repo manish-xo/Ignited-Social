@@ -2,6 +2,8 @@ import { FileCheck2, Lock, ShieldCheck } from "lucide-react";
 import { getPlan } from "@/lib/plans";
 import PlanSummaryPanel from "@/components/payment/PlanSummaryPanel";
 import PaymentForm from "./PaymentForm";
+import { getPaypalPlanId } from "@/lib/paypal/plans";
+
 // import PayPalCheckout from "@/components/PayPalCheckout";
 
 interface PaymentPageProps {
@@ -51,6 +53,7 @@ export default async function PaymentPage({ searchParams }: PaymentPageProps) {
             price={plan.price}
             username={username}
             nextChargeLabel={nextChargeLabel}
+            paypalPlanId={getPaypalPlanId(plan.slug as "grow" | "scale")}
           />
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] text-muted">
@@ -72,13 +75,3 @@ export default async function PaymentPage({ searchParams }: PaymentPageProps) {
     </div>
   );
 }
-
-// const Payment = () => {
-//   return (
-//     <main>
-//       <PayPalCheckout />
-//     </main>
-//   );
-// };
-
-// export default Payment;
