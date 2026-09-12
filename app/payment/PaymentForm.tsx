@@ -803,37 +803,48 @@ export default function PaymentForm({
           >
             <PayPalButtons
               style={{ layout: "vertical", shape: "pill", label: "subscribe" }}
+              // createSubscription={(_data, actions) => {
+              //   console.log("========== PAYPAL DEBUG ==========");
+              //   console.log("Environment:", "sandbox");
+              //   console.log("Plan ID:", paypalPlanId);
+              //   console.log("Plan:", plan);
+              //   console.log("Full name:", fullName);
+              //   console.log("Email:", email);
+              //   console.log("==========================================");
+
+              //   const [given, ...rest] = fullName.trim().split(" ");
+
+              //   // IMPORTANT: no shipping_address here. PayPal's schema
+              //   // requires shipping_address to include its own
+              //   // name.full_name field (separate from subscriber.name,
+              //   // which uses given_name/surname) — omitting it caused
+              //   // INVALID_SUBSCRIBER_SHIPPING_INFO_NAME. We don't ship
+              //   // anything, so it's just left out entirely rather than
+              //   // fighting that schema. Country/postal code are still
+              //   // collected above and sent to /api/create-subscription
+              //   // for the Supabase record — just not to PayPal itself.
+              //   return actions.subscription.create({
+              //     plan_id: paypalPlanId,
+              //     subscriber: {
+              //       email_address: email,
+              //       name: {
+              //         given_name: given || fullName,
+              //         surname: rest.join(" ") || "-",
+              //       },
+              //     },
+              //   });
+              // }}
               createSubscription={(_data, actions) => {
-                const [given, ...rest] = fullName.trim().split(" ");
-
-                console.log("========== PAYPAL SUBSCRIPTION ==========");
-                console.log("PayPal plan_id being used:", paypalPlanId);
-                console.log(
-                  "Client ID:",
-                  process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
-                );
+                console.log("========== PAYPAL DEBUG ==========");
+                console.log("Environment:", "sandbox");
+                console.log("Plan ID:", paypalPlanId);
                 console.log("Plan:", plan);
+                console.log("Full name:", fullName);
                 console.log("Email:", email);
-                console.log("==========================================");
+                console.log("=================================");
 
-                // IMPORTANT: no shipping_address here. PayPal's schema
-                // requires shipping_address to include its own
-                // name.full_name field (separate from subscriber.name,
-                // which uses given_name/surname) — omitting it caused
-                // INVALID_SUBSCRIBER_SHIPPING_INFO_NAME. We don't ship
-                // anything, so it's just left out entirely rather than
-                // fighting that schema. Country/postal code are still
-                // collected above and sent to /api/create-subscription
-                // for the Supabase record — just not to PayPal itself.
                 return actions.subscription.create({
                   plan_id: paypalPlanId,
-                  subscriber: {
-                    email_address: email,
-                    name: {
-                      given_name: given || fullName,
-                      surname: rest.join(" ") || "-",
-                    },
-                  },
                 });
               }}
               onApprove={async (data) => {

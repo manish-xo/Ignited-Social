@@ -59,8 +59,10 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
+    // CHANGED — was "paypal_subsriptions" (missing the "c"), which meant
+    // this insert was silently failing every time.
     const { error: insertError } = await supabaseAdmin
-      .from("paypal_subsriptions")
+      .from("paypal_subscriptions")
       .insert({
         signup_id: signup?.id ?? null,
         paypal_subscription_id: subscriptionID,
