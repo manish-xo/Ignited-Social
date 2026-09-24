@@ -29,21 +29,22 @@ const Proof = () => {
 
           {/* <Heading className="hidden sm:block">
             We've done this 20,000 times
-          </Heading>
-
-          <Heading className="block text-[8vw] sm:hidden">
-            We've done this
+            
           </Heading>
           <Heading className="block text-[8vw] sm:hidden">
             20,000 times.
           </Heading> */}
 
-          <Heading className="block text-[8vw] sm:hidden">
+          <Heading className="text-[8vw] sm:hidden md:block lg:hidden">
             We've done this
           </Heading>
-          <Heading className="block text-[8vw] sm:hidden">20,000 times</Heading>
+          <Heading className="text-[8vw] sm:hidden md:block lg:hidden">
+            20,000 times
+          </Heading>
 
-          <Heading className="sm:block ">We've done this 20,000 times.</Heading>
+          <Heading className="hidden sm:block md:hidden lg:block">
+            We've done this 20,000 times
+          </Heading>
         </div>
 
         <div className="subHeading">
