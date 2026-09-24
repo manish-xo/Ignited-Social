@@ -27,7 +27,7 @@ export default async function PaymentAddonsPage({
       </div>
 
       {/* ===== RIGHT — add-on picker ===== */}
-      <div className="bg-canvas mt-20 relative px-6 py-10 sm:px-10 lg:px-14 lg:py-14">
+      <div className="bg-canvas mt-6 relative px-6 py-10 sm:px-10 lg:px-14 lg:py-14">
         <div className="mx-auto max-w-lg">
           <div className="flex items-center gap-2 text-xs font-[500] text-green-500">
             <span className="w-[1rem] h-[1rem] flex items-center justify-center rounded-full bg-green-500">

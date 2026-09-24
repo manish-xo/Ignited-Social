@@ -39,10 +39,10 @@ export default async function PaymentPage({ searchParams }: PaymentPageProps) {
           <p className="font-mono text-xs uppercase tracking-[0.14em] text-muted">
             Payment
           </p>
-          <h1 className="mt-3 font-heading text-4xl font-bold tracking-tight text-ink">
+          <h1 className="mt-3 text-4xl font-[700] tracking-tighter text-ink sm:text-4xl">
             Complete your subscription
           </h1>
-          <p className="mt-2 text-sm text-secondary">
+          <p className="mt-2 text-md mt-3 text-secondary">
             You&apos;re subscribing as{" "}
             <span className="font-semibold text-ink">@{username}</span>.
           </p>

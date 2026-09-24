@@ -1,4 +1,5 @@
 import { Star } from "lucide-react";
+import Logo from "../Logo/Logo";
 
 // Simple placeholder tile for the before/after grid — swap the `bg-*`
 // classes here for real `<img>` thumbnails once you have example content
@@ -17,9 +18,10 @@ function Tile({ tone }: { tone: "flat" | "polished" }) {
 
 export default function ProfileImpactPanel() {
   return (
-    <div className="mx-auto max-w-xl mt-20">
+    <div className="mx-auto max-w-xl mt-4">
       <p className="font-heading text-xl font-bold tracking-tight">
-        YourBrand.
+        {/* Your Brand. */}
+        <Logo outerTxt="#faf9f6" circleStroke="" mainLogoTxt="#faf9f6" />
       </p>
 
       <p className="mt-10 font-mono text-xs uppercase tracking-[0.14em] text-white/50">

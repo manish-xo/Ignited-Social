@@ -58,7 +58,7 @@ export default function OnboardingPage() {
     //   // wizard just because the save call failed. Swap this for whatever
     //   // error handling fits once the endpoint is real.
     // }
-    router.push("/dashboard");
+    router.push("/dashboard/billing");
   };
 
   return (

@@ -1,7 +1,14 @@
+import Logo from "@/components/Logo/Logo";
+
 export default function EngagementPanel() {
   return (
-    <div className="mx-auto max-w-xl mt-20">
-      <p className="font-mono text-xs uppercase tracking-[0.14em] text-white/50">
+    <div className="mx-auto max-w-xl mt-6">
+      <div className="font-heading text-xl font-bold tracking-tight">
+        {/* Your Brand. */}
+        <Logo outerTxt="#faf9f6" circleStroke="" mainLogoTxt="#faf9f6" />
+      </div>
+
+      <p className="font-mono mt-8 text-xs uppercase tracking-[0.14em] text-white/50">
         The engagement loop
       </p>
       <h2 className="mt-2 text-3xl font-bold leading-tight tracking-tight sm:text-4xl">

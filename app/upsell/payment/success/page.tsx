@@ -29,7 +29,7 @@ export default async function PaymentSuccessPage({
 
       {/* ===== RIGHT — upsell offer ===== */}
       <div className="bg-canvas relative px-6 py-10 sm:px-10 lg:px-14 lg:py-14">
-        <div className="mx-auto max-w-lg mt-20">
+        <div className="mx-auto max-w-lg mt-4">
           <div className="flex items-center gap-2 text-sm font-semibold text-success">
             <CheckCircle2 size={18} />
             Payment confirmed

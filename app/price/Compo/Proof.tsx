@@ -3,7 +3,7 @@ import React from "react";
 import CornerFrame from "@/components/ui/CornerFrame";
 import Heading from "@/components/ui/Heading";
 import { testimonials, stats } from "@/data/pricing";
-import { Quote, Star, BadgeCheck } from "lucide-react";
+import { BadgeCheck } from "lucide-react";
 
 const Proof = () => {
   return (
@@ -26,13 +26,24 @@ const Proof = () => {
           <Heading className="text-center text-[8.5vw] sm:hidden">
             growth.
           </Heading> */}
-          <Heading className="hidden sm:block">
-            We've done this 20,000 times.
+
+          {/* <Heading className="hidden sm:block">
+            We've done this 20,000 times
+          </Heading>
+
+          <Heading className="block text-[8vw] sm:hidden">
+            We've done this
           </Heading>
           <Heading className="block text-[8vw] sm:hidden">
-            We've done this 20,000
+            20,000 times.
+          </Heading> */}
+
+          <Heading className="block text-[8vw] sm:hidden">
+            We've done this
           </Heading>
-          <Heading className="block text-[8vw] sm:hidden">times.</Heading>
+          <Heading className="block text-[8vw] sm:hidden">20,000 times</Heading>
+
+          <Heading className="sm:block ">We've done this 20,000 times.</Heading>
         </div>
 
         <div className="subHeading">

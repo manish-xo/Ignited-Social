@@ -13,7 +13,7 @@ export default function PlanSummaryPanel({
   switchBasePath,
 }: PlanSummaryPanelProps) {
   return (
-    <div className="mx-auto mt-24 max-w-xl sm:mt-16">
+    <div className="mx-auto mt-8 max-w-xl sm:mt-4">
       <p className="mt-10 font-mono text-xs uppercase tracking-[0.14em] text-white/50">
         Your Plan
       </p>
