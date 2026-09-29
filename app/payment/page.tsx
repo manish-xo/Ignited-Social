@@ -30,7 +30,11 @@ export default async function PaymentPage({ searchParams }: PaymentPageProps) {
     <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
       {/* ===== LEFT — dark plan summary panel (shared with signup) ===== */}
       <div className="bg-ink px-6 py-10 text-white sm:px-10 lg:px-14 lg:py-14">
-        <PlanSummaryPanel plan={plan} switchBasePath="/payment" />
+        <PlanSummaryPanel
+          plan={plan}
+          switchBasePath="/payment"
+          username={params.username}
+        />
       </div>
 
       {/* ===== RIGHT — payment form ===== */}

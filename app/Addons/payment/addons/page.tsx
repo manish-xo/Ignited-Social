@@ -1,5 +1,5 @@
 import { Check, CheckCircle2 } from "lucide-react";
-import { ADDON_OFFERS } from "../../lib/addons";
+import { ADDON_OFFERS, ADDONS_BUNDLE_PLAN_ID } from "../../lib/addons";
 import EngagementPanel from "../../components/payment/EngagementPanel";
 import AddonSelector from "./AddonSelector";
 
@@ -54,7 +54,9 @@ export default async function PaymentAddonsPage({
               monthlyPrice: a.monthlyPrice,
               description: a.description,
               recommended: a.recommended ?? false,
+              paypalPlanId: a.paypalPlanId,
             }))}
+            bundlePlanId={ADDONS_BUNDLE_PLAN_ID}
             customerId={customerId}
             plan={plan}
             username={username}

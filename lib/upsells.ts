@@ -5,8 +5,8 @@ export interface UpsellOffer {
   monthlyPrice: number; // ongoing price, from month 2 onward
   discountPct: number; // e.g. 35 -> 35% off the first month
   features: string[];
-  // Stripe recurring Price for the add-on subscription item
-  priceId: string;
+  // PayPal plan: first month at discountPct off (trial cycle), then monthlyPrice
+  paypalPlanId: string;
 }
 
 export const UPSELL_OFFERS: UpsellOffer[] = [
@@ -20,7 +20,7 @@ export const UPSELL_OFFERS: UpsellOffer[] = [
       "Professionally designed around your direction",
       "Scheduled and posted with captions",
     ],
-    priceId: process.env.STRIPE_PRICE_CONTENT_CREATION as string,
+    paypalPlanId: process.env.NEXT_PUBLIC_PAYPAL_PLAN_ID_CONTENT_CREATION as string,
   },
   {
     slug: "content-creation-plus",
@@ -33,7 +33,7 @@ export const UPSELL_OFFERS: UpsellOffer[] = [
       "Plus 3 Reels per month — the #1 format for reach",
       "Priority creative review from your manager",
     ],
-    priceId: process.env.STRIPE_PRICE_CONTENT_CREATION_PLUS as string,
+    paypalPlanId: process.env.NEXT_PUBLIC_PAYPAL_PLAN_ID_CONTENT_CREATION_PLUS as string,
   },
 ];
 

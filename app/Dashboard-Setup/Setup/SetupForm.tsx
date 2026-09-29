@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,6 +14,9 @@ import {
 } from "@/components/ui/field";
 // import { setupSchema, SetupFormValues } from "@/schema/setup.schema";
 import { setupSchema, SetupFormValues } from "@/schema/setup.schema";
+import { useAppDispatch, useAppSelector } from "@/libs/store";
+import { setAccount } from "@/libs/dataslice";
+import { createClient } from "@/lib/supabaseClient";
 
 interface SetupFormProps {
   plan: string;
@@ -27,9 +30,18 @@ export default function SetupForm({ plan, username, addons }: SetupFormProps) {
   const [serverError, setServerError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
+  // The login must use the signup email, so take it from Redux and lock the
+  // field. The API checks it against Signup too, so editing the page won't help.
+  const dispatch = useAppDispatch();
+  const signupEmail = useAppSelector(
+    (state) =>
+      state.dataSlice.signup?.email || state.dataSlice.payment?.email || "",
+  );
+
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
   } = useForm<SetupFormValues>({
     resolver: zodResolver(setupSchema),
@@ -37,12 +49,19 @@ export default function SetupForm({ plan, username, addons }: SetupFormProps) {
     defaultValues: { email: "", password: "" },
   });
 
+  // Redux rehydrates from localStorage after first render.
+  useEffect(() => {
+    if (signupEmail) {
+      setValue("email", signupEmail, { shouldValidate: true });
+    }
+  }, [signupEmail, setValue]);
+
   const onSubmit = async (values: SetupFormValues) => {
     setSubmitting(true);
     setServerError(null);
 
     try {
-      await axios.post("/api/account/create", {
+      const { data: res } = await axios.post("/api/account/create", {
         email: values.email,
         password: values.password,
         instagramUsername: username,
@@ -50,9 +69,35 @@ export default function SetupForm({ plan, username, addons }: SetupFormProps) {
         addons,
       });
 
-      router.push(
-        `/dashboard?${new URLSearchParams({ plan, username }).toString()}`,
+      // Log them straight in so onboarding knows who they are.
+      const supabase = createClient();
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: values.email.trim().toLowerCase(),
+        password: values.password,
+      });
+      if (signInError) {
+        setServerError(
+          "Account created, but we couldn't log you in. Please log in from the dashboard.",
+        );
+        setSubmitting(false);
+        return;
+      }
+
+      // Keep a copy in Redux too — never the password, Redux is persisted
+      // to localStorage.
+      dispatch(
+        setAccount({
+          userId: res.userId,
+          email: values.email.trim().toLowerCase(),
+          username,
+          plan,
+          addons: addons ? addons.split(",") : [],
+          createdAt: new Date().toISOString(),
+        }),
       );
+
+      // replace: Back mustn't return to the create-password form.
+      router.replace("/onboarding");
     } catch (err: any) {
       setServerError(
         err.response?.data?.message ??
@@ -70,11 +115,18 @@ export default function SetupForm({ plan, username, addons }: SetupFormProps) {
           <input
             id="setup-email"
             type="email"
-            placeholder="Enter your email"
+            placeholder="Enter the email you signed up with"
+            readOnly={!!signupEmail}
+            aria-readonly={!!signupEmail}
             data-invalid={!!errors.email}
-            className="w-full rounded-xl border border-border bg-white px-3.5 py-3 text-sm text-ink placeholder:text-placeholder focus:outline-none focus:ring-2 focus:ring-action/30 data-[invalid=true]:border-danger data-[invalid=true]:focus:ring-danger/30"
+            className="w-full rounded-xl border border-border bg-white px-3.5 py-3 text-sm text-ink placeholder:text-placeholder focus:outline-none focus:ring-2 focus:ring-action/30 read-only:cursor-not-allowed read-only:bg-border/20 read-only:text-secondary data-[invalid=true]:border-danger data-[invalid=true]:focus:ring-danger/30"
             {...register("email")}
           />
+          {signupEmail && (
+            <p className="mt-1 text-xs text-muted">
+              This is the email you signed up with.
+            </p>
+          )}
           <FieldError errors={[errors.email]} />
         </Field>
 

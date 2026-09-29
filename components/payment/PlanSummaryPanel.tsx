@@ -6,11 +6,14 @@ interface PlanSummaryPanelProps {
   plan: ReturnType<typeof getPlan>;
   /** Base path so the plan-switcher pills link correctly from /signup or /payment */
   switchBasePath: "/signup" | "/payment";
+  /** Carried through the plan-switcher links so /payment keeps the handle */
+  username?: string;
 }
 
 export default function PlanSummaryPanel({
   plan,
   switchBasePath,
+  username,
 }: PlanSummaryPanelProps) {
   return (
     <div className="mx-auto mt-8 max-w-xl sm:mt-4">
@@ -26,7 +29,9 @@ export default function PlanSummaryPanel({
           return (
             <Link
               key={slug}
-              href={`${switchBasePath}?plan=${slug}`}
+              href={`${switchBasePath}?${new URLSearchParams(
+                username ? { plan: slug, username } : { plan: slug },
+              ).toString()}`}
               replace
               className={`relative rounded-xl border p-3.5 transition-colors ${
                 isActive

@@ -27,7 +27,7 @@ export default async function PaymentCompletePage({
     <div className="flex min-h-screen items-center justify-center bg-canvas px-6 py-12">
       <div className="w-full max-w-md mt-6">
         <p className="mb-3 text-center flex items-center justify-center font-heading text-xl font-bold text-ink">
-          <Logo className="" />
+          <Logo outerTxt="#221F1B" circleStroke="" mainLogoTxt="#faf9f6" />
         </p>
 
         <div className="rounded-3xl border border-border bg-white p-8 text-center shadow-sm sm:p-10">

@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useStepper } from "../components/stepper/StepperContext";
 import Accordion from "../components/ui/Accordion";
-import TagInput from "../components/ui/TagInput";
+import InstagramSearchInput from "../components/ui/InstagramSearchInput";
 
 export default function TargetHashtagsStep() {
   const { formData, updateFormData, setStepValid } = useStepper();
@@ -24,12 +24,12 @@ export default function TargetHashtagsStep() {
       </p>
 
       <div className="mt-6">
-        <TagInput
+        <InstagramSearchInput
+          type="hashtag"
           values={hashtags}
           onChange={(v) => updateFormData({ targetHashtags: v })}
           max={50}
-          placeholder="E.g. fitnessmotivation"
-          prefix="#"
+          placeholder="Search hashtags, e.g. fitnessmotivation"
         />
       </div>
 

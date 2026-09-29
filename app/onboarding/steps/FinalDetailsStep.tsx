@@ -1,38 +1,48 @@
 "use client";
 
 import { useEffect, useState } from "react";
-// import { useStepper } from "../StepperContext";
+import {
+  isSupportedCountry,
+  isValidPhoneNumber,
+  parsePhoneNumberWithError,
+  type CountryCode,
+} from "libphonenumber-js";
 import { useStepper } from "../components/stepper/StepperContext";
-
-const COUNTRIES = [
-  { code: "IN", dial: "+91", flag: "🇮🇳" },
-  { code: "US", dial: "+1", flag: "🇺🇸" },
-  { code: "GB", dial: "+44", flag: "🇬🇧" },
-  { code: "CA", dial: "+1", flag: "🇨🇦" },
-  { code: "AU", dial: "+61", flag: "🇦🇺" },
-];
+import PhoneInput from "../components/ui/PhoneInput";
+import { useAppSelector } from "@/libs/store";
 
 export default function FinalDetailsStep() {
   const { formData, updateFormData, setStepValid } = useStepper();
-  const [countryCode, setCountryCode] = useState<string>(
-    (formData.phoneCountry as string) ?? "IN",
+  // Start on the billing country from the payment step, else India.
+  const billingCountry = useAppSelector(
+    (state) => state.dataSlice.payment?.country,
   );
+  const [countryCode, setCountryCode] = useState<CountryCode>(() => {
+    const saved = (formData.phoneCountry as string) ?? billingCountry;
+    return saved && isSupportedCountry(saved) ? saved : "IN";
+  });
   const [phoneNumber, setPhoneNumber] = useState<string>(
     (formData.phoneNumber as string) ?? "",
   );
+  const [touched, setTouched] = useState(false);
   const [additionalDetails, setAdditionalDetails] = useState<string>(
     (formData.additionalDetails as string) ?? "",
   );
 
-  const country = COUNTRIES.find((c) => c.code === countryCode) ?? COUNTRIES[0];
+  const digits = phoneNumber.replace(/\D/g, "");
+  // Checks length and number ranges for the selected country.
+  const phoneValid = digits.length > 0 && isValidPhoneNumber(digits, countryCode);
+  const showPhoneError = touched && digits.length > 0 && !phoneValid;
 
   useEffect(() => {
-    const digits = phoneNumber.replace(/\D/g, "");
-    setStepValid(digits.length >= 7);
+    setStepValid(phoneValid);
     updateFormData({
       phoneCountry: countryCode,
       phoneNumber,
-      phone: `${country.dial}${phoneNumber}`,
+      // Full international format, e.g. "+919876543210" — ready for SMS/WhatsApp.
+      phone: phoneValid
+        ? parsePhoneNumberWithError(digits, countryCode).number
+        : "",
       additionalDetails,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -53,26 +63,19 @@ export default function FinalDetailsStep() {
           <label className="mb-2 block text-sm font-semibold text-ink">
             Phone number
           </label>
-          <div className="flex items-center rounded-xl border border-border bg-white focus-within:ring-2 focus-within:ring-action/30">
-            <select
-              value={countryCode}
-              onChange={(e) => setCountryCode(e.target.value)}
-              className="appearance-none rounded-l-xl border-r border-border bg-transparent py-3 pl-3.5 pr-2 text-sm text-ink focus:outline-none"
-            >
-              {COUNTRIES.map((c) => (
-                <option key={c.code} value={c.code}>
-                  {c.flag} {c.dial}
-                </option>
-              ))}
-            </select>
-            <input
-              type="tel"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              placeholder="Phone number"
-              className="w-full rounded-r-xl bg-transparent px-3.5 py-3 text-sm text-ink placeholder:text-placeholder focus:outline-none"
-            />
-          </div>
+          <PhoneInput
+            country={countryCode}
+            onCountryChange={setCountryCode}
+            value={phoneNumber}
+            onChange={setPhoneNumber}
+            onBlur={() => setTouched(true)}
+            invalid={showPhoneError}
+          />
+          {showPhoneError && (
+            <p className="mt-1.5 text-xs text-danger">
+              That doesn&apos;t look like a valid number for this country.
+            </p>
+          )}
         </div>
 
         <div>

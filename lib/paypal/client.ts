@@ -10,9 +10,19 @@ async function getAccessToken(): Promise<string> {
     return cachedToken.value;
   }
 
-  const auth = Buffer.from(
-    `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`,
-  ).toString("base64");
+  // The client ID is public (the browser SDK needs it too), so fall back to
+  // the NEXT_PUBLIC_ one if a server-only copy isn't set.
+  const clientId =
+    process.env.PAYPAL_CLIENT_ID ?? process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+  const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
+
+  if (!clientId || !clientSecret) {
+    throw new Error(
+      "Missing PayPal credentials — set NEXT_PUBLIC_PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET",
+    );
+  }
+
+  const auth = Buffer.from(`${clientId}:${clientSecret}`).toString("base64");
 
   const res = await fetch(`${PAYPAL_API_BASE}/v1/oauth2/token`, {
     method: "POST",
@@ -24,7 +34,7 @@ async function getAccessToken(): Promise<string> {
   });
 
   if (!res.ok) {
-    throw new Error(`PayPal auth failed: ${res.status}`);
+    throw new Error(`PayPal auth failed (${res.status}): ${await res.text()}`);
   }
 
   const data = await res.json();

@@ -1,17 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { ArrowRight, Lock } from "lucide-react";
+import { Lock } from "lucide-react";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { useAppDispatch, useAppSelector } from "@/libs/store";
+import { setUpsell } from "@/libs/dataslice";
 
 interface OfferView {
-  slug: string;
+  slug: "content-creation" | "content-creation-plus";
   name: string;
   recommended: boolean;
   monthlyPrice: number;
   discountPct: number;
   features: string[];
+  paypalPlanId: string;
 }
 
 interface UpsellSelectorProps {
@@ -29,41 +33,51 @@ export default function UpsellSelector({
   offers,
   customerId,
   plan,
-  username,
+  username: usernameFromUrl,
 }: UpsellSelectorProps) {
   const router = useRouter();
-  const [selected, setSelected] = useState(
-    offers.find((o) => o.recommended)?.slug ?? offers[0]?.slug,
-  );
+  const dispatch = useAppDispatch();
+  // Payment/signup are in Redux; prefer them over the URL fallback.
+  const payment = useAppSelector((state) => state.dataSlice.payment);
+  const signup = useAppSelector((state) => state.dataSlice.signup);
+  const username = payment?.username || signup?.username || usernameFromUrl;
+  const email = payment?.email || signup?.email;
+
+  // Nothing preselected — the client picks one, and can click it again to unselect.
+  const [selected, setSelected] = useState<OfferView["slug"] | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const selectedOffer = offers.find((o) => o.slug === selected);
 
-  const handleAdd = async () => {
-    if (!selectedOffer) return;
+  // PayPalButtons can hold on to the callbacks from its first render, so read
+  // the current selection through a ref.
+  const selectedRef = useRef(selectedOffer);
+  selectedRef.current = selectedOffer;
+
+  // With or without Content Creation, the next step is the add-ons page.
+  const addonsUrl = (upsell?: string) =>
+    `/Addons/payment/addons?${new URLSearchParams({
+      plan,
+      customer: customerId,
+      username,
+      ...(upsell ? { upsell } : {}),
+    }).toString()}`;
+
+  // Skipping still goes through the server, which moves the funnel pass on
+  // to the add-ons step (and locks this page).
+  const handleSkip = async () => {
     setSubmitting(true);
     setError(null);
-
     try {
-      await axios.post("/api/upsell/charge", {
-        customerId,
-        offerSlug: selectedOffer.slug,
-      });
-      router.push(
-        `/dashboard?plan=${plan}&username=${username}&addon=${selectedOffer.slug}`,
-      );
+      await axios.post("/api/flow/skip", { step: "upsell" });
+      router.replace(addonsUrl());
     } catch (err: any) {
-      setError(
-        err.response?.data?.message ??
-          "Couldn't charge your card on file. Please try again.",
-      );
+      const next = err.response?.data?.next;
+      if (next) return router.replace(next);
+      setError("Couldn't continue. Please try again.");
       setSubmitting(false);
     }
-  };
-
-  const handleSkip = () => {
-    router.push(`/dashboard?plan=${plan}&username=${username}`);
   };
 
   return (
@@ -75,7 +89,12 @@ export default function UpsellSelector({
             <button
               key={offer.slug}
               type="button"
-              onClick={() => setSelected(offer.slug)}
+              aria-pressed={isSelected}
+              onClick={() =>
+                setSelected((current) =>
+                  current === offer.slug ? null : offer.slug,
+                )
+              }
               className={`relative w-full rounded-2xl border-2 p-5 text-left transition-colors ${
                 isSelected
                   ? "border-action bg-white shadow-sm"
@@ -142,7 +161,9 @@ export default function UpsellSelector({
 
       <div className="mt-5 flex items-center gap-2 rounded-xl bg-border/30 px-4 py-3 text-xs text-muted">
         <Lock size={13} />
-        Using your card on file. One tap to add.
+        {selectedOffer
+          ? `${selectedOffer.name}: $${firstMonthPrice(selectedOffer)} today, then $${selectedOffer.monthlyPrice}/mo. Cancel anytime.`
+          : "Select an add-on above to continue."}
       </div>
 
       {error && (
@@ -151,19 +172,92 @@ export default function UpsellSelector({
         </p>
       )}
 
-      <button
-        type="button"
-        onClick={handleAdd}
-        disabled={submitting || !selectedOffer}
-        className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-action text-sm font-semibold text-white transition-colors hover:bg-action-hover disabled:opacity-60"
-      >
-        {submitting
-          ? "Adding..."
-          : selectedOffer
-            ? `Add ${selectedOffer.name} — $${firstMonthPrice(selectedOffer)} today`
-            : "Select a plan"}
-        {!submitting && <ArrowRight size={15} />}
-      </button>
+      <div className="mt-4">
+        <p className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-muted">
+          Secure checkout via PayPal
+        </p>
+        <div
+          className={
+            !selectedOffer || submitting ? "pointer-events-none opacity-40" : ""
+          }
+        >
+          <PayPalScriptProvider
+            options={{
+              clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID as string,
+              vault: true,
+              intent: "subscription",
+            }}
+          >
+            <PayPalButtons
+              style={{ layout: "vertical", shape: "pill", label: "subscribe" }}
+              createSubscription={(_data, actions) => {
+                const offer = selectedRef.current;
+                if (!offer) {
+                  return Promise.reject(new Error("No add-on selected"));
+                }
+                return actions.subscription.create({
+                  plan_id: offer.paypalPlanId,
+                });
+              }}
+              onApprove={async (data) => {
+                const offer = selectedRef.current;
+                if (!offer) return;
+                setSubmitting(true);
+                setError(null);
+                try {
+                  const { data: res } = await axios.post(
+                    "/api/upsell/create-subscription",
+                    {
+                      subscriptionID: data.subscriptionID,
+                      offerSlug: offer.slug,
+                      parentSubscriptionId: customerId || undefined,
+                      email: email || undefined,
+                      instagramUsername: username,
+                    },
+                  );
+
+                  // Saved to Supabase by the API — keep a copy in Redux too.
+                  dispatch(
+                    setUpsell({
+                      upsellId: res.upsellId,
+                      parentSubscriptionId: customerId,
+                      offer: offer.slug,
+                      offerName: offer.name,
+                      firstMonthAmount: firstMonthPrice(offer),
+                      monthlyAmount: offer.monthlyPrice,
+                      username,
+                      email: email ?? "",
+                      paymentMethod: "paypal",
+                      status: "active",
+                    }),
+                  );
+
+                  router.replace(addonsUrl(offer.slug));
+                } catch (err: any) {
+                  console.error(
+                    "upsell create-subscription failed:",
+                    err.response?.data ?? err,
+                  );
+                  setError(
+                    err.response?.data?.message ??
+                      "Something went wrong confirming your add-on.",
+                  );
+                  setSubmitting(false);
+                }
+              }}
+              onError={(err) => {
+                console.error("PayPal SDK error (upsell):", err, {
+                  offer: selectedRef.current?.slug,
+                });
+                setError("PayPal couldn't complete that. Please try again.");
+              }}
+              onCancel={(data) => {
+                console.warn("PayPal upsell checkout cancelled:", data);
+              }}
+            />
+          </PayPalScriptProvider>
+        </div>
+      </div>
 
       <button
         type="button"

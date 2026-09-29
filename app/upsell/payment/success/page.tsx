@@ -51,6 +51,7 @@ export default async function PaymentSuccessPage({
               monthlyPrice: o.monthlyPrice,
               discountPct: o.discountPct,
               features: o.features,
+              paypalPlanId: o.paypalPlanId,
             }))}
             customerId={customerId}
             plan={plan.slug}

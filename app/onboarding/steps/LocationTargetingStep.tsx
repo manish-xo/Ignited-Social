@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MapPin } from "lucide-react";
 import { useStepper } from "../components/stepper/StepperContext";
 import Accordion from "../components/ui/Accordion";
-import TagInput from "../components/ui/TagInput";
+import InstagramSearchInput from "../components/ui/InstagramSearchInput";
 
 type Scope = "local" | "local-plus-national";
 
@@ -31,12 +30,12 @@ export default function LocationTargetingStep() {
       </p>
 
       <div className="mt-6">
-        <TagInput
+        <InstagramSearchInput
+          type="location"
           values={locations}
           onChange={(v) => updateFormData({ locations: v })}
           max={20}
           placeholder="Search for a city, state, or country"
-          icon={<MapPin size={15} />}
         />
       </div>
 
@@ -63,6 +62,7 @@ export default function LocationTargetingStep() {
           <button
             type="button"
             onClick={() => setScope("local")}
+            aria-pressed={scope === "local"}
             className={`rounded-full border-2 px-4 py-2 text-sm font-semibold transition-colors ${
               scope === "local"
                 ? "border-success bg-white text-ink"
@@ -74,6 +74,7 @@ export default function LocationTargetingStep() {
           <button
             type="button"
             onClick={() => setScope("local-plus-national")}
+            aria-pressed={scope === "local-plus-national"}
             className={`flex items-center gap-2 rounded-full border-2 px-4 py-2 text-sm font-semibold transition-colors ${
               scope === "local-plus-national"
                 ? "border-success bg-white text-ink"

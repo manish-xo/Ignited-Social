@@ -13,6 +13,7 @@ import Link from "next/link";
 import { instagramService } from "@/service/instagram.service";
 import InstagramUsernameInput from "@/components/signup/InstagramUsernameInput";
 import Signupform from "./signupform";
+import Logo from "@/components/Logo/Logo";
 
 interface SignupPageProps {
   searchParams: Promise<{ plan?: string }>;
@@ -30,7 +31,8 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
       {/* ===== LEFT — dark plan summary panel ===== */}
       <div className="bg-ink px-6 text-white sm:px-10 lg:px-14 lg:py-6">
         <div className="mx-auto max-w-xl sm:mt-0">
-          <p className="mt-10 font-mono text-xs uppercase tracking-[0.14em] text-white/50">
+          <Logo outerTxt="#faf9f6" mainLogoTxt="#faf9f6" />
+          <p className="mt-5 font-mono text-xs uppercase tracking-[0.14em] text-white/50">
             Your Plan
           </p>
 

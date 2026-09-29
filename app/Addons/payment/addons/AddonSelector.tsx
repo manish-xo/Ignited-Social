@@ -196,21 +196,27 @@
 
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { ArrowRight } from "lucide-react";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { useAppDispatch, useAppSelector } from "@/libs/store";
+import { setAddons } from "@/libs/dataslice";
 
 interface AddonView {
-  slug: string;
+  slug: "targeted-comments" | "dm-new-followers";
   name: string;
   monthlyPrice: number;
   description: string;
   recommended: boolean;
+  paypalPlanId: string;
 }
 
 interface AddonSelectorProps {
   offers: AddonView[];
+  /** PayPal plan used when every add-on is selected (one checkout, not two) */
+  bundlePlanId: string;
   customerId: string;
   plan: string;
   username: string;
@@ -218,11 +224,18 @@ interface AddonSelectorProps {
 
 export default function AddonSelector({
   offers,
+  bundlePlanId,
   customerId,
   plan,
-  username,
+  username: usernameFromUrl,
 }: AddonSelectorProps) {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  // Payment/signup are in Redux; prefer them over the URL fallback.
+  const payment = useAppSelector((state) => state.dataSlice.payment);
+  const signup = useAppSelector((state) => state.dataSlice.signup);
+  const username = payment?.username || signup?.username || usernameFromUrl;
+  const email = payment?.email || signup?.email;
   // Back to multi-select — any number of add-ons can be active at once.
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [submitting, setSubmitting] = useState(false);
@@ -241,37 +254,43 @@ export default function AddonSelector({
     });
   };
 
-  const goToDashboard = (addedSlugs: string[]) => {
+  // One PayPal subscription covers one plan: a single add-on uses its own
+  // plan, both together use the bundle plan.
+  const planId =
+    selectedOffers.length === 0
+      ? null
+      : selectedOffers.length === offers.length
+        ? bundlePlanId
+        : selectedOffers[0].paypalPlanId;
+
+  // PayPalButtons can hold on to the callbacks from its first render, so read
+  // the current selection through a ref.
+  const selectionRef = useRef({ selectedOffers, planId, total });
+  selectionRef.current = { selectedOffers, planId, total };
+
+  // With or without add-ons, the next step is the "Setup complete" page.
+  const goToComplete = (addedSlugs: string[]) => {
     const params = new URLSearchParams({ plan, username });
     if (addedSlugs.length) params.set("addons", addedSlugs.join(","));
-    router.push(`/dashboard?${params.toString()}`);
+    // replace: Back mustn't return to the add-ons form.
+    router.replace(`/Addons/payment/complete?${params.toString()}`);
   };
 
-  const handleAdd = async () => {
-    if (selectedOffers.length === 0) {
-      goToDashboard([]);
-      return;
-    }
-
+  // Skipping still goes through the server, which moves the funnel pass on
+  // to "setup complete" (and locks this page).
+  const handleSkip = async () => {
     setSubmitting(true);
     setError(null);
-
     try {
-      await axios.post("/api/addons/charge", {
-        customerId,
-        offerSlugs: selectedOffers.map((o) => o.slug),
-      });
-      goToDashboard(selectedOffers.map((o) => o.slug));
+      await axios.post("/api/flow/skip", { step: "addons" });
+      goToComplete([]);
     } catch (err: any) {
-      setError(
-        err.response?.data?.message ??
-          "Couldn't charge your card on file. Please try again.",
-      );
+      const next = err.response?.data?.next;
+      if (next) return router.replace(next);
+      setError("Couldn't continue. Please try again.");
       setSubmitting(false);
     }
   };
-
-  const handleSkip = () => goToDashboard([]);
 
   return (
     <div className="mt-8">
@@ -356,19 +375,101 @@ export default function AddonSelector({
         </p>
       )}
 
-      <button
-        type="button"
-        onClick={handleAdd}
-        disabled={submitting}
-        className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-action text-sm font-semibold text-white transition-colors hover:bg-action-hover disabled:opacity-60"
-      >
-        {submitting
-          ? "Adding..."
-          : selectedOffers.length > 0
-            ? "Add to my plan"
-            : "Continue to setup"}
-        {!submitting && <ArrowRight size={15} />}
-      </button>
+      {selectedOffers.length === 0 ? (
+        <button
+          type="button"
+          onClick={handleSkip}
+          className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-action text-sm font-semibold text-white transition-colors hover:bg-action-hover disabled:opacity-60"
+        >
+          Continue to setup
+          <ArrowRight size={15} />
+        </button>
+      ) : (
+        <div className="mt-4">
+          <p className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-muted">
+            Secure checkout via PayPal
+          </p>
+          <div className={submitting ? "pointer-events-none opacity-40" : ""}>
+            <PayPalScriptProvider
+              options={{
+                clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID as string,
+                vault: true,
+                intent: "subscription",
+              }}
+            >
+              <PayPalButtons
+                style={{
+                  layout: "vertical",
+                  shape: "pill",
+                  label: "subscribe",
+                }}
+                createSubscription={(_data, actions) => {
+                  const { planId } = selectionRef.current;
+                  if (!planId) {
+                    return Promise.reject(new Error("No add-ons selected"));
+                  }
+                  return actions.subscription.create({ plan_id: planId });
+                }}
+                onApprove={async (data) => {
+                  const { selectedOffers, total } = selectionRef.current;
+                  if (selectedOffers.length === 0) return;
+                  const slugs = selectedOffers.map((o) => o.slug);
+                  setSubmitting(true);
+                  setError(null);
+                  try {
+                    const { data: res } = await axios.post(
+                      "/api/addons/create-subscription",
+                      {
+                        subscriptionID: data.subscriptionID,
+                        addonSlugs: slugs,
+                        parentSubscriptionId: customerId || undefined,
+                        email: email || undefined,
+                        instagramUsername: username,
+                      },
+                    );
+
+                    // Saved to Supabase by the API — keep a copy in Redux too.
+                    dispatch(
+                      setAddons({
+                        addonSubscriptionId: res.addonSubscriptionId,
+                        parentSubscriptionId: customerId,
+                        addons: slugs,
+                        addonNames: selectedOffers.map((o) => o.name),
+                        monthlyAmount: total,
+                        username,
+                        email: email ?? "",
+                        paymentMethod: "paypal",
+                        status: "active",
+                      }),
+                    );
+
+                    goToComplete(slugs);
+                  } catch (err: any) {
+                    console.error(
+                      "addons create-subscription failed:",
+                      err.response?.data ?? err,
+                    );
+                    setError(
+                      err.response?.data?.message ??
+                        "Something went wrong confirming your add-ons.",
+                    );
+                    setSubmitting(false);
+                  }
+                }}
+                onError={(err) => {
+                  console.error("PayPal SDK error (add-ons):", err, {
+                    planId: selectionRef.current.planId,
+                  });
+                  setError("PayPal couldn't complete that. Please try again.");
+                }}
+                onCancel={(data) => {
+                  console.warn("PayPal add-ons checkout cancelled:", data);
+                }}
+              />
+            </PayPalScriptProvider>
+          </div>
+        </div>
+      )}
 
       {selectedOffers.length > 0 && (
         <button

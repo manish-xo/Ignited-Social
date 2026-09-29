@@ -3,8 +3,7 @@
 import { useEffect } from "react";
 import { useStepper } from "../components/stepper/StepperContext";
 import Accordion from "../components/ui/Accordion";
-import TagInput from "../components/ui/TagInput";
-import InstagramUsernameInput from "@/components/signup/InstagramUsernameInput";
+import InstagramSearchInput from "../components/ui/InstagramSearchInput";
 
 export default function SimilarAccountsStep() {
   const { formData, updateFormData, setStepValid } = useStepper();
@@ -26,21 +25,12 @@ export default function SimilarAccountsStep() {
       </p>
 
       <div className="mt-6">
-        {/* <TagInput
+        <InstagramSearchInput
+          type="account"
           values={accounts}
           onChange={(v) => updateFormData({ similarAccounts: v })}
           max={50}
-          placeholder="E.g. fitnesscreator"
-          prefix="@"
-        /> */}
-
-        <InstagramUsernameInput
-          mode="multiple"
-          label="Similar accounts"
-          placeholder="E.g. fitnesscreator"
-          values={accounts}
-          onValuesChange={(v) => updateFormData({ similarAccounts: v })}
-          max={50}
+          placeholder="Search accounts, e.g. fitnesscreator"
         />
       </div>
 

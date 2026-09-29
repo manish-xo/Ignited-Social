@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 import InstagramUsernameInput from "@/components/signup/InstagramUsernameInput";
 import { useDispatch, useSelector } from "react-redux";
 import { setSignup, setStatus, setError } from "@/libs/dataslice";
@@ -61,13 +62,33 @@ const Signupform = ({ plan }: SignupFormProps) => {
     console.log("SIGNUP RESULT:", result);
 
     if (result.success) {
+      // The server checks the signup exists and issues the pass for /payment.
+      // Without it, the payment page redirects back here.
+      let next = `/payment?${new URLSearchParams({
+        plan,
+        username: values.username,
+      })}`;
+      try {
+        const { data } = await axios.post("/api/flow/start", {
+          signupId: result.data?.signupId,
+        });
+        next = data.next ?? next;
+      } catch {
+        showErrorToast({
+          title: "Couldn't continue to payment",
+          description: "Please try again in a moment.",
+        });
+        return;
+      }
+
       showSuccessToast({
         title: "Signup successful",
         description:
           "Your account has been created. Let's continue to payment.",
       });
 
-      router.push(`/payment?plan=${plan}`);
+      // replace, not push: Back shouldn't return to a submitted signup form.
+      router.replace(next);
     } else {
       showErrorToast({
         title: "Signup failed",

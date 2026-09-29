@@ -3,7 +3,7 @@ import { z } from "zod";
 export const paypalSubscriptionSchema = z.object({
   subscriptionID: z.string().min(1),
   plan: z.enum(["grow", "scale"]),
-  email: z.string().email(),
+  email: z.string().email().optional(),
   fullName: z.string().optional(),
   country: z.string().optional(),
   postalCode: z.string().optional(),

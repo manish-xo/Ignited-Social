@@ -13,7 +13,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["dataslice"],
+  whitelist: ["dataSlice"], // must match the key in combineReducers exactly
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

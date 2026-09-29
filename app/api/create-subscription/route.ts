@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { paypalFetch } from "@/lib/paypal/client";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { paypalSubscriptionSchema } from "@/schema/paypal-subscription";
+import { getPaypalPlanId } from "@/lib/paypal/plans";
+import { readFlow, writeFlow } from "@/lib/flow/session";
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -21,7 +23,7 @@ export const POST = async (req: NextRequest) => {
     const {
       subscriptionID,
       plan,
-      email,
+      email: formEmail,
       fullName,
       country,
       postalCode,
@@ -31,7 +33,9 @@ export const POST = async (req: NextRequest) => {
     const subscription = await paypalFetch(
       `/v1/billing/subscriptions/${subscriptionID}`,
     );
-    if (subscription.status !== "ACTIVE") {
+    // Right after approval PayPal can still report APPROVED for a few seconds
+    // before flipping to ACTIVE — both mean the buyer agreed to the plan.
+    if (!["ACTIVE", "APPROVED"].includes(subscription.status)) {
       return NextResponse.json(
         {
           message: `Subscription isn't active yet (status: ${subscription.status})`,
@@ -40,8 +44,41 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
+    // Don't trust the plan the browser sent — make sure the subscription the
+    // buyer actually approved is for that plan.
+    if (subscription.plan_id !== getPaypalPlanId(plan)) {
+      console.error("PayPal plan mismatch:", {
+        subscriptionID,
+        claimed: plan,
+        actual: subscription.plan_id,
+      });
+      return NextResponse.json(
+        { message: "Subscription plan doesn't match. Please contact support." },
+        { status: 400 },
+      );
+    }
+
+    // Prefer the email typed into the form (that's what signup used); the
+    // PayPal account email can be different.
+    const email: string | null =
+      formEmail ?? subscription.subscriber?.email_address ?? null;
+
+    if (!email) {
+      console.error(
+        "PayPal subscription had no subscriber email:",
+        subscriptionID,
+      );
+      return NextResponse.json(
+        {
+          message:
+            "Couldn't retrieve your email from PayPal. Please contact support.",
+        },
+        { status: 500 },
+      );
+    }
+
     const { data: signup, error: signupError } = await supabaseAdmin
-      .from("signups")
+      .from("Signup")
       .select("id")
       .eq("email", email)
       .order("created_at", { ascending: false })
@@ -83,10 +120,19 @@ export const POST = async (req: NextRequest) => {
         { status: 500 },
       );
     }
-    return NextResponse.json({
-      customerId: subscriptionID,
-      status: "active",
-    });
+    // Payment verified with PayPal — unlock the upsell step (and lock /payment).
+    const flow = await readFlow(req);
+    return writeFlow(
+      NextResponse.json({ customerId: subscriptionID, status: "active" }),
+      {
+        signupId: flow?.signupId ?? signup?.id ?? "",
+        email: flow?.email ?? email,
+        username: flow?.username ?? instagramUsername ?? "",
+        plan,
+        stage: "paid",
+        subscriptionId: subscriptionID,
+      },
+    );
   } catch (err) {
     console.error("create-subscription (PayPal) error:", err);
 

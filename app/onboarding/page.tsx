@@ -20,6 +20,7 @@ import GrowthNoteStep from "./steps/GrowthNoteStep";
 import LaunchCallStep from "./steps/LaunchCallStep";
 import RedirectStep from "./steps/RedirectStep";
 import Logo from "@/components/Logo/Logo";
+import { showErrorToast } from "@/components/custom/Toaster/ErrorToast";
 
 // ── Add your steps here, in order. ──────────────────────────────────────
 // Each entry needs a unique `id` (used as the React key) and a
@@ -50,15 +51,20 @@ export default function OnboardingPage() {
   const router = useRouter();
 
   const handleComplete = async (formData: Record<string, unknown>) => {
-    // try {
-    //   await axios.post("/api/onboarding/complete", formData);
-    // } catch (err) {
-    //   console.error("Failed to save onboarding answers:", err);
-    //   // Non-blocking on purpose — don't strand the user on a finished
-    //   // wizard just because the save call failed. Swap this for whatever
-    //   // error handling fits once the endpoint is real.
-    // }
-    router.push("/dashboard/billing");
+    // Marks onboarding finished on the account — proxy.ts then keeps
+    // /onboarding closed and opens the dashboard. (Answers aren't stored yet.)
+    try {
+      const { data } = await axios.post("/api/onboarding/complete", formData);
+      // replace: Back from the dashboard shouldn't reopen the finished wizard.
+      router.replace(data.next ?? "/dashboard/billing");
+    } catch (err) {
+      console.error("Failed to complete onboarding:", err);
+      // The dashboard stays locked until this succeeds, so let them retry.
+      showErrorToast({
+        title: "Couldn't finish onboarding",
+        description: "Please check your connection and try again.",
+      });
+    }
   };
 
   return (
