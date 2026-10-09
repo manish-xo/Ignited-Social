@@ -4,9 +4,11 @@ import { createPayPalOrder, capturePayPalOrder } from "@/lib/paypal/order";
 
 export const createOrder = async (): Promise<{ id: string }> => {
   try {
-    const orderId = await createPayPalOrder("9.99");
+    // createPayPalOrder takes the amount as a number and returns the full
+    // PayPal order object — the button only needs its id.
+    const order = await createPayPalOrder(9.99);
     return {
-      id: orderId,
+      id: order.id,
     };
   } catch (error) {
     console.error("PAYPAL CREATE ERROR:", error);
