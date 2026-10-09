@@ -73,7 +73,12 @@ export default function OnboardingPage() {
       onComplete={handleComplete}
       logo={
         <div className="flex items-center gap-2 font-heading text-lg font-bold text-ink">
-          <Logo className="" />
+          <Logo
+            className=""
+            mainLogoTxt="#faf9f6"
+            outerTxt="#221f1b"
+            circleStroke="#faf9f6"
+          />
         </div>
       }
     />

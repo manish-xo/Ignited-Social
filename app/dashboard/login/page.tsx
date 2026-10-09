@@ -53,7 +53,11 @@ export default function DashboardLoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-canvas px-6 py-12">
       <div className="w-full max-w-md">
         <div className="flex items-center justify-center gap-2 font-heading text-lg font-bold text-ink">
-          <Logo />
+          <Logo
+            mainLogoTxt="#faf9f6"
+            outerTxt="#221f1b"
+            circleStroke="#faf9f6"
+          />
         </div>
 
         <div className="rounded-3xl border border-border bg-white p-8 text-center shadow-sm sm:p-10">
