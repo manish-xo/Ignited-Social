@@ -44,7 +44,11 @@ const Footer = () => {
                 Ignited
               </span>
               <span className="text-base font-medium">Social</span> */}
-              <Logo />
+              <Logo
+                mainLogoTxt="#faf9f6"
+                outerTxt="#221f1b"
+                circleStroke="#faf9f6"
+              />
             </a>
             <p className="max-w-[220px] text-sm font-light tracking-wide text-secondary">
               Real growth, real people, real results.
