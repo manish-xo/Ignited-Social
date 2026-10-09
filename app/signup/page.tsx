@@ -31,7 +31,7 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
       {/* ===== LEFT — dark plan summary panel ===== */}
       <div className="bg-ink px-6 text-white sm:px-10 lg:px-14 lg:py-6">
         <div className="mx-auto max-w-xl sm:mt-0">
-          <Logo outerTxt="#faf9f6" mainLogoTxt="#faf9f6" />
+          <Logo outerTxt="#faf9f6" mainLogoTxt="#faf9f6" circleStroke="none" />
           <p className="mt-5 font-mono text-xs uppercase tracking-[0.14em] text-white/50">
             Your Plan
           </p>

@@ -205,3 +205,37 @@ body {
     @apply font-sans;
   }
 }
+
+/* Bricolage Grotesque, condensed cut (width axis 75 of 75–100).
+   Usage: <h1 className="font-heading-condensed">…</h1> */
+@utility font-heading-condensed {
+  font-family: var(--font-heading);
+  font-variation-settings: "wdth" 75;
+}
+
+/* Gentle drift for floating hero pills. Vary speed/offset per element with
+   inline animation-duration / animation-delay. */
+@keyframes hero-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  25% {
+    transform: translate3d(4px, -8px, 0);
+  }
+  50% {
+    transform: translate3d(-3px, -12px, 0);
+  }
+  75% {
+    transform: translate3d(-5px, -4px, 0);
+  }
+}
+
+@utility animate-hero-float {
+  animation: hero-float 7s ease-in-out infinite;
+  will-change: transform;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}

@@ -10,19 +10,23 @@ import ProblemSection from "./Compo/ProblemSection";
 import ServicesHero from "./Compo/ServiceHero";
 import ProofNumbers from "./ProofNumbers";
 import Footer from "@/components/layout/Footer/Footer";
+import Hero from "./sections/Hero";
+import BrandManager from "./sections/BrandManager";
 
 const Home = () => {
   return (
     <>
       {/* <ProHeader /> */}
-      <ServicesHero />
-      <ProblemSection />
+      {/* <ServicesHero /> */}
+      <Hero />
+      <BrandManager />
+      {/* <ProblemSection />
       <OurApproach />
       <EverythingIncluded />
       <NotJustNumbers />
       <GrowthManagerSpotlight />
       <MonthlyService />
-      <ProofNumbers />
+      <ProofNumbers /> */}
       {/* <Footer /> */}
     </>
   );

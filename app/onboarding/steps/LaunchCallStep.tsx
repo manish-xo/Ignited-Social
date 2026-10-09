@@ -4,12 +4,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Bell, Loader2, MapPin } from "lucide-react";
 import { useStepper } from "../components/stepper/StepperContext";
+import CurrentUserAvatar from "@/components/custom/CurrentUserAvatar";
 
 export default function LaunchCallStep() {
   const { formData, setHideNav, goNext } = useStepper();
   const [phase, setPhase] = useState<"submitting" | "ready">("submitting");
-
-  const username = (formData.username as string) ?? "your account";
 
   useEffect(() => {
     setHideNav(true);
@@ -71,14 +70,12 @@ export default function LaunchCallStep() {
       </p>
 
       <div className="mt-6 text-center">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-tr from-orange-400 via-pink-500 to-purple-500 p-[2px]">
-          <div className="flex h-full w-full items-center justify-center rounded-full bg-white text-lg font-bold text-ink">
-            {username.replace(/^@/, "")[0]?.toUpperCase() ?? "?"}
-          </div>
-        </div>
-        <p className="mt-2 text-sm font-semibold text-ink">
-          @{username.replace(/^@/, "")}
-        </p>
+        <CurrentUserAvatar
+          size={64}
+          showHandle
+          handleClassName="mt-2 text-sm font-semibold text-ink"
+          letterClassName="bg-white text-lg font-bold text-ink"
+        />
       </div>
 
       <p className="mt-4 text-center text-sm text-secondary">

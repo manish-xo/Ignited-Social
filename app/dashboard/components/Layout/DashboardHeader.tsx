@@ -1,4 +1,5 @@
 import { MessageCircle } from "lucide-react";
+import CurrentUserAvatar from "@/components/custom/CurrentUserAvatar";
 
 interface DashboardHeaderProps {
   instagramUsername: string;
@@ -14,10 +15,8 @@ export default function DashboardHeader({
   return (
     <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-white p-5">
       <div className="flex flex-wrap items-center gap-4">
-        <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-tr from-orange-400 via-pink-500 to-purple-500 p-[2px]">
-          <div className="flex h-full w-full items-center justify-center rounded-full bg-white text-sm font-bold text-ink">
-            {instagramUsername[0]?.toUpperCase() ?? "?"}
-          </div>
+        <div>
+          <CurrentUserAvatar size={44} fallbackUsername={instagramUsername} />
         </div>
         <div>
           <p className="text-[10px] font-semibold uppercase tracking-wide text-muted">

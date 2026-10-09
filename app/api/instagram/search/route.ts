@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { instagramService } from "@/service/instagram.service";
 
 // Cloudflare worker that scrapes Instagram search. Override per environment
 // with INSTAGRAM_SEARCH_API_URL if it ever moves.
@@ -27,6 +28,56 @@ export interface HashtagResult {
   name: string;
   postCount: number;
   postCountLabel: string; // e.g. "52.9M posts"
+}
+
+// Both sources occasionally repeat an account/tag in one response.
+function uniqueBy<T extends AccountResult | HashtagResult>(
+  items: T[],
+  type: SearchType,
+): T[] {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    const key = (
+      type === "account"
+        ? (item as AccountResult).username
+        : (item as HashtagResult).name
+    ).toLowerCase();
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+// socialboost wraps picture URLs in its own proxy; unwrap so ours serves them.
+const SOCIALBOOST_IMAGE_PROXY = "https://instagram-proxy-fbng.onrender.com/";
+
+async function searchAccountsFallback(
+  query: string,
+): Promise<AccountResult[] | null> {
+  try {
+    const res = await instagramService.suggestInstagramUsername(query);
+    const users = (res as any)?.data;
+    if (!Array.isArray(users)) return null;
+    return users
+      .filter((u: any) => u?.username)
+      .map((u: any): AccountResult => {
+        const pic = String(u.profile_pic_url ?? "");
+        const raw = pic.startsWith(SOCIALBOOST_IMAGE_PROXY)
+          ? pic.slice(SOCIALBOOST_IMAGE_PROXY.length)
+          : pic;
+        return {
+          id: String(u.id ?? u.pk ?? u.username),
+          username: String(u.username),
+          fullName: String(u.full_name ?? ""),
+          isVerified: Boolean(u.is_verified),
+          followersLabel: "", // this source doesn't include follower counts
+          profilePicUrl: raw.startsWith("http") ? raw : null,
+        };
+      });
+  } catch (err) {
+    console.error("Instagram account search fallback failed:", err);
+    return null;
+  }
 }
 
 export async function GET(req: NextRequest) {
@@ -62,6 +113,23 @@ export async function GET(req: NextRequest) {
         message: body?.message,
         error: body?.error,
       });
+
+      // The worker breaks whenever Instagram blocks its session; for accounts
+      // fall back to the same suggestions API the signup form uses.
+      if (type === "account") {
+        const fallback = await searchAccountsFallback(query);
+        if (fallback) {
+          return NextResponse.json(
+            {
+              success: true,
+              data: uniqueBy(fallback, "account"),
+              source: "fallback",
+            },
+            { headers: { "Cache-Control": "private, max-age=300" } },
+          );
+        }
+      }
+
       return NextResponse.json(
         { success: false, message: "Search is unavailable right now." },
         { status: 502 },
@@ -89,7 +157,7 @@ export async function GET(req: NextRequest) {
           );
 
     return NextResponse.json(
-      { success: true, data },
+      { success: true, data: uniqueBy(data, type) },
       // Same search twice in a row (e.g. typing then deleting a letter)
       // can come from the browser cache.
       { headers: { "Cache-Control": "private, max-age=300" } },

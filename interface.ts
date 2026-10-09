@@ -2,6 +2,7 @@ export type Plan = "grow" | "scale";
 
 export interface SignupData {
   username: string;
+  profilePicUrl?: string; // Instagram CDN URL — expires after a few days
   email: string;
   plan: Plan;
   signupId: string | null;

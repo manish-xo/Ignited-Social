@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CheckCheck } from "lucide-react";
 import Logo from "@/components/Logo/Logo";
+import CurrentUserAvatar from "@/components/custom/CurrentUserAvatar";
 
 interface CompletePageProps {
   searchParams: Promise<{
@@ -15,7 +16,6 @@ export default async function PaymentCompletePage({
 }: CompletePageProps) {
   const params = await searchParams;
   const username = params.username ?? "yourhandle";
-  const initial = username.replace(/^@/, "")[0]?.toUpperCase() ?? "?";
 
   const dashboardSetupUrl = `/Dashboard-Setup/Setup?${new URLSearchParams({
     plan: params.plan ?? "",
@@ -32,9 +32,12 @@ export default async function PaymentCompletePage({
 
         <div className="rounded-3xl border border-border bg-white p-8 text-center shadow-sm sm:p-10">
           <div className="relative mx-auto h-20 w-20">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-action-tint-bg text-2xl font-bold text-action">
-              {initial}
-            </div>
+            <CurrentUserAvatar
+              size={80}
+              ring={false}
+              fallbackUsername={username}
+              letterClassName="bg-action-tint-bg text-2xl font-bold text-action"
+            />
             <span className="absolute -bottom-0.5 -right-0.5 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-success">
               <CheckCheck size={12} className="text-white" />
             </span>

@@ -108,7 +108,17 @@ export default function InstagramSearchInput({
                   value: location.label,
                   location,
                 }));
-        setResults(mapped);
+        // Search sources sometimes return the same account/tag twice; keep
+        // the first so each row (and its React key) is unique.
+        const seen = new Set<string>();
+        setResults(
+          mapped.filter((r) => {
+            const key = r.value.toLowerCase();
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+          }),
+        );
         setHighlighted(0);
         setLoading(false);
       } catch (err) {
@@ -150,6 +160,13 @@ export default function InstagramSearchInput({
   const typedHashtag =
     type === "hashtag" ? query.replace(/[^\p{L}\p{N}_]/gu, "") : "";
 
+  // Fallback for when search itself is down (e.g. the scraper is blocked by
+  // Instagram): let a well-formed handle through so onboarding isn't stuck.
+  const typedHandle =
+    type === "account" && error && /^[a-z0-9._]{1,30}$/i.test(query)
+      ? query.toLowerCase()
+      : "";
+
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "ArrowDown") {
       e.preventDefault();
@@ -163,6 +180,7 @@ export default function InstagramSearchInput({
       const pick = results[highlighted];
       if (open && pick && !isSelected(pick.value)) add(pick.value);
       else if (typedHashtag) add(`#${typedHashtag}`);
+      else if (typedHandle) add(`@${typedHandle}`);
     } else if (e.key === "Escape") {
       setOpen(false);
     } else if (e.key === "Backspace" && text === "" && values.length > 0) {
@@ -181,7 +199,25 @@ export default function InstagramSearchInput({
       </div>
     );
   } else if (error) {
-    dropdownBody = <p className="px-3 py-4 text-sm text-danger">{error}</p>;
+    const manual = typedHandle
+      ? `@${typedHandle}`
+      : typedHashtag
+        ? `#${typedHashtag}`
+        : "";
+    dropdownBody = (
+      <div className="px-3 py-4 text-sm">
+        <p className="text-danger">Search isn&apos;t available right now.</p>
+        {manual && (
+          <button
+            type="button"
+            onClick={() => add(manual)}
+            className="mt-2 font-semibold text-action hover:underline"
+          >
+            Add {manual} anyway (or press Enter)
+          </button>
+        )}
+      </div>
+    );
   } else if (results.length === 0) {
     dropdownBody = (
       <p className="px-3 py-4 text-sm text-muted">

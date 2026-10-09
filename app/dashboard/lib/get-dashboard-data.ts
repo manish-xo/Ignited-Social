@@ -1,10 +1,25 @@
-// import { createClient } from "@/lib/supabase/server";
-import { createClient } from "@/lib/supabaseClient";
+import { cookies } from "next/headers";
+import { createServerClient } from "@supabase/ssr";
+import { supabaseAdmin } from "@/lib/supabase/admin";
+import { UPSELL_OFFERS } from "@/lib/upsells";
+import { ADDON_OFFERS } from "@/app/Addons/lib/addons";
 import { DUMMY_DASHBOARD_DATA } from "./dummy-data";
 import type { DashboardData } from "./types";
 
+const offerName = (slug: string) =>
+  [...UPSELL_OFFERS, ...ADDON_OFFERS].find((o) => o.slug === slug)?.name ??
+  slug;
+
 export async function getDashboardData(): Promise<DashboardData> {
-  const supabase = await createClient();
+  // Runs on the server, so it needs the server client reading the request's
+  // cookies — the browser client never sees the login here and always fell
+  // back to dummy data.
+  const cookieStore = await cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { cookies: { getAll: () => cookieStore.getAll(), setAll: () => {} } },
+  );
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -13,18 +28,61 @@ export async function getDashboardData(): Promise<DashboardData> {
   // login, but fall back cleanly rather than throwing.
   if (!user) return DUMMY_DASHBOARD_DATA;
 
-  const [{ data: profile }, { data: onboarding }] = await Promise.all([
-    supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(),
-    supabase
+  // The tables have RLS on with no public policies, so read them with the
+  // service role — scoped to this user's own id / signup.
+  const signupId = (user.user_metadata?.signup_id as string) ?? null;
+
+  const [
+    { data: onboarding },
+    { data: signup },
+    { data: upsells },
+    { data: addonRows },
+  ] = await Promise.all([
+    supabaseAdmin
       .from("onboarding_responses")
       .select("answers")
       .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .limit(1)
       .maybeSingle(),
+    signupId
+      ? supabaseAdmin
+          .from("Signup")
+          .select("instagram_username, plan")
+          .eq("id", signupId)
+          .maybeSingle()
+      : Promise.resolve({ data: null }),
+    signupId
+      ? supabaseAdmin
+          .from("paypal_upsells")
+          .select("offer")
+          .eq("signup_id", signupId)
+          .in("status", ["ACTIVE", "APPROVED"])
+      : Promise.resolve({ data: [] }),
+    signupId
+      ? supabaseAdmin
+          .from("paypal_addons")
+          .select("addons")
+          .eq("signup_id", signupId)
+          .in("status", ["ACTIVE", "APPROVED"])
+      : Promise.resolve({ data: [] }),
   ]);
 
   const answers = (onboarding?.answers ?? {}) as Record<string, any>;
+
+  const plan: string | null =
+    signup?.plan ?? (user.user_metadata?.plan as string) ?? null;
+  const profile = {
+    instagram_username:
+      signup?.instagram_username ??
+      (user.user_metadata?.instagram_username as string) ??
+      null,
+    plan,
+    addons: [
+      ...(upsells ?? []).map((u: { offer: string }) => offerName(u.offer)),
+      ...(addonRows ?? []).flatMap((a: { addons: string[] }) =>
+        a.addons.map(offerName),
+      ),
+    ],
+  };
 
   return {
     ...DUMMY_DASHBOARD_DATA,

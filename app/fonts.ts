@@ -1,9 +1,12 @@
 import { Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
 import localFont from "next/font/local";
 
+// Variable font (weights 200–800) with the width axis loaded too, so headings
+// can use the condensed cut via `font-heading-condensed` (wdth 75). Everything
+// else stays at the default width (100), so existing headings look the same.
 export const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
-  weight: ["200", "300", "400", "500", "600", "700", "800"],
+  axes: ["wdth"],
   variable: "--font-bricolage",
   display: "swap",
 });

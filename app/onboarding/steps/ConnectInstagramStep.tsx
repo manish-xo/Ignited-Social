@@ -6,6 +6,7 @@ import axios from "axios";
 // import { useStepper } from "../StepperContext";
 import { useStepper } from "../components/stepper/StepperContext";
 import { createClient } from "@/lib/supabaseClient";
+import CurrentUserAvatar from "@/components/custom/CurrentUserAvatar";
 
 export default function ConnectInstagramStep() {
   const { formData, updateFormData, setStepValid, registerBeforeNext, goNext } =
@@ -29,8 +30,6 @@ export default function ConnectInstagramStep() {
   const [warningVisible, setWarningVisible] = useState(false);
   const confirmedSamePassword = useRef(false);
   const passwordInputRef = useRef<HTMLInputElement>(null);
-
-  const username = (formData.username as string) ?? "your account";
 
   // Reveal the confirm-password field once the user signals they're done
   // typing the first one — either by pressing Enter or by tabbing/clicking
@@ -103,14 +102,7 @@ export default function ConnectInstagramStep() {
 
       <div className="mt-6 flex items-center justify-center gap-3">
         <div className="text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-orange-400 via-pink-500 to-purple-500 p-[2px]">
-            <div className="flex h-full w-full items-center justify-center rounded-full bg-white text-sm font-bold text-ink">
-              {username.replace(/^@/, "")[0]?.toUpperCase() ?? "?"}
-            </div>
-          </div>
-          <p className="mt-1.5 text-xs font-medium text-secondary">
-            @{username.replace(/^@/, "")}
-          </p>
+          <CurrentUserAvatar size={56} showHandle />
         </div>
 
         <span className="flex h-8 w-8 items-center justify-center rounded-full bg-action text-white">
