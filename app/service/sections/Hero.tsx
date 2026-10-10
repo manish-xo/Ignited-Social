@@ -17,9 +17,9 @@ import { getPlan } from "@/lib/plans";
 
 // Placeholder faces for the social-proof pill — swap for real creator photos.
 const CREATOR_AVATARS = [
-  { initial: "A", className: "bg-[#c08457]" },
-  { initial: "M", className: "bg-[#7c6a5a]" },
-  { initial: "R", className: "bg-[#a5715b]" },
+  { imgSrc: "/stock/avatar.jpg" },
+  { imgSrc: "/stock/avatar-2.jpg" },
+  { imgSrc: "/stock/avatar-3.jpg" },
 ];
 
 const STATS = [
@@ -46,7 +46,6 @@ interface FloatingPill {
   position: string;
   duration: string;
   delay: string;
-  hideOnMobile?: boolean;
 }
 
 const FLOATING_PILLS: FloatingPill[] = [
@@ -75,7 +74,6 @@ const FLOATING_PILLS: FloatingPill[] = [
     position: "top-[50%] -left-[24%]",
     duration: "9s",
     delay: "-4s",
-    hideOnMobile: true,
   },
   {
     icon: TrendingUp,
@@ -93,7 +91,6 @@ const FLOATING_PILLS: FloatingPill[] = [
     position: "bottom-[4%] -left-[4%] sm:-left-[12%]",
     duration: "8.5s",
     delay: "-3s",
-    hideOnMobile: true,
   },
 ];
 
@@ -115,14 +112,18 @@ const Hero = () => {
               <div className="flex -space-x-1.5">
                 {CREATOR_AVATARS.map((a) => (
                   <span
-                    key={a.initial}
-                    className={`flex h-5 w-5 items-center justify-center rounded-full border border-canvas text-[9px] font-bold text-white ${a.className}`}
+                    key={a.imgSrc}
+                    className="flex h-4 w-4 sm:h-5 sm:h-5 items-center justify-center rounded-full border border-canvas text-[9px] font-bold text-white"
                   >
-                    {a.initial}
+                    <img
+                      src={a.imgSrc}
+                      alt=""
+                      className="h-full w-full rounded-full object-cover"
+                    />
                   </span>
                 ))}
               </div>
-              <p className="font-mono font-[500] text-[0.75rem] text-ink/80">
+              <p className="font-mono font-[500] text-[0.6rem] sm:text-[0.75rem] text-ink/80">
                 20,000+ creators. One manager each.
               </p>
             </div>
@@ -141,10 +142,10 @@ const Hero = () => {
               , and helps you give them a reason to stay.
             </p>
 
-            <div className="mt-7 flex flex-wrap items-center justify-center md:justify-normal gap-3">
+            <div className="mt-7 flex items-center justify-center md:justify-normal gap-3">
               <Link
                 href="/price"
-                className="group inline-flex items-center gap-4 rounded-full bg-action py-1.5 pl-6 pr-1.5 text-sm font-medium text-white transition-colors hover:bg-action-hover"
+                className="group inline-flex items-center gap-2 rounded-full bg-action py-1.5 pl-6 pr-1.5 text-sm font-medium text-white transition-colors hover:bg-action-hover"
               >
                 Find my plan
                 <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-action transition-transform group-hover:translate-x-0.5">
@@ -153,7 +154,7 @@ const Hero = () => {
               </Link>
               <a
                 href="#how-it-works"
-                className="inline-flex items-center gap-1.5 rounded-full border border-action/40 bg-canvas/60 px-6 py-3 text-sm font-medium text-action transition-colors hover:bg-action-tint-bg"
+                className="inline-flex items-center gap-1.5 rounded-full border border-action/40 bg-canvas/60 px-5 sm:px-6 py-3 text-sm font-medium text-action transition-colors hover:bg-action-tint-bg"
               >
                 How it works <ArrowDown size={14} />
               </a>
@@ -165,7 +166,7 @@ const Hero = () => {
               free
             </p>
 
-            <div className="mt-14 flex flex-col items-center justify-center md:items-start">
+            <div className="mt-10 sm:mt-14 flex flex-col items-center justify-center -space-y-0.5 md:items-start">
               <p className="font-heading text-lg font-[700] -tracking-[0.06em] text-ink">
                 We grow your audience.
               </p>
@@ -190,7 +191,8 @@ const Hero = () => {
               />
             </div>
 
-            {/* floating pills — some straddle the frame edge */}
+            {/* floating pills — some straddle the frame edge. Hidden on
+                phones (below sm) to keep scrolling smooth there. */}
             {FLOATING_PILLS.map(
               ({
                 icon: Icon,
@@ -200,32 +202,29 @@ const Hero = () => {
                 position,
                 duration,
                 delay,
-                hideOnMobile,
               }) => (
                 <div
                   key={title}
-                  className={`absolute z-10 ${position} ${
-                    hideOnMobile ? "hidden sm:block" : ""
-                  }`}
+                  className={`absolute z-10 hidden sm:block ${position}`}
                 >
                   <div
-                    className="animate-hero-float flex items-center gap-2.5 whitespace-nowrap rounded-full border border-white/70 bg-white/90 py-1.5 pl-1.5 pr-4 shadow-[0_8px_24px_-8px_rgba(34,31,27,0.25)] backdrop-blur-md"
+                    className="animate-hero-float flex items-center gap-1.5 whitespace-nowrap rounded-full border border-white/70 bg-white/90 py-1 pl-1 pr-2.5 shadow-[0_6px_16px_-6px_rgba(34,31,27,0.25)] backdrop-blur-md"
                     style={{
                       animationDuration: duration,
                       animationDelay: delay,
                     }}
                   >
                     <span
-                      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white shadow-sm ${iconBg}`}
+                      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-white shadow-sm ${iconBg}`}
                     >
-                      <Icon size={15} strokeWidth={2.25} />
+                      <Icon size={11} strokeWidth={2.5} />
                     </span>
                     <span className="leading-tight">
-                      <span className="block text-xs font-semibold text-ink">
+                      <span className="block text-[10px] font-semibold text-ink">
                         {title}
                       </span>
                       {caption && (
-                        <span className="block text-[10px] text-secondary">
+                        <span className="block text-[8.5px] text-secondary">
                           {caption}
                         </span>
                       )}
@@ -245,7 +244,9 @@ const Hero = () => {
                 {stat.value}
               </p>
               <p className="mt-1 text-xs text-ink sm:text-sm ">{stat.label}</p>
-              <p className="text-xs text-secondary sm:text-sm">{stat.detail}</p>
+              <p className="text-xs text-secondary text-center sm:text-sm">
+                {stat.detail}
+              </p>
             </div>
           ))}
         </div>

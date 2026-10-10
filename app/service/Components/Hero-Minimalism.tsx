@@ -25,10 +25,19 @@ export default function MinimalHero({ className = "" }: MinimalHeroProps) {
     // Respect "reduce motion": keep the grid, skip the moving particles.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
+    // Phones/tablets: fewer particles, lower canvas resolution and ~30fps.
+    // The drift is slow, so it looks the same but costs far less while
+    // the page is being scrolled.
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    const AREA_PER_PARTICLE = isTouch ? 14000 : 7000;
+    const MAX_PARTICLES = isTouch ? 60 : 220;
+    const MIN_FRAME_MS = isTouch ? 1000 / 30 : 0;
+
     type Particle = {
       x: number;
       y: number;
       speed: number;
+      length: number;
       opacity: number;
       fadeStart: number;
       fadingOut: boolean;
@@ -36,27 +45,33 @@ export default function MinimalHero({ className = "" }: MinimalHeroProps) {
 
     let particles: Particle[] = [];
     let raf = 0;
+    let running = false;
+    let lastFrame = 0;
+    let now = 0;
     let width = 0;
     let height = 0;
 
-    // Size to the section (not the window), sharp on high-DPI screens.
+    // Size to the section (not the window).
     const setSize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, isTouch ? 1.5 : 2);
       width = root.clientWidth;
       height = root.clientHeight;
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.fillStyle = `rgb(${PARTICLE_RGB})`; // reset by resizing; alpha set per particle
     };
 
-    const count = () => Math.floor((width * height) / 7000);
+    const count = () =>
+      Math.min(MAX_PARTICLES, Math.floor((width * height) / AREA_PER_PARTICLE));
 
     const reset = (p: Particle) => {
       p.x = Math.random() * width;
       p.y = Math.random() * height;
       p.speed = Math.random() / 5 + 0.1;
+      p.length = Math.random() * 2 + 1; // fixed per particle — no per-frame random
       p.opacity = PARTICLE_MAX_OPACITY;
-      p.fadeStart = Date.now() + Math.random() * 600 + 100;
+      p.fadeStart = now + Math.random() * 600 + 100;
       p.fadingOut = false;
       return p;
     };
@@ -65,35 +80,74 @@ export default function MinimalHero({ className = "" }: MinimalHeroProps) {
       particles = Array.from({ length: count() }, () => reset({} as Particle));
     };
 
-    const draw = () => {
+    const draw = (time: number) => {
+      raf = requestAnimationFrame(draw);
+      if (time - lastFrame < MIN_FRAME_MS) return;
+      // Keep the drift speed the same at 30fps as at 60fps.
+      const step = lastFrame ? Math.min((time - lastFrame) / 16.67, 3) : 1;
+      lastFrame = time;
+      now = time;
+
       ctx.clearRect(0, 0, width, height);
       for (const p of particles) {
-        p.y -= p.speed;
+        p.y -= p.speed * step;
         if (p.y < 0) reset(p);
-        if (!p.fadingOut && Date.now() > p.fadeStart) p.fadingOut = true;
+        if (!p.fadingOut && time > p.fadeStart) p.fadingOut = true;
         if (p.fadingOut) {
-          p.opacity -= 0.005;
+          p.opacity -= 0.005 * step;
           if (p.opacity <= 0) reset(p);
         }
-        ctx.fillStyle = `rgba(${PARTICLE_RGB}, ${p.opacity})`;
-        ctx.fillRect(p.x, p.y, 0.8, Math.random() * 2 + 1);
+        ctx.globalAlpha = Math.max(p.opacity, 0);
+        ctx.fillRect(p.x, p.y, 0.8, p.length);
       }
-      raf = requestAnimationFrame(draw);
+      ctx.globalAlpha = 1;
     };
 
-    const observer = new ResizeObserver(() => {
-      setSize();
-      init();
-    });
-    observer.observe(root);
+    const start = () => {
+      if (running) return;
+      running = true;
+      lastFrame = 0;
+      raf = requestAnimationFrame(draw);
+    };
+    const stop = () => {
+      running = false;
+      cancelAnimationFrame(raf);
+    };
 
+    // Only animate while the hero is actually on screen and the tab is open —
+    // otherwise the canvas kept redrawing during the whole scroll.
+    let onScreen = true;
+    const sync = () => (onScreen && !document.hidden ? start() : stop());
+    const visibility = new IntersectionObserver(([entry]) => {
+      onScreen = entry.isIntersecting;
+      sync();
+    });
+    visibility.observe(root);
+    document.addEventListener("visibilitychange", sync);
+
+    // Phones change the section height when the address bar shows/hides
+    // during scroll. Only rebuild particles when the width really changes.
+    let lastWidth = 0;
+    const resize = new ResizeObserver(() => {
+      setSize();
+      if (Math.abs(width - lastWidth) > 1) {
+        lastWidth = width;
+        init();
+      }
+    });
+    resize.observe(root);
+
+    now = performance.now();
     setSize();
+    lastWidth = width;
     init();
-    raf = requestAnimationFrame(draw);
+    sync();
 
     return () => {
-      observer.disconnect();
-      cancelAnimationFrame(raf);
+      stop();
+      visibility.disconnect();
+      resize.disconnect();
+      document.removeEventListener("visibilitychange", sync);
     };
   }, []);
 
@@ -120,7 +174,6 @@ export default function MinimalHero({ className = "" }: MinimalHeroProps) {
 .minimal-hero-bg .vline {
   position: absolute;
   background: ${LINE_COLOR};
-  will-change: transform, opacity;
 }
 
 .minimal-hero-bg .hline {

@@ -48,7 +48,10 @@ export async function GET(req: NextRequest) {
     if (!res.ok || !Array.isArray(body?.features)) {
       console.error("Location search failed:", { query, status: res.status });
       return NextResponse.json(
-        { success: false, message: "Location search is unavailable right now." },
+        {
+          success: false,
+          message: "Location search is unavailable right now.",
+        },
         { status: 502 },
       );
     }
