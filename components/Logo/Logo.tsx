@@ -3,9 +3,9 @@ import React from "react";
 interface LogoProps extends React.SVGProps<SVGSVGElement> {
   width?: number | string;
   height?: number | string;
-  mainLogoTxt: string;
-  outerTxt: string;
-  circleStroke: string;
+  mainLogoTxt?: string;
+  outerTxt?: string;
+  circleStroke?: string;
 }
 
 const Logo = ({
