@@ -81,7 +81,7 @@ export default function ManagerCard() {
         </div>
 
         <div className="min-w-0">
-          <p className="flex items-center gap-1.5 font-heading text-lg font-bold -tracking-[0.02em] text-ink">
+          <p className="flex items-center gap-1.5 text-lg font-[700] -tracking-[0.04em] text-ink">
             <span className="truncate">{MANAGER.name}</span>
             <BadgeCheck
               size={17}
