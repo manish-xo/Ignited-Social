@@ -49,7 +49,7 @@ const FirstWeek = () => {
         <div className="mt-20 grid grid-cols-1 gap-8 border-t border-border pt-10 sm:grid-cols-3 sm:gap-6">
           {ROLES.map((role) => (
             <div key={role.title}>
-              <p className="font-heading text-lg font-bold -tracking-[0.03em] text-ink">
+              <p className="text-lg font-bold -tracking-[0.03em] text-ink">
                 {role.title}
               </p>
               <p className="mt-2 max-w-[16rem] text-sm leading-relaxed text-secondary">

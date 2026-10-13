@@ -391,7 +391,7 @@ export default function FirstWeekSteps() {
                 ref={(el) => {
                   barRefs.current[i] = el;
                 }}
-                className="absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-ink"
+                className="absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-action"
               />
 
               <button
@@ -399,7 +399,7 @@ export default function FirstWeekSteps() {
                 onClick={() => setActive(i)}
                 aria-expanded={isOpen}
                 aria-controls={`first-week-step-${i}`}
-                className={`flex w-full items-baseline gap-2.5 text-left font-heading text-lg font-semibold -tracking-[0.03em] transition-colors duration-300 sm:text-xl ${
+                className={`flex w-full items-baseline gap-2.5 text-left text-lg font-semibold -tracking-[0.03em] transition-colors duration-300 sm:text-xl ${
                   isOpen ? "text-ink" : "text-ink/45 hover:text-ink/70"
                 }`}
               >

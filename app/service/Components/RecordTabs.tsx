@@ -349,7 +349,7 @@ export default function RecordTabs() {
       {/* ── tab bar ──────────────────────────────────────────────────── */}
       <div
         ref={scrollerRef}
-        className="mx-auto max-w-3xl overflow-x-auto rounded-full bg-ink p-1.5 shadow-[0_12px_32px_-12px_rgba(34,31,27,0.5)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="mx-auto max-w-3xl overflow-x-auto rounded-full bg-action p-1.5 shadow-[0_12px_32px_-12px_rgba(90,76,224,0.6)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         <div
           ref={trackRef}

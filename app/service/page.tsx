@@ -14,6 +14,7 @@ import Hero from "./sections/Hero";
 import BrandManager from "./sections/BrandManager";
 import Record from "./sections/Record";
 import FirstWeek from "./sections/FirstWeek";
+import Niches from "./sections/Niches";
 
 const Home = () => {
   return (
@@ -24,6 +25,7 @@ const Home = () => {
       <BrandManager />
       <Record />
       <FirstWeek />
+      <Niches />
       {/* <ProblemSection />
       <OurApproach />
       <EverythingIncluded />
