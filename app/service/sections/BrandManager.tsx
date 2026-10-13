@@ -25,13 +25,13 @@ const BrandManager = () => {
             leading-[0.95] controls the gap between the two lines. */}
         <Heading
           as="h2"
-          className="mt-5 font-heading-condensed text-4xl md:text-5xl font-[700] -tracking-[0.04em] text-ink text-center leading-[0.9]"
+          className="mt-5 font-heading-condensed text-4xl md:text-5xl font-[600] -tracking-[0.04em] text-ink text-center leading-[0.9]"
         >
           One person who knows your business
         </Heading>
         <Heading
           as="h2"
-          className="font-heading-condensed text-4xl md:text-5xl font-[700] -tracking-[0.04em] text-ink text-center"
+          className="font-heading-condensed text-4xl md:text-5xl font-[600] -tracking-[0.04em] text-ink text-center"
         >
           And what to work on next.
         </Heading>
@@ -43,7 +43,7 @@ const BrandManager = () => {
 
         {/* Brand Manager card (left, sticks while scrolling on desktop) +
             what they do (right). Stacks on phones/tablets. */}
-        <div className="mt-14 grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,360px)_1fr] lg:gap-14">
+        <div className="mt-20 grid grid-cols-1 items-start gap-10 lg:grid-cols-[minmax(0,360px)_1fr] lg:gap-14">
           <div className="mx-auto w-full max-w-sm lg:sticky lg:top-24">
             <ManagerCard />
           </div>

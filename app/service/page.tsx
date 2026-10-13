@@ -12,6 +12,8 @@ import ProofNumbers from "./ProofNumbers";
 import Footer from "@/components/layout/Footer/Footer";
 import Hero from "./sections/Hero";
 import BrandManager from "./sections/BrandManager";
+import Record from "./sections/Record";
+import FirstWeek from "./sections/FirstWeek";
 
 const Home = () => {
   return (
@@ -20,6 +22,8 @@ const Home = () => {
       {/* <ServicesHero /> */}
       <Hero />
       <BrandManager />
+      <Record />
+      <FirstWeek />
       {/* <ProblemSection />
       <OurApproach />
       <EverythingIncluded />
