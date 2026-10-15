@@ -15,6 +15,10 @@ import BrandManager from "./sections/BrandManager";
 import Record from "./sections/Record";
 import FirstWeek from "./sections/FirstWeek";
 import Niches from "./sections/Niches";
+import Transformations from "./sections/Transformations";
+import Pricing from "./sections/Pricing";
+import Faq from "./sections/Faq";
+import FinalCta from "./sections/FinalCta";
 
 const Home = () => {
   return (
@@ -26,6 +30,10 @@ const Home = () => {
       <Record />
       <FirstWeek />
       <Niches />
+      <Transformations />
+      <Pricing />
+      <Faq />
+      <FinalCta />
       {/* <ProblemSection />
       <OurApproach />
       <EverythingIncluded />

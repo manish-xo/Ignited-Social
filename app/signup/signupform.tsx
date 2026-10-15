@@ -89,6 +89,11 @@ const Signupform = ({ plan }: SignupFormProps) => {
 
       // replace, not push: Back shouldn't return to a submitted signup form.
       router.replace(next);
+    } else if ("code" in result && result.code === "already_registered") {
+      showErrorToast({
+        title: "Already registered",
+        description: `${result.error} Try a different one, or log in if it's yours.`,
+      });
     } else {
       showErrorToast({
         title: "Signup failed",

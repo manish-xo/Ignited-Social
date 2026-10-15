@@ -1,5 +1,6 @@
 "use client";
 import { useDispatch } from "react-redux";
+import axios from "axios";
 import { supabase } from "@/libs/supabase";
 import { setSignup, setStatus, setError } from "@/libs/dataslice";
 
@@ -18,6 +19,39 @@ export const useSignup = () => {
     dispatch(setError(null));
 
     try {
+      // Stop early if this email or Instagram username is already registered.
+      let availability: { emailTaken: boolean; usernameTaken: boolean };
+      try {
+        ({ data: availability } = await axios.post("/api/signup/availability", {
+          email: values.email,
+          username: values.username,
+        }));
+      } catch (err) {
+        const message =
+          (axios.isAxiosError(err) && err.response?.data?.message) ||
+          "We can't reach our servers right now. Please try again shortly.";
+        dispatch(setStatus("error"));
+        dispatch(setError(message));
+        return { success: false as const, error: message };
+      }
+
+      if (availability.emailTaken || availability.usernameTaken) {
+        const what =
+          availability.emailTaken && availability.usernameTaken
+            ? "This email and Instagram username are"
+            : availability.emailTaken
+              ? "This email is"
+              : "This Instagram username is";
+        const message = `${what} already registered.`;
+        dispatch(setStatus("error"));
+        dispatch(setError(message));
+        return {
+          success: false as const,
+          error: message,
+          code: "already_registered" as const,
+        };
+      }
+
       const signupData = {
         instagram_username: values.username,
         instagram_profile_pic: values.profilePicUrl || "",
@@ -46,8 +80,13 @@ export const useSignup = () => {
 
       return { success: true, data: reduxSignupData };
     } catch (error) {
+      // Supabase errors are plain objects (not `Error`), so read `.message`
+      // directly instead of hiding the real reason behind a generic text.
+      const pgError = error as { code?: string; message?: string } | null;
       const message =
-        error instanceof Error ? error.message : "Something went wrong";
+        pgError?.code === "23505" // unique violation, if the table enforces it
+          ? "This email or Instagram username is already registered."
+          : pgError?.message || "Something went wrong";
 
       console.error("Signup error:", error);
       dispatch(setStatus("error"));

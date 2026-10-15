@@ -245,3 +245,18 @@ body {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(300%); }
 }
+
+/* Slow background glow drift for the final CTA (transform only — cheap). */
+@keyframes cta-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(6%, -8%, 0) scale(1.08); }
+  66% { transform: translate3d(-5%, 6%, 0) scale(0.95); }
+}
+
+@utility animate-cta-drift {
+  animation: cta-drift 18s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}

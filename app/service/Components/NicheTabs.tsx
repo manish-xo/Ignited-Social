@@ -155,7 +155,7 @@ export default function NicheTabs() {
             sizes="(min-width: 768px) 460px, 100vw"
             priority={i === active}
             style={{ objectPosition: n.imagePosition ?? "center" }}
-            className={`object-cover transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            className={`object-cover transition-[opacity,scale] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
               i === active ? "scale-100 opacity-100" : "scale-[1.06] opacity-0"
             }`}
           />
