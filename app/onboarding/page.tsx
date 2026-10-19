@@ -56,7 +56,7 @@ export default function OnboardingPage() {
     try {
       const { data } = await axios.post("/api/onboarding/complete", formData);
       // replace: Back from the dashboard shouldn't reopen the finished wizard.
-      router.replace(data.next ?? "/dashboard/billing");
+      router.replace(data.next ?? "/dashboard");
     } catch (err) {
       console.error("Failed to complete onboarding:", err);
       // The dashboard stays locked until this succeeds, so let them retry.

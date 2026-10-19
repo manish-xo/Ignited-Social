@@ -34,10 +34,9 @@ const redirectTo = (req: NextRequest, target: string) => {
 export async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
-  // The login page sits under /dashboard but must stay public.
-  if (path === "/dashboard/login") return NextResponse.next();
+  const isLogin = path === "/dashboard/login";
 
-  if (isAuthPage(path)) {
+  if (isAuthPage(path) || isLogin) {
     let res = NextResponse.next({ request: req });
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -62,6 +61,11 @@ export async function proxy(req: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser();
 
+    // The login page stays public; someone already logged in skips the form.
+    if (isLogin) {
+      return user ? NextResponse.redirect(new URL("/dashboard", req.url)) : res;
+    }
+
     if (!user) {
       // Mid-funnel? Send them to their step; otherwise to the login page.
       const flow = await readFlow(req);
@@ -75,7 +79,7 @@ export async function proxy(req: NextRequest) {
     // finished → it has to be done before the dashboard opens.
     const onboarded = user.app_metadata?.onboarding_completed === true;
     if (path === "/onboarding" && onboarded) {
-      return NextResponse.redirect(new URL("/dashboard/billing", req.url));
+      return NextResponse.redirect(new URL("/dashboard", req.url));
     }
     if (path !== "/onboarding" && !onboarded) {
       return NextResponse.redirect(new URL("/onboarding", req.url));

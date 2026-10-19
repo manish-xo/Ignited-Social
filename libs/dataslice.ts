@@ -50,6 +50,9 @@ const dataSlice = createSlice({
       state.status = "idle";
       state.error = null;
     },
+
+    // Logout: forget everything saved for this browser.
+    resetAll: () => initialState,
   },
 });
 
@@ -58,6 +61,7 @@ export const {
   setStatus,
   setError,
   resetSignup,
+  resetAll,
   setPayment,
   setUpsell,
   setAddons,

@@ -111,7 +111,10 @@ const ComparisonPlan = () => {
         </div>
 
         <div className="heading">
-          <Heading className="text-center hidden sm:block">
+          <Heading
+            as="h2"
+            className="mt-5 text-center font-heading-condensed text-4xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-5xl"
+          >
             Grow or Scale?
           </Heading>
         </div>

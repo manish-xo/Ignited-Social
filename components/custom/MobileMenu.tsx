@@ -111,6 +111,13 @@ const MobileMenu = ({ isOpen, onClose, links }: MobileMenuProps) => {
       >
         Get Started
       </a>
+      <a
+        href="/dashboard/login"
+        onClick={onClose}
+        className="mt-2 rounded-full border border-border px-8 py-3 text-base font-semibold text-ink"
+      >
+        Log in
+      </a>
     </div>
   );
 };

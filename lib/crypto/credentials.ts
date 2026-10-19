@@ -33,7 +33,9 @@ export function encryptSecret(plaintext: string): string {
 }
 
 export function decryptSecret(payload: string): string {
-  const [iv, tag, data] = payload.split(".").map((p) => Buffer.from(p, "base64"));
+  const [iv, tag, data] = payload
+    .split(".")
+    .map((p) => Buffer.from(p, "base64"));
   const decipher = createDecipheriv(ALGORITHM, key(), iv);
   decipher.setAuthTag(tag);
   return Buffer.concat([decipher.update(data), decipher.final()]).toString(

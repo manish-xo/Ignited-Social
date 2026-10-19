@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import {
   Field,
   FieldError,
@@ -50,15 +50,30 @@ export default function DashboardLoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-canvas px-6 py-12">
+    <div className="relative flex min-h-screen items-center justify-center bg-canvas px-6 py-12">
+      <Link
+        href="/"
+        className="group absolute left-4 top-4 inline-flex h-10 items-center gap-1.5 rounded-full border border-border bg-white px-4 text-sm font-medium text-ink shadow-sm transition-colors hover:border-action/30 hover:text-action sm:left-6 sm:top-6"
+      >
+        <ArrowLeft
+          size={15}
+          className="transition-transform duration-300 group-hover:-translate-x-0.5"
+        />
+        Back to home
+      </Link>
+
       <div className="w-full max-w-md">
-        <div className="flex items-center justify-center gap-2 font-heading text-lg font-bold text-ink">
+        <Link
+          href="/"
+          aria-label="Ignited Social home"
+          className="flex items-center justify-center gap-2 font-heading text-lg font-bold text-ink"
+        >
           <Logo
             mainLogoTxt="#faf9f6"
             outerTxt="#221f1b"
             circleStroke="#faf9f6"
           />
-        </div>
+        </Link>
 
         <div className="rounded-3xl border border-border bg-white p-8 text-center shadow-sm sm:p-10">
           <p className="text-xs font-semibold uppercase tracking-wide text-action">

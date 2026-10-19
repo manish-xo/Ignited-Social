@@ -76,6 +76,12 @@ const ProHeader = () => {
         </div>
         {/* right side actions */}
         <div className="flex items-center justify-end gap-2">
+          <Link
+            href="/dashboard/login"
+            className="hidden md:inline-flex whitespace-nowrap rounded-xl border border-border bg-white/70 px-4 py-2.5 font-[500] uppercase text-[0.7em] tracking-wide text-ink transition-colors hover:border-action/30 hover:text-action"
+          >
+            Log in
+          </Link>
           <a
             href="#contact"
             className="hidden md:inline-flex whitespace-nowrap rounded-xl bg-action px-4 py-2.5 font-[500] uppercase text-[0.7em] tracking-wide text-white transition-colors hover:bg-action-hover"

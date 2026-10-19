@@ -19,6 +19,7 @@ import PlanComparison from "./PlanComparison";
 import Comparison from "@/app/secondary/page";
 import { BothPlan } from "@/lib/plans";
 import ComparisonPlan from "./Comparison";
+import MinimalHero from "@/app/service/Components/Hero-Minimalism";
 
 const Pricing = () => {
   const left = ComparisonBento.filter((card) => !card.recommendation).slice(
@@ -84,6 +85,7 @@ const Pricing = () => {
   return (
     <section className="relative min-h-screen w-full overflow-hidden">
       {/* <GradientBackground /> */}
+
       <div className="relative isolate px-6 pt-4 overflow-hidden flex flex-col items-center justify-center max-w-7xl mx-auto mt-12">
         <div className="mx-auto pt-20">
           {/* EYEBRO */}
@@ -97,21 +99,16 @@ const Pricing = () => {
           </div>
           {/* HEADING */}
           <div className="Heading">
-            <Heading className="text-center hidden sm:block -tracking-[0.06em]">
-              {/* Affordable plans for every */}
+            <Heading
+              as="h2"
+              className="mt-5 text-center font-heading-condensed text-4xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-6xl"
+            >
               Choose how fast
             </Heading>
-            <Heading className="text-center hidden sm:block -tracking-[0.06em]">
-              {/* Budget */}
-              you want to grow.
-            </Heading>
-
-            <Heading className="text-center text-[9vw] sm:hidden -tracking-[0.06em]">
-              {/* Affordable plans for */}
-              Choose how fast
-            </Heading>
-            <Heading className="text-center text-[9vw] sm:hidden -tracking-[0.06em]">
-              {/* every budget */}
+            <Heading
+              as="h2"
+              className="text-center font-heading-condensed text-4xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-6xl"
+            >
               you want to grow.
             </Heading>
           </div>

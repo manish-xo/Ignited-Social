@@ -126,5 +126,5 @@ export const POST = async (req: NextRequest) => {
     );
   }
 
-  return NextResponse.json({ next: "/dashboard/billing" });
+  return NextResponse.json({ next: "/dashboard" });
 };

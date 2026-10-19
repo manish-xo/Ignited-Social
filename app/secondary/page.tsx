@@ -231,18 +231,6 @@ export default function Comparison() {
           <Heading className="text-center hidden md:block">
             less than the alternatives.
           </Heading>
-          {/* <Heading className="text-center text-[9vw] hidden sm:text-[7vw]">
-            less than the alternatives.
-          </Heading> */}
-          {/* <Heading className="text-center hidden lg:block">
-            Comparison with other options
-          </Heading>
-          <Heading className="text-center text-[9vw] sm:text-[7vw] lg:hidden">
-            Comparison with
-          </Heading>
-          <Heading className="text-center text-[9vw] sm:text-[7vw] lg:hidden">
-            other options
-          </Heading> */}
         </div>
 
         <p className="mx-auto mt-5 max-w-xs text-center text-md leading-5 font-[400] text-secondary tracking-tight sm:max-w-2xl sm:text-lg md:text-xl lg:text-[1.12rem]">
