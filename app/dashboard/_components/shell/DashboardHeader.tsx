@@ -19,7 +19,7 @@ export default function DashboardHeader({
   return (
     <header className="glass flex flex-col gap-4 rounded-[28px] p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
       <div className="flex items-center gap-3.5">
-        <div className="rounded-full bg-gradient-to-tr from-orange-400 via-pink-500 to-purple-500 p-[2px] shadow-[0_8px_20px_-10px_rgba(219,39,119,0.6)]">
+        <div className="rounded-full bg-gradient-to-tr from-orange-400 via-pink-500 to-purple-500 p-[2px]">
           <InstagramAvatar
             src={shell.profilePicUrl}
             username={username || "?"}
@@ -56,7 +56,7 @@ export default function DashboardHeader({
             "Question about my account",
             username ? `Instagram: @${username}\n\n` : undefined,
           )}
-          className="group ml-auto inline-flex h-10 items-center gap-2 rounded-full bg-ink px-4 text-xs font-semibold text-white shadow-[0_10px_24px_-12px_rgba(34,31,27,0.7)] transition-[translate,background-color] duration-300 hover:-translate-y-0.5 hover:bg-action sm:ml-2"
+          className="group ml-auto inline-flex h-10 items-center gap-2 rounded-full bg-ink px-4 text-xs font-semibold text-white transition-colors duration-300 hover:bg-action sm:ml-2"
         >
           <MessageCircle
             size={15}

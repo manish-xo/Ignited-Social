@@ -46,18 +46,18 @@ export default function Sidebar() {
         <Link
           href="/dashboard"
           aria-label="Ignited Social"
-          className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-action-subtle to-action-shadow text-white shadow-[0_10px_24px_-10px_rgba(61,53,122,0.8)]"
+          className="flex h-11 w-11 items-center justify-center rounded-2xl bg-action text-white"
         >
           <Flame size={20} />
         </Link>
 
-        <div className="my-5 h-px w-8 bg-ink/10" />
+        <div className="my-5 h-px w-8 bg-border" />
 
         <nav ref={navRef} className="relative flex w-full flex-col gap-1.5">
           <span
             ref={indicatorRef}
             aria-hidden
-            className="absolute left-0 top-0 w-full rounded-2xl bg-white shadow-[0_8px_20px_-10px_rgba(61,53,122,0.45)] ring-1 ring-action/10"
+            className="absolute left-0 top-0 w-full rounded-2xl border border-border bg-subtle-bg"
           />
           {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
             const isActive = href === active.href;
@@ -86,7 +86,7 @@ export default function Sidebar() {
       <div className="flex w-full flex-col gap-1.5">
         <a
           href={supportMailto("Help with my account")}
-          className={cn(itemClass, "text-muted hover:bg-white/60 hover:text-ink")}
+          className={cn(itemClass, "text-muted hover:bg-subtle-bg hover:text-ink")}
         >
           <LifeBuoy size={19} />
           Help

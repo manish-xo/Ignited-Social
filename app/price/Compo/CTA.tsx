@@ -7,18 +7,24 @@ import DarkGradientSection from "@/components/ui/DarkGradientSection";
 
 export default function CTA() {
   return (
-    <DarkGradientSection className="px-6 py-24 sm:py-24">
-      <div className="mx-auto max-w-5xl text-center">
+    <DarkGradientSection className="px-6 py-16 sm:py-24">
+      <div className="mx-auto max-w-5xl text-center space-y-4">
         <p className="eyebrow text-action-on-dark">Ready when you are</p>
         {/* <h2 className="heading text-center flex flex-col items-center justify-center text-canvas font-heading text-4xl sm:text-[6vw] md:text-[7vw] lg:text-6xl font-[700] leading-[0.98] tracking-tighter">
           <span>Start today. See followers</span>
           <span> by [dynamic weekday]</span>
         </h2> */}
-        <div className="heading text-center flex flex-col items-center justify-center text-canvas font-heading text-[8vw] sm:text-[8vw] md:text-[7vw] lg:text-6xl font-[700] leading-[0.88] tracking-tighter">
+        <div className="heading text-center flex flex-col items-center justify-center text-canvas font-heading text-[8vw] sm:text-5xl md:hidden font-[700] leading-[3.25rem] sm:leading-[2.8rem] tracking-tighter">
           {/* Your next 500 followers <br className="hidden sm:block" />
           start this week */}
-          <span>Start today. See followers</span>
-          <span> by [dynamic weekday]</span>
+          <span>Start today. See</span>
+          <span>followers by</span>
+          <span>[dynamic weekday]</span>
+        </div>
+
+        <div className="heading text-center flex flex-col items-center justify-center text-canvas font-heading hidden md:block text-6xl font-[700] leading-[4rem] md:tracking-tighter lg:tracking-tight">
+          <span>Start today. see followers by </span>
+          <span>[dynamic weekday]</span>
         </div>
 
         <p className="mt-5 text-base text-action-on-dark max-w-lg mx-auto">

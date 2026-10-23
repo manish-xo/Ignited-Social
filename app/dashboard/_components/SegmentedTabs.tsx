@@ -60,7 +60,7 @@ export default function SegmentedTabs<T extends string>({
       <span
         ref={indicatorRef}
         aria-hidden
-        className="absolute bottom-1 left-0 top-1 rounded-xl bg-white shadow-[0_4px_14px_-6px_rgba(61,53,122,0.35)] ring-1 ring-action/10"
+        className="absolute bottom-1 left-0 top-1 rounded-xl border border-border bg-white"
       />
       {options.map((o) => (
         <button

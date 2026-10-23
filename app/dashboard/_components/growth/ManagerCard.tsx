@@ -62,7 +62,7 @@ export default function ManagerCard({
     <GlassCard>
       <div className="flex items-center gap-3.5">
         <div className="relative">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-action-subtle to-action-shadow font-heading text-xl font-bold text-white shadow-[0_12px_24px_-12px_rgba(61,53,122,0.8)]">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-action font-heading text-xl font-bold text-white">
             {manager.avatarInitial}
           </div>
           <span className="absolute -bottom-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-white">
@@ -89,7 +89,7 @@ export default function ManagerCard({
             `Book a call with ${manager.name}`,
             `${who}Times that work for me:\n`,
           )}
-          className="flex h-11 items-center justify-center gap-2 rounded-2xl bg-action text-sm font-semibold text-white shadow-[0_12px_24px_-14px_rgba(90,76,224,0.9)] transition-[translate,background-color] duration-300 hover:-translate-y-0.5 hover:bg-action-hover"
+          className="flex h-11 items-center justify-center gap-2 rounded-2xl bg-action text-sm font-semibold text-white transition-colors duration-300 hover:bg-action-hover"
         >
           <CalendarDays size={15} />
           Book a call

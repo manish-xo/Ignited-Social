@@ -1,0 +1,46 @@
+/* Orbiting dots spinner. Based on Uiverse.io by Mike11jr.
+   Size comes from --spinner-size, colour from currentColor. */
+.spinner {
+  width: var(--spinner-size, 60px);
+  height: var(--spinner-size, 60px);
+  position: relative;
+}
+
+.dot {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  animation: spin 2s infinite;
+}
+
+.dot::after {
+  content: "";
+  /* 7px dots on the original 60px spinner, scaled with the size */
+  width: calc(var(--spinner-size, 60px) * 0.117);
+  height: calc(var(--spinner-size, 60px) * 0.117);
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 100ms;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 200ms;
+}
+
+.dot:nth-child(4) {
+  animation-delay: 300ms;
+}
+
+.dot:nth-child(5) {
+  animation-delay: 400ms;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

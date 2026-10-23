@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ArrowRight, Clock3 } from "lucide-react";
+import DarkGradientSection from "@/components/ui/DarkGradientSection";
 
 // Hand-drawn doodles around the heading. Kept few, thin and faint so they add
 // play without clutter. Each draws itself in, then sways gently.
@@ -138,24 +139,10 @@ export default function FinalCta() {
   }, []);
 
   return (
-    <section
+    <DarkGradientSection
       ref={sectionRef}
       className="relative isolate overflow-hidden bg-[#3b3180]"
     >
-      {/* drifting glows — gradients, not blur filters, so they stay cheap */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="animate-cta-drift absolute -left-[15%] top-[10%] h-[70%] w-[55%] rounded-full bg-[radial-gradient(closest-side,rgba(140,124,255,0.55),transparent)]" />
-        <div
-          className="animate-cta-drift absolute -right-[10%] -top-[30%] h-[80%] w-[50%] rounded-full bg-[radial-gradient(closest-side,rgba(90,76,224,0.7),transparent)]"
-          style={{ animationDelay: "-6s", animationDuration: "22s" }}
-        />
-        <div
-          className="animate-cta-drift absolute bottom-[-35%] right-[5%] h-[75%] w-[45%] rounded-full bg-[radial-gradient(closest-side,rgba(186,176,255,0.35),transparent)]"
-          style={{ animationDelay: "-12s", animationDuration: "26s" }}
-        />
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-      </div>
-
       {/* doodles */}
       {DOODLES.map((d) => (
         <svg
@@ -185,9 +172,8 @@ export default function FinalCta() {
           data-cta-reveal
           className="font-heading-condensed text-4xl font-bold leading-[0.95] -tracking-[0.04em] text-white sm:text-5xl md:text-6xl"
         >
-          Your next followers are already out there.
-          <br />
-          Let&apos;s help them find you.
+          Your next followers are already out there. Let&apos;s help them find
+          you.
         </h2>
         <p
           data-cta-reveal
@@ -219,6 +205,6 @@ export default function FinalCta() {
           </Link>
         </div>
       </div>
-    </section>
+    </DarkGradientSection>
   );
 }

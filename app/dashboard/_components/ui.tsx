@@ -5,20 +5,14 @@ import { cn } from "@/lib/utils";
 export function GlassCard({
   children,
   className,
-  tone = "glass",
 }: {
   children: ReactNode;
   className?: string;
-  tone?: "glass" | "action";
 }) {
   return (
     <section
       data-reveal
-      className={cn(
-        "rounded-3xl p-5 sm:p-6",
-        tone === "action" ? "glass-action text-white" : "glass",
-        className,
-      )}
+      className={cn("glass rounded-3xl p-5 sm:p-6", className)}
     >
       {children}
     </section>
@@ -39,7 +33,7 @@ export function CardHeader({
   return (
     <div className="flex flex-wrap items-start justify-between gap-3">
       <div className="flex items-center gap-3">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-action/10 text-action ring-1 ring-action/10">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-border text-ink">
           <Icon size={18} />
         </span>
         <div>

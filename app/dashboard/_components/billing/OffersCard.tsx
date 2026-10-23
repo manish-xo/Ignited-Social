@@ -25,7 +25,7 @@ export default function OffersCard({
         {offers.map((o) => (
           <div
             key={o.slug}
-            className="glass-inset group flex flex-col rounded-2xl p-4 transition-[translate,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-[0_16px_32px_-20px_rgba(61,53,122,0.5)]"
+            className="glass-inset group flex flex-col rounded-2xl p-4 transition-colors duration-300 hover:border-border-strong"
           >
             <div className="flex items-start justify-between gap-3">
               <p className="font-heading text-sm font-bold text-ink">{o.name}</p>

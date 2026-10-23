@@ -35,7 +35,8 @@ const Proof = () => {
             20,000 times.
           </Heading> */}
 
-          <Heading className="text-[8vw] md:text-[7vw] sm:hidden md:block lg:hidden">
+          {/* This is main Heading */}
+          {/* <Heading className="text-[8vw] md:text-[7vw] sm:hidden md:block lg:hidden">
             We've done this
           </Heading>
           <Heading className="text-[8vw] md:text-[7vw] sm:hidden md:block lg:hidden">
@@ -43,6 +44,27 @@ const Proof = () => {
           </Heading>
 
           <Heading className="hidden sm:block md:hidden lg:block">
+            We've done this 20,000 times
+          </Heading> */}
+
+          <Heading
+            as="h2"
+            className="mt-5 text-center font-heading-condensed text-[8vw] sm:hidden font-[600] leading-[0.9] -tracking-[0.04em] text-ink"
+          >
+            We've done this 20,000
+          </Heading>
+
+          <Heading
+            as="h2"
+            className="text-center font-heading-condensed text-[8vw] sm:hidden font-[600] leading-[0.9] -tracking-[0.04em] text-ink"
+          >
+            times
+          </Heading>
+
+          <Heading
+            as="h2"
+            className="text-center font-heading-condensed hidden sm:text-5xl md:text-6xl sm:block font-[600] leading-[0.9] -tracking-[0.04em] text-ink"
+          >
             We've done this 20,000 times
           </Heading>
         </div>

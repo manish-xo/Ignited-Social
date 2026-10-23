@@ -215,7 +215,7 @@ export default function Comparison() {
         </div>
 
         <div>
-          <Heading className="text-center hidden lg:block">
+          {/* <Heading className="text-center hidden lg:block">
             Real growth, for
           </Heading>
 
@@ -229,6 +229,19 @@ export default function Comparison() {
             alternatives
           </Heading>
           <Heading className="text-center hidden md:block">
+            less than the alternatives.
+          </Heading> */}
+
+          <Heading
+            as="h2"
+            className="mt-5 text-center font-heading-condensed text-[8vw] sm:text-5xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-6xl"
+          >
+            Real growth, for
+          </Heading>
+          <Heading
+            as="h2"
+            className="text-center font-heading-condensed text-[8vw] sm:text-5xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-6xl"
+          >
             less than the alternatives.
           </Heading>
         </div>
@@ -357,7 +370,7 @@ export default function Comparison() {
           </div>
 
           <div>
-            <Heading className="text-center hidden sm:block">
+            {/* <Heading className="text-center hidden sm:block">
               Explains Features as
             </Heading>
             <Heading className="text-center hidden sm:block">Benefits</Heading>
@@ -367,6 +380,26 @@ export default function Comparison() {
             </Heading>
             <Heading className="text-center text-[9vw] sm:hidden">
               Benefits
+            </Heading> */}
+
+            <Heading
+              as="h2"
+              className="mt-5 text-center font-heading-condensed font-[600] block text-[8vw] sm:hidden leading-[0.9] -tracking-[0.04em] text-ink"
+            >
+              Explains Features as
+            </Heading>
+            <Heading
+              as="h2"
+              className="text-center font-heading-condensed font-[600] block text-[8vw] sm:hidden leading-[0.9] -tracking-[0.04em] text-ink"
+            >
+              Benefits
+            </Heading>
+
+            <Heading
+              as="h2"
+              className="mt-5 text-center font-heading-condensed font-[600] hidden sm:block leading-[0.9] -tracking-[0.04em] text-ink sm:text-5xl md:text-6xl"
+            >
+              Explains Features as Benefits
             </Heading>
           </div>
 

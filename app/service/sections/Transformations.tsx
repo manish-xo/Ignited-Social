@@ -17,9 +17,22 @@ const Transformations = () => {
 
         <Heading
           as="h2"
-          className="mt-5 text-center font-heading-condensed text-4xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-5xl"
+          className="mt-5 text-center font-heading-condensed hidden sm:block text-4xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-5xl"
         >
           Real profiles. Real numbers.
+        </Heading>
+
+        <Heading
+          as="h2"
+          className="mt-5 text-center font-heading-condensed block sm:hidden text-4xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-5xl"
+        >
+          Real profiles.
+        </Heading>
+        <Heading
+          as="h2"
+          className="text-center font-heading-condensed block sm:hidden text-4xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-5xl"
+        >
+          Real numbers.
         </Heading>
 
         <p className="mx-auto mt-5 max-w-xl text-center text-sm leading-relaxed text-secondary sm:text-base">

@@ -1,4 +1,5 @@
-nav {
+/* Only the header's bar — a bare `nav` also styled the footer's link columns. */
+header > nav {
   border: 3px solid white;
   box-shadow:
     0 6px 12px rgba(0, 0, 0, 0.1),

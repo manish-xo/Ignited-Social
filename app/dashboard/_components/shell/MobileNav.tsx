@@ -22,10 +22,10 @@ export default function MobileNav() {
             href={href}
             aria-current={isActive ? "page" : undefined}
             className={cn(
-              "flex flex-1 items-center justify-center gap-2 rounded-[18px] py-3 text-xs font-semibold transition-[background-color,color,box-shadow] duration-300",
+              "flex flex-1 items-center justify-center gap-2 rounded-[18px] border py-3 text-xs font-semibold transition-[background-color,color,box-shadow] duration-300",
               isActive
-                ? "bg-white text-action shadow-[0_6px_16px_-8px_rgba(61,53,122,0.5)]"
-                : "text-muted",
+                ? "border-border bg-subtle-bg text-action"
+                : "border-transparent text-muted",
             )}
           >
             <Icon size={17} />

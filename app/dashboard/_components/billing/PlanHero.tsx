@@ -2,7 +2,7 @@ import { ArrowUpRight, Check, Repeat } from "lucide-react";
 import { formatDate, formatMoney } from "../../lib/format";
 import { supportMailto } from "../../lib/support";
 import type { BillingPageData, SubscriptionLine } from "../../lib/types";
-import { GlassCard, StatusChip } from "../ui";
+import { Eyebrow, GlassCard, StatusChip } from "../ui";
 
 export default function PlanHero({
   plan,
@@ -18,61 +18,52 @@ export default function PlanHero({
   paypalManageUrl: string;
 }) {
   return (
-    <GlassCard tone="action" className="relative overflow-hidden">
-      <span
-        aria-hidden
-        className="absolute -right-16 -top-16 h-56 w-56 rounded-full border border-white/10"
-      />
-      <span
-        aria-hidden
-        className="absolute -right-4 -top-4 h-32 w-32 rounded-full border border-white/10"
-      />
-
-      <div className="relative flex flex-wrap items-start justify-between gap-3">
+    <GlassCard>
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/60">
-            Your plan
-          </p>
-          <p className="mt-1 font-heading-condensed text-5xl font-bold leading-none tracking-tight">
+          <Eyebrow>Your plan</Eyebrow>
+          <p className="mt-1 font-heading-condensed text-5xl font-bold leading-none tracking-tight text-ink">
             {plan.name}
           </p>
         </div>
-        {main && <StatusChip status={main.status} className="bg-white/90" />}
+        {main && <StatusChip status={main.status} />}
       </div>
 
-      <div className="relative mt-6 flex flex-wrap items-end gap-x-8 gap-y-4">
-        <div>
-          <p className="font-heading-condensed text-4xl font-bold leading-none">
-            {formatMoney(plan.price)}
-            <span className="ml-1 font-body text-sm font-medium text-white/60">
-              / month
-            </span>
-          </p>
-        </div>
+      <div className="mt-6 flex flex-wrap items-end gap-x-8 gap-y-4">
+        <p className="font-heading-condensed text-4xl font-bold leading-none text-ink">
+          {formatMoney(plan.price)}
+          <span className="ml-1 font-body text-sm font-medium text-muted">
+            / month
+          </span>
+        </p>
         <dl className="flex gap-6 text-sm">
           <div>
-            <dt className="text-[11px] text-white/55">Next payment</dt>
-            <dd className="font-semibold">
+            <dt className="text-[11px] text-muted">Next payment</dt>
+            <dd className="font-semibold text-ink">
               {formatDate(nextBillingDate) ?? "—"}
             </dd>
           </div>
           <div>
-            <dt className="text-[11px] text-white/55">All subscriptions</dt>
-            <dd className="font-semibold">{formatMoney(monthlyTotal)} / mo</dd>
+            <dt className="text-[11px] text-muted">All subscriptions</dt>
+            <dd className="font-semibold text-ink">
+              {formatMoney(monthlyTotal)} / mo
+            </dd>
           </div>
           {main?.startedAt && (
             <div className="hidden sm:block">
-              <dt className="text-[11px] text-white/55">Member since</dt>
-              <dd className="font-semibold">{formatDate(main.startedAt)}</dd>
+              <dt className="text-[11px] text-muted">Member since</dt>
+              <dd className="font-semibold text-ink">
+                {formatDate(main.startedAt)}
+              </dd>
             </div>
           )}
         </dl>
       </div>
 
-      <ul className="relative mt-6 grid gap-2 border-t border-white/15 pt-5 sm:grid-cols-2">
+      <ul className="mt-6 grid gap-2 border-t border-hairline pt-5 sm:grid-cols-2">
         {plan.features.map((f) => (
-          <li key={f} className="flex items-start gap-2 text-sm text-white/90">
-            <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-white/20">
+          <li key={f} className="flex items-start gap-2 text-sm text-secondary">
+            <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-border text-ink">
               <Check size={10} strokeWidth={3} />
             </span>
             {f}
@@ -80,12 +71,12 @@ export default function PlanHero({
         ))}
       </ul>
 
-      <div className="relative mt-6 flex flex-wrap gap-2">
+      <div className="mt-6 flex flex-wrap gap-2">
         <a
           href={paypalManageUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="group inline-flex h-11 items-center gap-2 rounded-full bg-white px-5 text-sm font-semibold text-action-shadow transition-[translate] duration-300 hover:-translate-y-0.5"
+          className="group inline-flex h-11 items-center gap-2 rounded-full bg-ink px-5 text-sm font-semibold text-white transition-colors duration-300 hover:bg-action"
         >
           Manage in PayPal
           <ArrowUpRight
@@ -98,7 +89,7 @@ export default function PlanHero({
             "Change my plan",
             `I'm on the ${plan.name} plan and would like to switch to:\n`,
           )}
-          className="inline-flex h-11 items-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 text-sm font-semibold text-white transition-colors duration-300 hover:bg-white/20"
+          className="inline-flex h-11 items-center gap-2 rounded-full border border-border px-5 text-sm font-semibold text-ink transition-colors duration-300 hover:border-border-strong hover:bg-subtle-bg"
         >
           <Repeat size={14} />
           Change plan

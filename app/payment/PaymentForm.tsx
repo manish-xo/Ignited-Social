@@ -6,6 +6,7 @@ import axios from "axios";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { useAppDispatch, useAppSelector } from "@/libs/store";
 import { setPayment } from "@/libs/dataslice";
+import FullScreenLoader from "@/components/Loader/FullScreenLoader";
 
 interface PaymentFormProps {
   plan: "grow" | "scale";
@@ -67,6 +68,14 @@ export default function PaymentForm({
 
   return (
     <div className="mt-8 space-y-6">
+      {/* From PayPal closing until the next page opens (or an error). */}
+      {submitting && (
+        <FullScreenLoader
+          title="Confirming your payment…"
+          description="This takes a few seconds. Please don't close or refresh this page."
+        />
+      )}
+
       <div>
         <label
           htmlFor="fullName"

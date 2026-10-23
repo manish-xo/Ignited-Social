@@ -101,13 +101,13 @@ const Pricing = () => {
           <div className="Heading">
             <Heading
               as="h2"
-              className="mt-5 text-center font-heading-condensed text-4xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-6xl"
+              className="mt-5 text-center font-heading-condensed text-5xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-6xl"
             >
               Choose how fast
             </Heading>
             <Heading
               as="h2"
-              className="text-center font-heading-condensed text-4xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-6xl"
+              className="text-center font-heading-condensed text-5xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-6xl"
             >
               you want to grow.
             </Heading>
@@ -258,10 +258,17 @@ const Pricing = () => {
         </div>
 
         <div className="heading">
-          <Heading className="text-center hidden sm:block">
+          {/* <Heading className="text-center hidden sm:block">
             How are we different
           </Heading>
           <Heading className="text-center text-[9vw] sm:hidden">
+            How are we different
+          </Heading> */}
+
+          <Heading
+            as="h2"
+            className="mt-5 text-center font-heading-condensed text-[8vw] sm:text-5xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-6xl"
+          >
             How are we different
           </Heading>
         </div>

@@ -23,15 +23,35 @@ const BrandManager = () => {
 
         {/* Same classes on both lines so they always match in size.
             leading-[0.95] controls the gap between the two lines. */}
+
         <Heading
           as="h2"
-          className="mt-5 font-heading-condensed text-4xl md:text-5xl font-[600] -tracking-[0.04em] text-ink text-center leading-[0.9]"
+          className="mt-2 block text-4xl sm:text-5xl md:text-6xl sm:hidden font-heading-condensed font-[600] -tracking-[0.04em] text-ink text-center leading-[0.9]"
+        >
+          One person who knows
+        </Heading>
+        <Heading
+          as="h2"
+          className="mt-1 block text-4xl sm:text-5xl md:text-6xl sm:hidden font-heading-condensed font-[600] -tracking-[0.04em] text-ink text-center leading-[0.9]"
+        >
+          your business. And
+        </Heading>
+        <Heading
+          as="h2"
+          className="mt-1 block text-4xl sm:text-5xl md:text-6xl sm:hidden font-heading-condensed font-[600] -tracking-[0.04em] text-ink text-center leading-[0.9]"
+        >
+          what to work on next.
+        </Heading>
+
+        <Heading
+          as="h2"
+          className="mt-5 font-heading-condensed hidden sm:block text-4xl md:text-5xl font-[600] -tracking-[0.04em] text-ink text-center leading-[0.9]"
         >
           One person who knows your business
         </Heading>
         <Heading
           as="h2"
-          className="font-heading-condensed text-4xl md:text-5xl font-[600] -tracking-[0.04em] text-ink text-center"
+          className="font-heading-condensed hidden sm:block text-4xl md:text-5xl font-[600] -tracking-[0.04em] text-ink text-center"
         >
           And what to work on next.
         </Heading>

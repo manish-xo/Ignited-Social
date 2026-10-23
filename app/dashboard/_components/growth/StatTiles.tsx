@@ -10,7 +10,6 @@ interface Tile {
   value: number | null;
   icon: LucideIcon;
   caption: string;
-  featured?: boolean;
   sign?: boolean;
 }
 
@@ -27,7 +26,6 @@ export default function StatTiles({
       value: stats.followers,
       icon: Users,
       caption: "People following you",
-      featured: true,
     },
     {
       label: "Total growth",
@@ -54,36 +52,15 @@ export default function StatTiles({
 
   return (
     <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
-      {tiles.map(({ label, value, icon: Icon, caption, featured, sign }) => (
+      {tiles.map(({ label, value, icon: Icon, caption, sign }) => (
         <div
           key={label}
           data-reveal
-          className={cn(
-            "group relative overflow-hidden rounded-3xl p-4 transition-[translate] duration-500 hover:-translate-y-1 sm:p-5",
-            featured ? "glass-action text-white" : "glass",
-          )}
+          className="glass group rounded-3xl p-4 transition-colors duration-300 hover:border-border-strong sm:p-5"
         >
-          {featured && (
-            <span
-              aria-hidden
-              className="absolute -right-8 -top-8 h-28 w-28 rounded-full border border-white/15"
-            />
-          )}
           <div className="flex items-center justify-between">
-            <p
-              className={cn(
-                "text-xs font-semibold",
-                featured ? "text-white/75" : "text-muted",
-              )}
-            >
-              {label}
-            </p>
-            <span
-              className={cn(
-                "flex h-8 w-8 items-center justify-center rounded-xl transition-transform duration-500 group-hover:rotate-[-8deg] group-hover:scale-110",
-                featured ? "bg-white/15 text-white" : "bg-action/10 text-action",
-              )}
-            >
+            <p className="text-xs font-semibold text-muted">{label}</p>
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl border border-border text-ink">
               <Icon size={15} />
             </span>
           </div>
@@ -92,19 +69,10 @@ export default function StatTiles({
             prefixSign={sign}
             className={cn(
               "mt-3 block font-heading-condensed text-[34px] font-bold leading-none tracking-tight sm:text-[40px]",
-              featured
-                ? "text-white"
-                : sign && value !== null && value > 0
-                  ? "text-success"
-                  : "text-ink",
+              sign && value !== null && value > 0 ? "text-success" : "text-ink",
             )}
           />
-          <p
-            className={cn(
-              "mt-2 truncate text-[11px]",
-              featured ? "text-white/65" : "text-placeholder",
-            )}
-          >
+          <p className="mt-2 truncate text-[11px] text-placeholder">
             {caption}
           </p>
         </div>

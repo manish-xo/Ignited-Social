@@ -4,14 +4,20 @@ import React from "react";
 interface DarkGradientSectionProps {
   children: React.ReactNode;
   className?: string;
+  // React 19 passes `ref` as a normal prop. It's a <section>, so HTMLElement.
+  ref?: React.Ref<HTMLElement>;
 }
 
 export default function DarkGradientSection({
   children,
   className = "",
+  ref,
 }: DarkGradientSectionProps) {
   return (
-    <section className={`relative overflow-hidden bg-[#17153A] ${className}`}>
+    <section
+      ref={ref}
+      className={`relative overflow-hidden bg-[#17153A] ${className}`}
+    >
       {/* Top gradient blob */}
       <div
         aria-hidden="true"

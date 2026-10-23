@@ -128,7 +128,7 @@ const Hero = () => {
               </p>
             </div>
 
-            <h1 className="mt-5 font-heading-condensed text-4xl font-[700] leading-[1.02] -tracking-[0.04em] text-ink sm:text-6xl md:text-5xl lg:text-5xl text-center md:text-left">
+            <h1 className="mt-5 font-heading-condensed text-5xl font-[700] leading-[1.02] -tracking-[0.04em] text-ink sm:text-6xl md:text-5xl lg:text-5xl text-center md:text-left">
               More of the right Instagram followers. With your own{" "}
               <span className="text-action">Brand Manager.</span>
             </h1>
