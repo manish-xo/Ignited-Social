@@ -16,15 +16,7 @@ const BrandManager = () => {
           </CornerFrame>
         </div>
 
-        {/* <h1 className="mt-5 font-heading-condensed text-4xl font-[700] leading-[1.02] -tracking-[0.04em] text-ink sm:text-6xl md:text-5xl lg:text-5xl text-center flex flex-col">
-          <span>One person who knows your business</span>
-          <span>And what to work on next.</span>
-        </h1> */}
-
-        {/* Same classes on both lines so they always match in size.
-            leading-[0.95] controls the gap between the two lines. */}
-
-        <Heading
+        {/* <Heading
           as="h2"
           className="mt-2 block text-4xl sm:text-5xl md:text-6xl sm:hidden font-heading-condensed font-[600] -tracking-[0.04em] text-ink text-center leading-[0.9]"
         >
@@ -54,11 +46,19 @@ const BrandManager = () => {
           className="font-heading-condensed hidden sm:block text-4xl md:text-5xl font-[600] -tracking-[0.04em] text-ink text-center"
         >
           And what to work on next.
+        </Heading> */}
+
+        <Heading
+          as="h2"
+          className="font-heading-condensed hidden sm:block text-4xl md:text-5xl font-[600] -tracking-[0.04em] text-ink text-center"
+        >
+          Remove the guesswork
         </Heading>
 
         <p className="mx-auto mt-5 max-w-xl text-center text-sm leading-relaxed text-secondary sm:text-base">
-          Who you want to reach. What you sell. How much time you have. Your
-          Brand Manager gets to know all that, then gets to work.
+          Think of your Brand Manager as part of your team. A person who
+          understands what you’re building, and your why. Then helps you decide
+          what’s worth your time and what to work on next.
         </p>
 
         {/* Brand Manager card (left, sticks while scrolling on desktop) +
@@ -69,6 +69,11 @@ const BrandManager = () => {
           </div>
           <ServiceAccordion />
         </div>
+
+        {/* <p className="mx-auto mt-16 max-w-xl text-center text-sm leading-relaxed text-secondary sm:text-base">
+          Your brand manager takes an active role in growing your audience. And
+          helps you work through the difficult decisions.
+        </p> */}
       </div>
     </section>
   );

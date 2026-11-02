@@ -15,7 +15,7 @@ const Record = () => {
           </CornerFrame>
         </div>
 
-        <Heading
+        {/* <Heading
           as="h2"
           className="mt-5 font-heading-condensed text-4xl md:text-5xl font-[600] -tracking-[0.04em] text-ink text-center leading-[0.9]"
         >
@@ -26,6 +26,19 @@ const Record = () => {
           className="font-heading-condensed text-4xl md:text-5xl font-[600] -tracking-[0.04em] text-ink text-center"
         >
           And what happened next.
+        </Heading> */}
+
+        <Heading
+          as="h2"
+          className="mt-5 font-heading-condensed text-4xl md:text-5xl font-[600] -tracking-[0.04em] text-ink text-center leading-[0.9]"
+        >
+          More followers
+        </Heading>
+        <Heading
+          as="h2"
+          className="font-heading-condensed text-4xl md:text-5xl font-[600] -tracking-[0.04em] text-ink text-center"
+        >
+          were only the beginning.
         </Heading>
 
         <p className="mx-auto mt-5 max-w-xl text-center text-sm leading-relaxed text-secondary sm:text-base">

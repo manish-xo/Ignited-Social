@@ -4,6 +4,7 @@ import {
   ArrowDown,
   ArrowRight,
   BarChart3,
+  Check,
   MessageCircleHeart,
   ShieldCheck,
   TrendingUp,
@@ -14,6 +15,7 @@ import MinimalHero from "../Components/Hero-Minimalism";
 import GradientBackground from "@/components/ui/GradientBackground";
 import ProHeader from "@/components/layout/ProHeader/ProHeader";
 import { getPlan } from "@/lib/plans";
+import Heading from "@/components/ui/Heading";
 
 // Placeholder faces for the social-proof pill — swap for real creator photos.
 const CREATOR_AVATARS = [
@@ -22,17 +24,15 @@ const CREATOR_AVATARS = [
   { imgSrc: "/stock/avatar-3.jpg" },
 ];
 
+const BENEFITS = [
+  "Reach the right people",
+  "Know what to post",
+  "Give them a reason to buy",
+];
+
 const STATS = [
-  {
-    value: "90%",
-    label: "of customers stay",
-    detail: "Month-over-month retention",
-  },
-  {
-    value: "20,000+",
-    label: "accounts managed",
-    detail: "Month-over-month retention",
-  },
+  { value: "25M+", label: "followers grown since 2019" },
+  { value: "90%", label: "month-over-month customer retention" },
 ];
 
 // Floating pills around the video. `position` is relative to the video box:
@@ -87,7 +87,7 @@ const FLOATING_PILLS: FloatingPill[] = [
   {
     icon: BarChart3,
     iconBg: "bg-gradient-to-br from-violet-400 to-indigo-600",
-    title: "Weekly growth report",
+    title: "Live growth dashboard",
     position: "bottom-[4%] -left-[4%] sm:-left-[12%]",
     duration: "8.5s",
     delay: "-3s",
@@ -113,7 +113,7 @@ const Hero = () => {
                 {CREATOR_AVATARS.map((a) => (
                   <span
                     key={a.imgSrc}
-                    className="flex h-4 w-4 sm:h-5 sm:h-5 items-center justify-center rounded-full border border-canvas text-[9px] font-bold text-white"
+                    className="flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded-full border border-canvas text-[9px] font-bold text-white"
                   >
                     <img
                       src={a.imgSrc}
@@ -123,24 +123,38 @@ const Hero = () => {
                   </span>
                 ))}
               </div>
-              <p className="font-mono font-[500] text-[0.6rem] sm:text-[0.75rem] text-ink/80">
-                20,000+ creators. One manager each.
+              <p className="font-mono font-[500] text-[0.6rem] sm:text-[0.65rem] text-ink/80">
+                Our team supports 1,100+ active brands &amp; creators
               </p>
             </div>
 
-            <h1 className="mt-5 font-heading-condensed text-5xl font-[700] leading-[1.02] -tracking-[0.04em] text-ink sm:text-6xl md:text-5xl lg:text-5xl text-center md:text-left">
-              More of the right Instagram followers. With your own{" "}
-              <span className="text-action">Brand Manager.</span>
-            </h1>
+            <Heading
+              as="h1"
+              gradient={false}
+              className="mt-5 font-heading-condensed text-5xl font-[700] leading-[1.02] -tracking-[0.04em] text-ink sm:text-6xl md:text-5xl lg:text-5xl text-center md:text-left"
+            >
+              More Instagram followers{" "}
+              <span className="md:block">who care about your work.</span>
+            </Heading>
 
             <p className="mt-5 max-w-md mx-auto text-sm leading-relaxed text-secondary sm:text-base text-center md:text-left">
-              You&apos;ve got work worth seeing. Your personal Brand Manager
-              finds people likely to{" "}
+              Your dedicated Brand Manager{" "}
               <strong className="font-semibold text-ink">
-                care, handles the daily outreach
+                handles the daily outreach
               </strong>
-              , and helps you give them a reason to stay.
+              , helps with your content, and works with you on what to improve.
             </p>
+
+            <ul className="mx-auto mt-5 flex w-fit flex-col gap-2 text-sm text-ink md:mx-0">
+              {BENEFITS.map((b) => (
+                <li key={b} className="flex items-center gap-2.5">
+                  <span className="flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-action-tint text-action">
+                    <Check size={11} strokeWidth={3} aria-hidden />
+                  </span>
+                  {b}
+                </li>
+              ))}
+            </ul>
 
             <div className="mt-7 flex items-center justify-center md:justify-normal gap-3">
               <Link
@@ -160,20 +174,11 @@ const Hero = () => {
               </a>
             </div>
 
-            <p className="mt-6 text-xs text-ink sm:text-sm flex items-center justify-center md:block">
+            <p className="mt-6 text-center text-xs text-ink sm:text-sm md:text-left">
               From <strong className="font-bold">${startingPrice}</strong>
-              /month <span className="mx-1.5 text-muted">•</span> First 7 days
-              free
+              /month <span className="mx-1.5 text-muted">·</span>7 days free
+              trial <span className="mx-1.5 text-muted">·</span>Cancel anytime
             </p>
-
-            <div className="mt-10 sm:mt-14 flex flex-col items-center justify-center -space-y-0.5 md:items-start">
-              <p className="font-heading text-lg font-[700] -tracking-[0.06em] text-ink">
-                We grow your audience.
-              </p>
-              <p className="text-sm text-secondary">
-                You create and publish, with expert guidance.
-              </p>
-            </div>
           </div>
 
           {/* RIGHT — video (public/stock/Hero.mp4) */}
@@ -243,13 +248,15 @@ const Hero = () => {
               <p className="font-heading text-4xl font-[700] -tracking-[0.07em] text-ink sm:text-5xl">
                 {stat.value}
               </p>
-              <p className="mt-1 text-xs text-ink sm:text-sm ">{stat.label}</p>
-              <p className="text-xs text-secondary text-center sm:text-sm">
-                {stat.detail}
+              <p className="mt-1 max-w-[200px] text-center text-xs text-secondary sm:text-sm">
+                {stat.label}
               </p>
             </div>
           ))}
         </div>
+        <p className="mt-6 text-center text-xs text-muted">
+          The track record of the team behind Ignited.
+        </p>
       </div>
     </section>
   );

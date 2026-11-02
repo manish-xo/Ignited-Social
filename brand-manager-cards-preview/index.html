@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Brand Manager Cards</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <p class="eyebrow">Service page · Brand Manager section · Flow preview</p>
+      <h1>How the Brand Manager cards work</h1>
+      <p class="lead">
+        6 managers, one card each. Visitors browse them with arrows. The
+        “Today’s workflow” list on each card is picked from the owner’s copy and
+        changes once a day at 12:00 PM India time. Names, photos and experience
+        are placeholders until we get the real ones.
+      </p>
+
+      <div class="rules">
+        <div class="rule">
+          <span class="num">1</span>
+          <h3>6 managers, arrows to browse</h3>
+          <p>
+            One card per real Brand Manager. Left / right arrows move between
+            them.
+          </p>
+        </div>
+        <div class="rule">
+          <span class="num">2</span>
+          <h3>Manager 1 gets a special card</h3>
+          <p>
+            The first manager visitors see uses 1 of the 6 “special” lists,
+            written with “your”.
+          </p>
+        </div>
+        <div class="rule">
+          <span class="num">3</span>
+          <h3>Managers 2–6 share the pool</h3>
+          <p>
+            5 of the 15 pool lists are picked, one per manager. No two match on
+            the same day.
+          </p>
+        </div>
+        <div class="rule">
+          <span class="num">4</span>
+          <h3>New picks daily at 12 PM IST</h3>
+          <p>
+            Everyone sees the same picks until 12:00 PM IST, then a fresh set is
+            chosen.
+          </p>
+        </div>
+      </div>
+
+      <!-- time controls -->
+      <section aria-labelledby="clock-h">
+        <div class="section-head">
+          <div>
+            <h2 id="clock-h">Try it: change the day</h2>
+            <p>
+              Pick any date and time (India time) and watch the cards switch at
+              12 PM.
+            </p>
+          </div>
+        </div>
+        <div class="clock">
+          <label>
+            Pretend it’s (IST)
+            <input id="when" type="datetime-local" />
+          </label>
+          <div class="btns">
+            <button class="btn" type="button" data-shift="-1">
+              ← Previous day
+            </button>
+            <button class="btn" type="button" data-shift="1">Next day →</button>
+            <button class="btn primary" type="button" id="now">Now</button>
+          </div>
+          <p class="cycle" id="cycle" aria-live="polite"></p>
+          <label class="toggle">
+            <input id="flag" type="checkbox" checked />
+            Highlight times that don’t make sense yet
+          </label>
+        </div>
+      </section>
+
+      <!-- carousel + explanation -->
+      <section aria-labelledby="stage-h">
+        <div class="section-head">
+          <div>
+            <h2 id="stage-h">What a visitor sees</h2>
+            <p>
+              The coloured tag above the card is only for this preview; it won’t
+              be on the site.
+            </p>
+          </div>
+        </div>
+
+        <div class="stage">
+          <div
+            class="carousel"
+            aria-roledescription="carousel"
+            aria-label="Brand Managers"
+          >
+            <div class="slide-tag">
+              <span id="position"></span>
+              <span id="source"></span>
+            </div>
+            <div id="card"></div>
+            <div class="nav">
+              <button
+                class="arrow"
+                type="button"
+                id="prev"
+                aria-label="Previous manager"
+              >
+                ←
+              </button>
+              <div class="dots" id="dots"></div>
+              <button
+                class="arrow"
+                type="button"
+                id="next"
+                aria-label="Next manager"
+              >
+                →
+              </button>
+            </div>
+          </div>
+
+          <div class="why">
+            <h3>Today’s line-up</h3>
+            <p id="why-text"></p>
+            <ul class="lineup" id="lineup"></ul>
+            <p class="warn-note" id="warn"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- card library -->
+      <section aria-labelledby="special-h">
+        <div class="section-head">
+          <div>
+            <h2 id="special-h">Special cards · Manager 1 only</h2>
+            <p>
+              6 lists written to “you”. 1 is picked each day. Highlighted =
+              picked today.
+            </p>
+          </div>
+        </div>
+        <div class="library" id="special-lib"></div>
+      </section>
+
+      <section aria-labelledby="pool-h">
+        <div class="section-head">
+          <div>
+            <h2 id="pool-h">Card pool · Managers 2–6</h2>
+            <p>
+              15 general lists. 5 are picked each day, one per manager.
+              Highlighted = picked today.
+            </p>
+          </div>
+        </div>
+        <div class="library" id="pool-lib"></div>
+      </section>
+
+      <footer>
+        Preview only, not part of the site. Picks are worked out from the date,
+        so every visitor gets the same set on the same day without needing a
+        server.
+      </footer>
+    </main>
+
+    <script>
+      // ── Copy from the owner ──────────────────────────────────────
+      // Each card: done = completed today, later = scheduled for later.
+      const SPECIAL = [
+        {
+          done: [
+            ["Engaged with 63 accounts in your niche", "9:14 AM"],
+            ["Reviewed your recent posts", "10:02 AM"],
+            ["Followed 28 users matching your location filter", "11:11 AM"],
+          ],
+          later: [["Walk you through your content plan", "2:30 PM"]],
+        },
+        {
+          done: [
+            ["Prepared your content plan", "9:26 AM"],
+            ["Commented on 18 posts in your niche", "10:48 AM"],
+            ["Followed 46 people in your niche", "12:05 PM"],
+          ],
+          later: [["Brainstorm Reel ideas and hook strategies", "3:00 PM"]],
+        },
+        {
+          done: [
+            ["Liked 57 posts from people in your niche", "8:52 AM"],
+            ["Followed 34 people who liked your competitor’s post", "10:16 AM"],
+            ["Reviewed your growth and follower quality", "11:31 AM"],
+          ],
+          later: [["Refine your audience targeting", "2:15 PM"]],
+        },
+        {
+          done: [
+            ["Commented on 22 posts in your niche", "9:08 AM"],
+            ["Reviewed your offer and landing page", "10:37 AM"],
+            ["Followed 41 users matching your location filter", "12:18 PM"],
+          ],
+          later: [["Discuss your content calendar for next month", "3:45 PM"]],
+        },
+        {
+          done: [
+            ["Engaged with 52 accounts in your niche", "9:22 AM"],
+            ["Shared feedback on your Reel’s hook", "11:06 AM"],
+          ],
+          later: [
+            ["Review your bio and booking funnel", "1:30 PM"],
+            ["Discuss your content plan", "4:00 PM"],
+          ],
+        },
+        {
+          done: [
+            [
+              "Engaged with 68 accounts who followed your competitor",
+              "9:05 AM",
+            ],
+            ["Commented on 16 posts in your niche", "10:12 AM"],
+            ["Followed 37 users matching your location filter", "11:11 AM"],
+          ],
+          later: [["Review your growth and follower quality", "2:45 PM"]],
+        },
+      ];
+
+      const POOL = [
+        {
+          done: [
+            ["Engaged with 54 relevant accounts", "9:12 AM"],
+            ["Shared feedback on recent posts", "10:07 AM"],
+            ["Followed 32 people in the selected location", "11:38 AM"],
+          ],
+          later: [["Discuss next month’s content calendar", "3:00 PM"]],
+        },
+        {
+          done: [
+            ["Prepared a tailored content plan", "9:30 AM"],
+            [
+              "Followed 21 relevant people from competitor’s follower list",
+              "10:42 AM",
+            ],
+            ["Liked 48 posts from relevant accounts", "12:14 PM"],
+          ],
+          later: [["Discuss ideas for next week’s Reels", "3:30 PM"]],
+        },
+        {
+          done: [
+            ["Liked 59 posts from relevant accounts", "8:56 AM"],
+            ["Followed 36 people interested in the niche", "10:20 AM"],
+            ["Reviewed growth and follower quality", "11:47 AM"],
+          ],
+          later: [["Refine audience targeting", "2:40 PM"]],
+        },
+        {
+          done: [
+            ["Commented on 24 relevant posts", "9:18 AM"],
+            ["Reviewed an offer and landing page", "10:36 AM"],
+            ["Followed 43 people in the selected location", "12:09 PM"],
+          ],
+          later: [["Discuss improvements to the booking process", "3:15 PM"]],
+        },
+        {
+          done: [
+            ["Reviewed best-performing vs. recent posts", "9:04 AM"],
+            ["Engaged with 67 relevant accounts", "10:28 AM"],
+            ["Followed 38 people who liked competitor’s post", "11:53 AM"],
+          ],
+          later: [["Brainstorm new content topics", "2:20 PM"]],
+        },
+        {
+          done: [
+            ["Followed 29 people who followed a relevant account", "9:37 AM"],
+            [
+              "Analysed competitors’ Reels. Found a relevant visual hook strategy",
+              "10:51 AM",
+            ],
+            ["Commented on 19 relevant posts", "12:22 PM"],
+          ],
+          later: [["Review next month’s content calendar", "4:10 PM"]],
+        },
+        {
+          done: [
+            ["Engaged with 61 relevant accounts", "9:20 AM"],
+            ["Suggested new post formats", "10:24 AM"],
+            ["Followed 47 people in the selected location", "11:56 AM"],
+          ],
+          later: [["Review audience growth", "2:35 PM"]],
+        },
+        {
+          done: [
+            ["Reviewed the bio and booking link", "9:23 AM"],
+            ["Commented on 27 relevant posts", "10:46 AM"],
+            ["Liked 56 posts from relevant accounts", "12:08 PM"],
+          ],
+          later: [["Discuss content ideas for next month", "3:20 PM"]],
+        },
+        {
+          done: [
+            ["Liked 44 posts from relevant accounts", "9:06 AM"],
+            ["Followed 33 people interested in the niche", "10:31 AM"],
+            ["Refined audience targeting", "11:49 AM"],
+          ],
+          later: [["Review recent Reels", "4:15 PM"]],
+        },
+        {
+          done: [
+            ["Reviewed recent posts’ insights", "9:16 AM"],
+            ["Engaged with 58 relevant accounts", "10:34 AM"],
+            ["Suggested clearer wording for the bio", "12:06 PM"],
+          ],
+          later: [["Discuss next month’s content calendar", "3:10 PM"]],
+        },
+        {
+          done: [
+            ["Commented on 23 relevant posts", "9:28 AM"],
+            ["Reviewed an offer and landing page", "10:45 AM"],
+            ["Shared ideas for upcoming Reels", "11:52 AM"],
+          ],
+          later: [["Review the booking process", "3:40 PM"]],
+        },
+        {
+          done: [
+            ["Engaged with 64 relevant accounts", "9:13 AM"],
+            ["Followed 31 people in the selected location", "10:58 AM"],
+          ],
+          later: [
+            ["Prepare a content plan", "1:45 PM"],
+            ["Discuss progress and next steps", "4:20 PM"],
+          ],
+        },
+        {
+          done: [
+            ["Followed 26 people who liked a relevant post", "9:21 AM"],
+            ["Liked 53 posts from relevant accounts", "10:43 AM"],
+          ],
+          later: [
+            ["Review recent posts", "1:30 PM"],
+            ["Brainstorm new content ideas", "3:50 PM"],
+          ],
+        },
+        {
+          done: [
+            ["Followed 39 people in the selected location", "9:09 AM"],
+            ["Engaged with 72 relevant accounts", "10:52 AM"],
+          ],
+          later: [
+            ["Review an offer and landing page", "2:00 PM"],
+            ["Refine audience targeting", "4:05 PM"],
+          ],
+        },
+        {
+          done: [
+            ["Engaged with 66 relevant accounts", "9:17 AM"],
+            ["Commented on 20 relevant posts", "10:29 AM"],
+            ["Followed 35 people interested in the niche", "11:54 AM"],
+          ],
+          later: [["Review growth and follower quality", "3:25 PM"]],
+        },
+      ];
+
+      // Placeholders until the real names, photos and experience arrive.
+      const MANAGERS = [1, 2, 3, 4, 5, 6].map((n) => ({
+        name: `Brand Manager ${n}`,
+        initials: `BM${n}`,
+      }));
+
+      // ── Daily pick ───────────────────────────────────────────────
+      const HOUR = 3600000;
+      const DAY = 24 * HOUR;
+      const IST = 5.5 * HOUR;
+
+      // Day number that ticks over at 12:00 PM IST.
+      const cycleOf = (ms) => Math.floor((ms + IST - 12 * HOUR) / DAY);
+      const cycleStart = (c) => c * DAY - IST + 12 * HOUR;
+
+      // Small seeded random, so the same day always gives the same picks.
+      function seeded(seed) {
+        let a = (seed * 2654435761) >>> 0;
+        return () => {
+          a = (a + 0x6d2b79f5) >>> 0;
+          let t = a;
+          t = Math.imul(t ^ (t >>> 15), t | 1);
+          t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+          return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+
+      function picksFor(cycle) {
+        const rand = seeded(cycle + 1);
+        const special = Math.floor(rand() * SPECIAL.length);
+        const order = POOL.map((_, i) => i);
+        for (let i = order.length - 1; i > 0; i--) {
+          const j = Math.floor(rand() * (i + 1));
+          [order[i], order[j]] = [order[j], order[i]];
+        }
+        // [Manager 1 → special, Managers 2–6 → five unique pool cards]
+        return [
+          { kind: "special", index: special },
+          ...order.slice(0, 5).map((index) => ({ kind: "pool", index })),
+        ];
+      }
+
+      // ── Time helpers ─────────────────────────────────────────────
+      const toMinutes = (t) => {
+        const [, h, m, ap] = t.match(/(\d+):(\d+) (AM|PM)/);
+        return ((+h % 12) + (ap === "PM" ? 12 : 0)) * 60 + +m;
+      };
+      const istMinutes = (ms) => Math.floor(((ms + IST) % DAY) / 60000);
+      const fmtIST = (ms, opts) =>
+        new Intl.DateTimeFormat("en-GB", {
+          timeZone: "Asia/Kolkata",
+          ...opts,
+        }).format(ms);
+      const dateLabel = (ms) =>
+        fmtIST(ms, { weekday: "short", day: "numeric", month: "short" }) +
+        ", " +
+        fmtIST(ms, {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        }).toUpperCase();
+
+      // datetime-local value <-> ms, treating the input as India time.
+      const toInput = (ms) => new Date(ms + IST).toISOString().slice(0, 16);
+      const fromInput = (v) => Date.parse(v + ":00Z") - IST;
+
+      // ── State ────────────────────────────────────────────────────
+      let now = Date.now();
+      let current = 0;
+
+      const $ = (id) => document.getElementById(id);
+      const label = (p) =>
+        p.kind === "special"
+          ? `Special #${p.index + 1}`
+          : `Pool #${p.index + 1}`;
+      const cardFor = (p) => (p.kind === "special" ? SPECIAL : POOL)[p.index];
+
+      function taskRow(text, time, later, mins, flag) {
+        const t = toMinutes(time);
+        // "Completed" at a time that hasn't come yet, or "later" when it's already passed.
+        const odd = flag && (later ? t <= mins : t > mins);
+        const cls = [
+          "task",
+          later ? "later" : "done",
+          odd ? (later ? "past-later" : "future") : "",
+        ].join(" ");
+        const title = odd
+          ? later
+            ? ` title="It's already past ${time} IST, but this still says 'later'"`
+            : ` title="Says completed, but it's not ${time} IST yet"`
+          : "";
+        return `<li class="${cls}"${title}><span class="ico" aria-hidden="true">${later ? "◷" : "✓"}</span><span>${text}</span><time>${time}</time></li>`;
+      }
+
+      function renderCard(manager, card, mins, flag) {
+        return `
+          <article class="card">
+            <div class="profile">
+              <div class="avatar" aria-hidden="true">${manager.initials}</div>
+              <div>
+                <p class="name">${manager.name}</p>
+                <p class="role">Personal Brand Manager</p>
+                <p class="role placeholder">Real name &amp; photo needed</p>
+              </div>
+            </div>
+            <div class="stats">
+              <div class="stat"><b class="placeholder">—</b>accounts managed</div>
+              <div class="stat"><b class="placeholder">—</b>experience</div>
+            </div>
+            <div class="workflow">
+              <div class="wf-head">Today’s workflow <span class="live">● LIVE</span></div>
+              <p class="group">Completed today <span>${card.done.length}</span></p>
+              <ul class="tasks">${card.done.map(([x, t]) => taskRow(x, t, false, mins, flag)).join("")}</ul>
+              <p class="group">Scheduled for later <span>${card.later.length}</span></p>
+              <ul class="tasks">${card.later.map(([x, t]) => taskRow(x, t, true, mins, flag)).join("")}</ul>
+            </div>
+          </article>`;
+      }
+
+      function renderMini(card, i, kind, owner) {
+        const lines = [
+          ...card.done.map(([x, t]) => `<li>✓ ${x} — ${t}</li>`),
+          ...card.later.map(([x, t]) => `<li>◷ ${x} — ${t}</li>`),
+        ].join("");
+        const who = owner
+          ? `<span class="pill ${kind} who">Today: ${owner}</span>`
+          : `<span class="who">not today</span>`;
+        return `<div class="mini ${kind} ${owner ? "picked" : ""}"><h4>Card #${i + 1} ${who}</h4><ul>${lines}</ul></div>`;
+      }
+
+      function render() {
+        const cycle = cycleOf(now);
+        const picks = picksFor(cycle);
+        const start = cycleStart(cycle);
+        const end = start + DAY;
+        const left = end - now;
+        const mins = istMinutes(now);
+        const flag = $("flag").checked;
+
+        $("when").value = toInput(now);
+        $("cycle").innerHTML =
+          `Showing the set from <strong>${dateLabel(start)}</strong> to <strong>${dateLabel(end)}</strong> IST. ` +
+          `Next change in <strong>${Math.floor(left / HOUR)}h ${Math.floor((left % HOUR) / 60000)}m</strong>.`;
+
+        // carousel
+        const pick = picks[current];
+        $("position").textContent =
+          `Manager ${current + 1} of ${MANAGERS.length}`;
+        $("source").innerHTML =
+          `<span class="pill ${pick.kind}">${label(pick)}</span>`;
+        $("card").innerHTML = renderCard(
+          MANAGERS[current],
+          cardFor(pick),
+          mins,
+          flag,
+        );
+        $("dots").innerHTML = MANAGERS.map(
+          (m, i) =>
+            `<button type="button" class="dot ${i === current ? "on" : ""}" data-go="${i}" aria-label="Show ${m.name}"${i === current ? ' aria-current="true"' : ""}></button>`,
+        ).join("");
+
+        // line-up
+        $("why-text").textContent =
+          "Click any row to jump to that manager. Change the day above and every row reshuffles; Manager 1 always comes from the special set.";
+        $("lineup").innerHTML = picks
+          .map(
+            (p, i) =>
+              `<li><button type="button" data-go="${i}" aria-current="${i === current}"><span>${MANAGERS[i].name}</span><span class="pill ${p.kind}">${label(p)}</span></button></li>`,
+          )
+          .join("");
+
+        // warning about clock times
+        const card = cardFor(pick);
+        const early = card.done.filter(([, t]) => toMinutes(t) > mins).length;
+        const stale = card.later.filter(([, t]) => toMinutes(t) <= mins).length;
+        const warn = $("warn");
+        const bits = [];
+        if (early)
+          bits.push(
+            `${early} “completed” task${early > 1 ? "s are" : " is"} timed later than now`,
+          );
+        if (stale)
+          bits.push(
+            `${stale} “scheduled for later” task${stale > 1 ? "s have" : " has"} a time that's already passed`,
+          );
+        warn.textContent = bits.length
+          ? `At ${fmtIST(now, { hour: "numeric", minute: "2-digit", hour12: true }).toUpperCase()} IST, ${bits.join(" and ")}. This is the timing question to ask the owner.`
+          : "";
+        warn.classList.toggle("show", flag && bits.length > 0);
+
+        // library
+        const owners = { special: {}, pool: {} };
+        picks.forEach((p, i) => (owners[p.kind][p.index] = MANAGERS[i].name));
+        $("special-lib").innerHTML = SPECIAL.map((c, i) =>
+          renderMini(c, i, "special", owners.special[i]),
+        ).join("");
+        $("pool-lib").innerHTML = POOL.map((c, i) =>
+          renderMini(c, i, "pool", owners.pool[i]),
+        ).join("");
+      }
+
+      // ── Events ───────────────────────────────────────────────────
+      const go = (i) => {
+        current = (i + MANAGERS.length) % MANAGERS.length;
+        render();
+      };
+      $("prev").addEventListener("click", () => go(current - 1));
+      $("next").addEventListener("click", () => go(current + 1));
+      document.addEventListener("click", (e) => {
+        const t = e.target.closest("[data-go]");
+        if (t) go(+t.dataset.go);
+      });
+      document.querySelectorAll("[data-shift]").forEach((b) =>
+        b.addEventListener("click", () => {
+          now += +b.dataset.shift * DAY;
+          render();
+        }),
+      );
+      $("now").addEventListener("click", () => {
+        now = Date.now();
+        render();
+      });
+      $("when").addEventListener("change", (e) => {
+        if (e.target.value) {
+          now = fromInput(e.target.value);
+          render();
+        }
+      });
+      $("flag").addEventListener("change", render);
+
+      render();
+    </script>
+  </body>
+</html>

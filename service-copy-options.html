@@ -1,0 +1,1288 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Service Page Copy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --canvas: #faf9f6;
+        --ink: #221f1b;
+        --secondary: #5e5c58;
+        --muted: #858380;
+        --border: #e0dfdc;
+        --hairline: #ebeae7;
+        --subtle: #f2f1ee;
+        --action: #5a4ce0;
+        --tint: #dad6f2;
+        --tint-bg: #edebf4;
+        --danger: #c13b33;
+        --danger-bg: #f4e6e2;
+        --ok: #2f7d4f;
+        --ok-bg: #e6ede5;
+        --heading: "Bricolage Grotesque", system-ui, sans-serif;
+        --body:
+          -apple-system, "SF Pro Display", "SF Pro Text", system-ui, "Segoe UI",
+          sans-serif;
+        --mono: "JetBrains Mono", ui-monospace, monospace;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 90px;
+      }
+      body {
+        margin: 0;
+        background: var(--canvas);
+        color: var(--ink);
+        font: 15px/1.55 var(--body);
+        -webkit-font-smoothing: antialiased;
+      }
+      button {
+        font: inherit;
+        cursor: pointer;
+      }
+
+      /* ── top bar ───────────────────────────────── */
+      .bar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: rgba(250, 249, 246, 0.9);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border);
+      }
+      .bar-in {
+        max-width: 1240px;
+        margin: auto;
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .brand {
+        font: 700 18px/1 var(--heading);
+        font-variation-settings: "wdth" 75;
+        letter-spacing: -0.02em;
+      }
+      .brand span {
+        color: var(--action);
+      }
+      .jump {
+        display: flex;
+        gap: 4px;
+        overflow-x: auto;
+        flex: 1;
+        min-width: 0;
+        scrollbar-width: none;
+      }
+      .jump a {
+        white-space: nowrap;
+        font-size: 12px;
+        color: var(--secondary);
+        text-decoration: none;
+        padding: 6px 10px;
+        border-radius: 10px;
+      }
+      .jump a:hover {
+        background: var(--subtle);
+        color: var(--ink);
+      }
+      .switch {
+        display: flex;
+        background: var(--subtle);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 3px;
+        gap: 2px;
+      }
+      .switch button {
+        border: 0;
+        background: none;
+        padding: 7px 12px;
+        border-radius: 11px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--secondary);
+      }
+      .switch button[aria-pressed="true"] {
+        background: var(--action);
+        color: #fff;
+        box-shadow: 0 8px 18px -10px rgba(90, 76, 224, 0.9);
+      }
+
+      /* ── intro ─────────────────────────────────── */
+      .wrap {
+        max-width: 1240px;
+        margin: auto;
+        padding: 0 20px;
+      }
+      .intro {
+        padding: 56px 0 24px;
+        display: grid;
+        gap: 28px;
+        grid-template-columns: 1.1fr 0.9fr;
+      }
+      .eyebrow {
+        display: inline-flex;
+        font: 500 11px/1 var(--mono);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        border: 1px solid var(--border);
+        background: var(--tint-bg);
+        padding: 6px 8px;
+        position: relative;
+      }
+      .eyebrow:before,
+      .eyebrow:after {
+        content: "";
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: var(--action);
+      }
+      .eyebrow:before {
+        top: -2px;
+        left: -2px;
+      }
+      .eyebrow:after {
+        bottom: -2px;
+        right: -2px;
+      }
+      h1 {
+        font: 700 clamp(36px, 5vw, 54px)/0.95 var(--heading);
+        font-variation-settings: "wdth" 75;
+        letter-spacing: -0.04em;
+        margin: 18px 0 14px;
+      }
+      h1 span {
+        color: var(--action);
+      }
+      .lede {
+        color: var(--secondary);
+        max-width: 560px;
+        margin: 0;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 20px 22px;
+      }
+      .card h3 {
+        margin: 0 0 10px;
+        font: 600 13px/1.2 var(--body);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+      }
+      .card ul {
+        margin: 0;
+        padding-left: 18px;
+        display: grid;
+        gap: 6px;
+        font-size: 14px;
+      }
+      .legend {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 12px;
+      }
+      .legend div {
+        background: var(--subtle);
+        border-radius: 14px;
+        padding: 12px;
+      }
+      .legend b {
+        display: block;
+        font: 700 22px/1 var(--heading);
+        font-variation-settings: "wdth" 75;
+        color: var(--action);
+      }
+      .legend small {
+        font-size: 12px;
+        color: var(--secondary);
+      }
+
+      /* ── sections ──────────────────────────────── */
+      .sec {
+        padding: 40px 0;
+        border-top: 1px solid var(--border);
+      }
+      .sec-head {
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+        flex-wrap: wrap;
+        margin-bottom: 6px;
+      }
+      .num {
+        font: 500 12px/1 var(--mono);
+        color: var(--action);
+        background: var(--tint-bg);
+        padding: 6px 8px;
+        border-radius: 6px;
+      }
+      .sec-head h2 {
+        font: 700 30px/1 var(--heading);
+        font-variation-settings: "wdth" 75;
+        letter-spacing: -0.03em;
+        margin: 0;
+      }
+      .file {
+        font: 12px var(--mono);
+        color: var(--muted);
+      }
+      .why {
+        color: var(--secondary);
+        font-size: 14px;
+        max-width: 820px;
+        margin: 8px 0 18px;
+      }
+
+      details.now {
+        background: #fff;
+        border: 1px dashed var(--border-strong, #cfcdca);
+        border-radius: 16px;
+        margin-bottom: 18px;
+      }
+      details.now summary {
+        list-style: none;
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--secondary);
+        cursor: pointer;
+      }
+      details.now summary::-webkit-details-marker {
+        display: none;
+      }
+      details.now summary:after {
+        content: "Show";
+        font-weight: 500;
+        color: var(--action);
+      }
+      details.now[open] summary:after {
+        content: "Hide";
+      }
+      .now-list {
+        padding: 0 16px 14px;
+        display: grid;
+        gap: 6px;
+      }
+      .now-row {
+        display: grid;
+        grid-template-columns: 110px 1fr;
+        gap: 12px;
+        font-size: 13px;
+        padding: 6px 0;
+        border-top: 1px solid var(--hairline);
+      }
+      .now-row em {
+        font-style: normal;
+        font: 11px/1.5 var(--mono);
+        color: var(--muted);
+        text-transform: uppercase;
+      }
+      .now-row.cut span {
+        text-decoration: line-through;
+        text-decoration-color: rgba(193, 59, 51, 0.55);
+        color: var(--muted);
+      }
+      .flag {
+        display: inline-block;
+        margin-left: 6px;
+        font: 600 10px/1 var(--body);
+        background: var(--danger-bg);
+        color: var(--danger);
+        padding: 3px 6px;
+        border-radius: 6px;
+        text-decoration: none;
+      }
+
+      .opts {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+      body[data-view="A"] .opt:not([data-k="A"]),
+      body[data-view="B"] .opt:not([data-k="B"]),
+      body[data-view="C"] .opt:not([data-k="C"]) {
+        display: none;
+      }
+      body:not([data-view="all"]) .opts {
+        grid-template-columns: 1fr;
+      }
+      body:not([data-view="all"]) .opt .pv {
+        padding: 44px 40px;
+      }
+      body:not([data-view="all"]) .opt .pv h4 {
+        font-size: 44px;
+      }
+
+      .opt {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .opt-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--hairline);
+        gap: 8px;
+      }
+      .tag {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .tag b {
+        width: 24px;
+        height: 24px;
+        border-radius: 8px;
+        background: var(--action);
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-size: 12px;
+      }
+      .tag small {
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .wc {
+        font: 11px var(--mono);
+        color: var(--ok);
+        background: var(--ok-bg);
+        padding: 4px 7px;
+        border-radius: 6px;
+        white-space: nowrap;
+      }
+      .pv {
+        padding: 26px 22px;
+        flex: 1;
+      }
+      .pv .eyebrow {
+        margin-bottom: 14px;
+      }
+      .pv h4 {
+        font: 600 32px/0.95 var(--heading);
+        font-variation-settings: "wdth" 75;
+        letter-spacing: -0.04em;
+        margin: 0;
+      }
+      .pv h4 span {
+        color: var(--action);
+      }
+      .pv .sub {
+        color: var(--secondary);
+        margin: 12px 0 0;
+        max-width: 620px;
+      }
+      .items {
+        display: grid;
+        gap: 10px;
+        margin-top: 18px;
+      }
+      .item {
+        border: 1px solid var(--hairline);
+        background: var(--canvas);
+        border-radius: 14px;
+        padding: 12px 14px;
+      }
+      .item strong {
+        display: block;
+        font-size: 14px;
+      }
+      .item span {
+        display: block;
+        font-size: 13px;
+        color: var(--secondary);
+        margin-top: 2px;
+      }
+      .item i {
+        font-style: normal;
+        font: 10px/1 var(--mono);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--action);
+        display: block;
+        margin-bottom: 6px;
+      }
+      .ctas {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 20px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 999px;
+        padding: 9px 16px;
+        font-size: 13px;
+        font-weight: 600;
+        background: var(--action);
+        color: #fff;
+      }
+      .btn.ghost {
+        background: transparent;
+        color: var(--action);
+        border: 1px solid rgba(90, 76, 224, 0.4);
+      }
+      .meta {
+        font-size: 12px;
+        color: var(--secondary);
+        margin-top: 14px;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 16px;
+      }
+      .chips span {
+        font-size: 12px;
+        background: var(--subtle);
+        border: 1px solid var(--hairline);
+        border-radius: 999px;
+        padding: 4px 10px;
+      }
+
+      .shared {
+        margin-top: 16px;
+        background: var(--subtle);
+        border-radius: 18px;
+        padding: 18px 20px;
+      }
+      .shared h5 {
+        margin: 0 0 4px;
+        font: 600 12px/1.2 var(--body);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+      }
+      .shared p.hint {
+        margin: 0 0 12px;
+        font-size: 13px;
+        color: var(--secondary);
+      }
+      .qa {
+        display: grid;
+        gap: 10px;
+      }
+      .qa div {
+        background: #fff;
+        border: 1px solid var(--hairline);
+        border-radius: 14px;
+        padding: 12px 14px;
+      }
+      .qa strong {
+        display: block;
+        font-size: 14px;
+      }
+      .qa span {
+        display: block;
+        font-size: 13px;
+        color: var(--secondary);
+        margin-top: 3px;
+      }
+
+      .owner {
+        background: var(--tint-bg);
+        border: 1px solid var(--tint);
+        border-radius: 16px;
+        padding: 16px 18px;
+        font-size: 14px;
+        color: var(--secondary);
+      }
+      .owner b {
+        color: var(--ink);
+      }
+
+      footer {
+        padding: 40px 0 60px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      @media (max-width: 900px) {
+        .intro {
+          grid-template-columns: 1fr;
+        }
+        .opts {
+          grid-template-columns: 1fr;
+        }
+        .now-row {
+          grid-template-columns: 1fr;
+          gap: 2px;
+        }
+        body:not([data-view="all"]) .opt .pv {
+          padding: 26px 22px;
+        }
+        body:not([data-view="all"]) .opt .pv h4 {
+          font-size: 34px;
+        }
+      }
+      @media (max-width: 560px) {
+        .bar-in {
+          gap: 10px;
+        }
+        .jump {
+          order: 3;
+          flex-basis: 100%;
+        }
+        .legend {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body data-view="all">
+    <header class="bar">
+      <div class="bar-in">
+        <div class="brand">Service page <span>copy</span></div>
+        <nav class="jump" id="jump" aria-label="Sections"></nav>
+        <div class="switch" role="group" aria-label="View">
+          <button data-v="all" aria-pressed="true">Compare</button>
+          <button data-v="A" aria-pressed="false">A</button>
+          <button data-v="B" aria-pressed="false">B</button>
+          <button data-v="C" aria-pressed="false">C</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="intro">
+        <div>
+          <span class="eyebrow">Copy review · Service route</span>
+          <h1>Less text. <span>One idea per section.</span></h1>
+          <p class="lede">
+            Every section of the service page, rewritten three ways. Use
+            <b>Compare</b> to see all three side by side, or pick <b>A</b>,
+            <b>B</b> or <b>C</b> to read one version from top to bottom, as a
+            visitor would. Open “Current copy” in any section to see what's
+            there now. Lines that are struck through get removed.
+          </p>
+          <div class="legend">
+            <div>
+              <b>A · Direct</b
+              ><small>Plain and short. Says what you get.</small>
+            </div>
+            <div>
+              <b>B · Personal</b
+              ><small>Warmer. Leads with the person doing the work.</small>
+            </div>
+            <div>
+              <b>C · Proof-led</b
+              ><small>Leads with facts: timings, plans, guarantees.</small>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>What's wrong with the current copy</h3>
+          <ul>
+            <li>
+              Most sections stack an eyebrow, a two-part heading, a subheading
+              and extra small print. That's 4–7 lines of text before the content
+              starts.
+            </li>
+            <li>
+              The hero says the same thing twice: the subheading and the “We
+              grow your audience / You create and publish” lines.
+            </li>
+            <li>
+              “Brand Manager” appears 20+ times, and “7 days free” in four
+              places.
+            </li>
+            <li>
+              Pricing explains the refund twice, once in each plan card and
+              again below them.
+            </li>
+            <li>
+              Two-part headings (“X. And Y.”) are used in five sections, so none
+              of them stands out.
+            </li>
+            <li>
+              A few typos and mismatches. These are flagged in the section where
+              they occur.
+            </li>
+          </ul>
+          <h3 style="margin-top: 16px">Rules used for every option</h3>
+          <ul>
+            <li>One heading and at most one supporting line.</li>
+            <li>Eyebrows kept only where they add information.</li>
+            <li>
+              Every fact comes from the current site: prices, timings, plans,
+              refund. Nothing new is invented.
+            </li>
+            <li>Customer quotes are left exactly as written.</li>
+          </ul>
+        </div>
+      </section>
+
+      <div id="sections"></div>
+    </main>
+
+    <footer class="wrap">
+      Prepared from the live components in <code>app/service/</code>. Word
+      counts cover the copy visible on load; quotes and mockup text aren't
+      counted.
+    </footer>
+
+    <script>
+      const S = [
+        {
+          id: "hero",
+          num: "01",
+          name: "Hero",
+          file: "sections/Hero.tsx",
+          why: "Seven text layers. The two lines under the CTAs repeat the subheading, and the eyebrow and the heading both talk about a manager.",
+          now: [
+            ["Eyebrow", "20,000+ creators. One manager each."],
+            [
+              "Heading",
+              "More of the right Instagram followers. With your own Brand Manager.",
+            ],
+            [
+              "Subheading",
+              "You’ve got work worth seeing. Your personal Brand Manager finds people likely to care, handles the daily outreach, and helps you give them a reason to stay.",
+            ],
+            ["Buttons", "Find my plan · How it works"],
+            ["Small print", "From $139/month • First 7 days free"],
+            ["Tagline", "We grow your audience.", 1],
+            ["Tagline", "You create and publish, with expert guidance.", 1],
+          ],
+          A: {
+            eyebrow: "20,000+ creators grown",
+            h: "The right Instagram followers, <span>found by a real person.</span>",
+            sub: "Your Brand Manager finds people who care about what you do and handles the daily outreach. You keep creating.",
+            ctas: ["Find my plan", "How it works"],
+            meta: "From $139/month · 7 days free",
+          },
+          B: {
+            eyebrow: "One manager per account",
+            h: "Your own <span>Brand Manager</span> for Instagram growth.",
+            sub: "One person who learns your business, reaches the people most likely to follow, and tells you what to post next.",
+            ctas: ["Find my plan", "How it works"],
+            meta: "7 days free, then from $139/month",
+          },
+          C: {
+            h: "Grow an Instagram audience <span>that actually cares.</span>",
+            sub: "We reach the right people every day. You get a personal Brand Manager and a full account audit in week one.",
+            ctas: ["Find my plan", "How it works"],
+            meta: "From $139/month · 7 days free · Cancel anytime",
+          },
+        },
+        {
+          id: "manager",
+          num: "02",
+          name: "Brand Manager",
+          file: "sections/BrandManager.tsx + ServiceAccordion.tsx",
+          why: "The hero has already introduced the manager, so this section only needs to say what they do. Each of the three blocks below has an eyebrow, a title, a description and a toggle label. That’s too many layers for three points.",
+          now: [
+            ["Eyebrow", "your personal brand manager", 1],
+            [
+              "Heading",
+              "One person who knows your business. And what to work on next.",
+            ],
+            [
+              "Subheading",
+              "Who you want to reach. What you sell. How much time you have. Your Brand Manager gets to know all that, then gets to work.",
+            ],
+            [
+              "Block 1",
+              "1. Audience growth / Done for you — We help the right people discover you. — We find people already interested in work like yours, then follow and like to bring them to your profile.",
+            ],
+            [
+              "Block 2",
+              "2. Content / Done with you — We help you create content that earns their trust. — Know what to post, why it matters and what to improve. Get advice you can use with the time and skills you actually have.",
+            ],
+            [
+              "Block 3",
+              "3. Business / With you on Scale — We help you improve the path from interest to business. — Make it easier for someone who likes your work to enquire, book or buy. Your offer and the steps to a sale get a closer look.",
+            ],
+            [
+              "Toggles",
+              "How we choose who to approach · What the content help includes · Where we look for missed business",
+            ],
+          ],
+          A: {
+            h: "One person on your account.",
+            sub: "They learn who you want to reach and what you sell, then do the daily work.",
+            items: [
+              [
+                "Done for you",
+                "Audience",
+                "We reach people already interested in work like yours.",
+              ],
+              [
+                "Done with you",
+                "Content",
+                "Clear advice on what to post, sized to the time you have.",
+              ],
+              [
+                "On Scale",
+                "Sales",
+                "We review the path from profile visit to enquiry or sale.",
+              ],
+            ],
+          },
+          B: {
+            h: "Someone who <span>knows your business.</span>",
+            sub: "Not a bot. One manager who learns your goals, your audience and how much time you have.",
+            items: [
+              [
+                "",
+                "Finds your people.",
+                "Follows and likes the accounts most likely to care about your work.",
+              ],
+              [
+                "",
+                "Shapes your content.",
+                "Tells you what to post and why, in a way you can keep up.",
+              ],
+              [
+                "Scale plan",
+                "Tightens your sales path.",
+                "Checks your bio, offer and booking link so interest turns into business.",
+              ],
+            ],
+          },
+          C: {
+            h: "Three jobs. <span>One manager.</span>",
+            items: [
+              [
+                "1",
+                "Grow the audience",
+                "Daily outreach to people already following accounts like yours.",
+              ],
+              [
+                "2",
+                "Improve the content",
+                "Reviews on Grow. A monthly plan and weekly reviews on Scale.",
+              ],
+              [
+                "3 · Scale",
+                "Turn interest into business",
+                "Your profile, offer and booking path, reviewed and improved.",
+              ],
+            ],
+          },
+          shared: {
+            title: "Toggle labels (same for every option)",
+            hint: "Shorter labels for the “show more” buttons.",
+            qa: [
+              [
+                "How we choose",
+                "Your niche, location and the accounts your audience already follows. We review the response and keep refining.",
+              ],
+              [
+                "What’s included",
+                "Grow: content reviews and practical pointers. Scale: a monthly plan, weekly reviews and deeper strategy. You create and publish.",
+              ],
+              [
+                "What we review",
+                "Your bio, your offer and how easy it is to book or buy. You make the changes and handle the customers.",
+              ],
+            ],
+          },
+        },
+        {
+          id: "record",
+          num: "03",
+          name: "The record",
+          file: "sections/Record.tsx + RecordTabs.tsx",
+          why: "The quotes are strong, and the heading should get out of their way. The subheading is missing its full stop, each tab repeats its own label as an eyebrow, and one featured title doesn’t match its quote.",
+          now: [
+            ["Eyebrow", "the record", 1],
+            ["Heading", "More followers. And what happened next."],
+            [
+              "Subheading",
+              'New audiences. Better content. Business from Instagram. Here’s what customers told the team behind Ignited <a class="flag">no full stop</a>',
+            ],
+            [
+              "Tab eyebrows",
+              "Business results • First growth / Follower growth • 20 days / … (repeats the tab label)",
+              1,
+            ],
+            [
+              "Mismatch",
+              '“People who care about what to do.” sits above a quote about hosting, entertaining and home decor. <a class="flag">doesn’t match</a>',
+            ],
+            [
+              "Typos in quotes",
+              '“…more traffic to our.” · “Thanks you for…” · “Thanks for the advice I made…” <a class="flag">check against the originals</a>',
+            ],
+          ],
+          A: {
+            eyebrow: "In their words",
+            h: "What customers told us.",
+            sub: "Messages from accounts our team has managed.",
+            chips: [
+              "Business results",
+              "Follower growth",
+              "The right audience",
+              "Content & reach",
+              "Personal support",
+            ],
+          },
+          B: {
+            h: "More followers <span>was just the start.</span>",
+            sub: "Clients, bookings and better posts, in customers’ own words.",
+            chips: [
+              "New business",
+              "Follower growth",
+              "The right people",
+              "Better posts",
+              "Real support",
+            ],
+          },
+          C: {
+            h: "Results, <span>in customers’ own words.</span>",
+            chips: [
+              "Clients & sales",
+              "Followers",
+              "Audience quality",
+              "Reach",
+              "Support",
+            ],
+          },
+          shared: {
+            title: "Fixes for every option",
+            hint: "Apply these whichever option you choose.",
+            qa: [
+              [
+                "Remove the tab eyebrows",
+                "The tab label already says it. Keep only the date under each quote.",
+              ],
+              [
+                "Featured title, “The right audience” tab",
+                "Change to: “Followers who care about hosting and decor.”",
+              ],
+              [
+                "Quotes",
+                "Don’t rewrite them. Check the three flagged quotes against the original messages; the typos may have crept in when the text was copied.",
+              ],
+            ],
+          },
+        },
+        {
+          id: "week",
+          num: "04",
+          name: "Your first week",
+          file: "sections/FirstWeek.tsx + FirstWeekSteps.tsx",
+          why: "This section is already fairly tight. The two-part heading can lose a part, and putting the times in the step titles makes it quicker to scan.",
+          now: [
+            ["Eyebrow", "your first week"],
+            [
+              "Heading",
+              "Ten minutes to get started. A person to take it from here.",
+            ],
+            [
+              "Step 1",
+              "Tell us about your business. — A short form and a secure account connection. About ten minutes, all in.",
+            ],
+            [
+              "Step 2",
+              "Your Brand Manager gets to work. — Targeting is set up within 24–48 hours. Join over the weekend and we start Monday. Most accounts see their first followers within 2–3 days.",
+            ],
+            [
+              "Step 3",
+              "Get a clear view of what to improve. — In week one, we audit your audience, content, offer and positioning. The audit is yours to keep, even if you leave.",
+            ],
+            [
+              "Footer",
+              "See the work as it happens. Ask your Brand Manager about any of it.",
+              1,
+            ],
+          ],
+          A: {
+            h: "Your first week.",
+            sub: "Ten minutes from you. The rest is on us.",
+            items: [
+              [
+                "10 minutes",
+                "Sign up",
+                "A short form and a secure Instagram connection.",
+              ],
+              [
+                "24–48 hours",
+                "We start",
+                "Targeting goes live. Most accounts see first followers in 2–3 days.",
+              ],
+              [
+                "Week one",
+                "Your audit",
+                "Audience, content, offer and positioning. Yours to keep.",
+              ],
+            ],
+          },
+          B: {
+            eyebrow: "Your first week",
+            h: "Ten minutes to start. <span>We take it from there.</span>",
+            items: [
+              [
+                "Step 1",
+                "Tell us about your business.",
+                "A short form and a secure connection. About ten minutes.",
+              ],
+              [
+                "Step 2",
+                "Your manager sets up targeting.",
+                "Live within 24–48 hours. Join at the weekend and we start Monday.",
+              ],
+              [
+                "Step 3",
+                "You get your account audit.",
+                "What’s working, what to fix first. Yours to keep, even if you leave.",
+              ],
+            ],
+          },
+          C: {
+            h: "Live within <span>48 hours.</span>",
+            sub: "Most accounts see their first new followers in 2–3 days.",
+            items: [
+              [
+                "Day 0",
+                "10-minute sign-up",
+                "Form plus secure Instagram connection.",
+              ],
+              [
+                "Day 1–2",
+                "Targeting goes live",
+                "Weekend sign-ups start Monday.",
+              ],
+              [
+                "Week 1",
+                "Full account audit",
+                "Audience, content, offer, positioning. Yours to keep.",
+              ],
+            ],
+          },
+        },
+        {
+          id: "niches",
+          num: "05",
+          name: "For every niche",
+          file: "sections/Niches.tsx",
+          owner: true,
+          why: "The owner has already supplied the replacement copy for this section (the audience stories, now on <code>/audiences</code>).",
+          now: [
+            ["Eyebrow", "for every niche"],
+            ["Heading", "Tailored strategy for your goals."],
+            [
+              "Subheading",
+              "Pick the one that sounds like you. Your Brand Manager shapes the targeting around what you actually want from Instagram.",
+            ],
+          ],
+        },
+        {
+          id: "proof",
+          num: "06",
+          name: "Before vs after",
+          file: "sections/Transformations.tsx",
+          why: "The owner’s handoff replaces this section with “See how their accounts grew.” If you keep it anyway, the subheading can lose half its words, and four trust badges can become two.",
+          now: [
+            ["Eyebrow", "before vs after", 1],
+            ["Heading", "Real profiles. Real numbers."],
+            [
+              "Subheading",
+              "Skip the hype and see the actual transformation. Unedited Instagram screenshots from creators and brands we’ve worked with: the same profile when they started, and today.",
+            ],
+            [
+              "Badges",
+              "Unedited Instagram screenshots · Same profile, before and after · Real people, no bots · Grown by one Brand Manager",
+            ],
+            [
+              "Small print",
+              "Follower counts read from each account’s own profile screenshots.",
+            ],
+          ],
+          A: {
+            h: "Before and after.",
+            sub: "The same profiles when they joined, and today. Unedited screenshots.",
+            chips: ["Unedited screenshots", "Real people, no bots"],
+          },
+          B: {
+            h: "Real profiles. <span>Real numbers.</span>",
+            sub: "Unedited screenshots of the same accounts, when they started and today.",
+            chips: ["Same profile, before and after", "No bots"],
+          },
+          C: {
+            h: "Same profile. <span>Months apart.</span>",
+            sub: "Unedited screenshots from accounts we’ve grown.",
+            chips: ["Unedited", "Real people", "One Brand Manager each"],
+          },
+        },
+        {
+          id: "pricing",
+          num: "07",
+          name: "Pricing",
+          file: "sections/Pricing.tsx + PricingPlans.tsx",
+          why: "The heading is in two parts, the subheading repeats “seven days free”, and the refund is explained twice. Say it once, clearly.",
+          now: [
+            ["Eyebrow", "find your plan", 1],
+            ["Heading", "Make room for growth. We’ll take on the daily work."],
+            [
+              "Subheading",
+              "Both plans come with your own Brand Manager and seven days free. Choose how much help you want along the way.",
+            ],
+            [
+              "Grow tagline",
+              "Steady audience growth. Practical content advice.",
+            ],
+            [
+              "Scale tagline",
+              "More growth. A closer look at content and sales.",
+            ],
+            [
+              "In each card",
+              "7 days free · Cancel anytime · If you leave, your last payment comes back.",
+            ],
+            [
+              "Under the cards",
+              "Cancel anytime. We automatically refund your last payment. No claim to file. No explanation needed.",
+              1,
+            ],
+          ],
+          A: {
+            h: "Two plans. <span>Both with a Brand Manager.</span>",
+            sub: "Start with 7 days free. Pick how much help you want.",
+            items: [
+              [
+                "$139 / month",
+                "Grow",
+                "Audience growth with practical content tips.",
+              ],
+              [
+                "$199 / month · Most popular",
+                "Scale",
+                "More growth, plus content and sales strategy.",
+              ],
+            ],
+            meta: "Cancel anytime and we refund your last payment. No questions.",
+          },
+          B: {
+            h: "Pick how much <span>help you want.</span>",
+            sub: "Every plan includes your own Brand Manager and 7 days free.",
+            items: [
+              [
+                "$139 / month",
+                "Grow",
+                "For steady, hands-off audience growth.",
+              ],
+              [
+                "$199 / month · Most popular",
+                "Scale",
+                "For growth that turns into business.",
+              ],
+            ],
+            meta: "Leave anytime. Your last payment is refunded automatically.",
+          },
+          C: {
+            h: "Simple pricing. <span>7 days free.</span>",
+            sub: "Cancel anytime and your last payment is refunded automatically.",
+            items: [
+              [
+                "$139 / month · est. 150–500+ followers/month",
+                "Grow",
+                "Daily outreach, core targeting, content reviews.",
+              ],
+              [
+                "$199 / month · est. 250–800+ followers/month",
+                "Scale",
+                "Higher-volume outreach, monthly content plan, sales review.",
+              ],
+            ],
+          },
+        },
+        {
+          id: "faq",
+          num: "08",
+          name: "FAQ",
+          file: "sections/Faq.tsx + FaqAccordion.tsx",
+          why: "The heading works. The answers average about 60 words each, which is long for an FAQ. The shorter answers below keep every fact.",
+          now: [
+            ["Eyebrow", "a few honest answers", 1],
+            ["Heading", "Will this work for someone like me?"],
+            ["Answers", "6 answers, roughly 360 words in total"],
+          ],
+          A: { h: "Common questions." },
+          B: { h: "Will this work <span>for someone like me?</span>" },
+          C: { h: "Before you start." },
+          shared: {
+            title: "Shorter answers (same for every option)",
+            hint: "About half the length. Same facts.",
+            qa: [
+              [
+                "My account is small. Am I ready?",
+                "Yes. You need something worth sharing and a sense of who you want to reach. Your week-one audit shows where to start.",
+              ],
+              [
+                "I want customers. How do followers help?",
+                "Each relevant follower gets more chances to see your work and your offer. On Scale, we also work on the path from profile to enquiry, booking or sale.",
+              ],
+              [
+                "How do you find people who actually care?",
+                "We start with people who follow accounts like yours, then narrow by niche, location and other signals. Your manager adjusts as the results come in.",
+              ],
+              [
+                "How much will I have to do?",
+                "We handle the research and daily outreach. You create, publish and reply to enquiries. Grow includes content tips; Scale adds a monthly plan and weekly reviews.",
+              ],
+              [
+                "Will my account still feel like me?",
+                "Yes. You decide what to make and publish. We help sharpen the message and spot what’s working.",
+              ],
+              [
+                "I’ve tried services like this before.",
+                "Try 7 days free and judge the work yourself. If you leave, your last payment is refunded automatically, and you keep the audit.",
+              ],
+            ],
+          },
+        },
+        {
+          id: "cta",
+          num: "09",
+          name: "Final CTA",
+          file: "sections/FinalCta.tsx",
+          why: "Good as it is, but long. The subheading repeats three things the visitor read in pricing a moment ago.",
+          now: [
+            [
+              "Heading",
+              "Your next followers are already out there. Let’s help them find you.",
+            ],
+            [
+              "Subheading",
+              "Seven days free. Your own Brand Manager. An account audit you keep either way.",
+            ],
+            ["Button", "Find my plan"],
+            ["Small print", "About ten minutes to get started"],
+          ],
+          A: {
+            h: "Your next followers <span>are out there.</span>",
+            sub: "Let’s help them find you.",
+            ctas: ["Find my plan"],
+            meta: "7 days free · About 10 minutes to start",
+          },
+          B: {
+            h: "Ready <span>when you are.</span>",
+            sub: "Ten minutes to sign up. Your Brand Manager takes it from there.",
+            ctas: ["Start 7 days free"],
+          },
+          C: {
+            h: "Start free. <span>Keep the audit either way.</span>",
+            ctas: ["Find my plan"],
+            meta: "7 days free · Cancel anytime",
+          },
+        },
+      ];
+
+      const NAMES = { A: "Direct", B: "Personal", C: "Proof-led" };
+      const strip = (s) => s.replace(/<[^>]+>/g, " ");
+      const words = (s) =>
+        (strip(s).match(/[A-Za-z0-9$’'+.,–-]+/g) || []).filter((w) =>
+          /[A-Za-z0-9]/.test(w),
+        ).length;
+
+      function countNow(sec) {
+        return sec.now
+          .filter((r) => !/Typos|Mismatch|Answers/.test(r[0]))
+          .reduce(
+            (n, r) => n + words(r[1].replace(/<a[^>]*>.*?<\/a>/g, "")),
+            0,
+          );
+      }
+      function countOpt(o) {
+        let t = [
+          o.eyebrow,
+          o.h,
+          o.sub,
+          o.meta,
+          ...(o.ctas || []),
+          ...(o.chips || []),
+        ]
+          .filter(Boolean)
+          .join(" ");
+        (o.items || []).forEach((i) => (t += " " + i.join(" ")));
+        return words(t);
+      }
+
+      function preview(o) {
+        let h = "";
+        if (o.eyebrow) h += `<span class="eyebrow">${o.eyebrow}</span>`;
+        h += `<h4>${o.h}</h4>`;
+        if (o.sub) h += `<p class="sub">${o.sub}</p>`;
+        if (o.items)
+          h += `<div class="items">${o.items.map(([k, t, d]) => `<div class="item">${k ? `<i>${k}</i>` : ""}<strong>${t}</strong><span>${d}</span></div>`).join("")}</div>`;
+        if (o.chips)
+          h += `<div class="chips">${o.chips.map((c) => `<span>${c}</span>`).join("")}</div>`;
+        if (o.ctas)
+          h += `<div class="ctas">${o.ctas.map((c, i) => `<span class="btn ${i ? "ghost" : ""}">${c}${i ? "" : " →"}</span>`).join("")}</div>`;
+        if (o.meta) h += `<p class="meta">${o.meta}</p>`;
+        return h;
+      }
+
+      document.getElementById("jump").innerHTML = S.map(
+        (s) => `<a href="#${s.id}">${s.num} ${s.name}</a>`,
+      ).join("");
+
+      document.getElementById("sections").innerHTML = S.map((s) => {
+        const nowWords = countNow(s);
+        const now = `<details class="now"><summary>Current copy · ${s.now.length} text blocks · ~${nowWords} words</summary><div class="now-list">${s.now
+          .map(
+            ([k, v, cut]) =>
+              `<div class="now-row ${cut ? "cut" : ""}"><em>${k}</em><span>${v}</span></div>`,
+          )
+          .join("")}</div></details>`;
+        let body;
+        if (s.owner) {
+          body = `<div class="owner"><b>Copy already supplied by the owner.</b> Not rewritten here. The new audience copy (“For people building something of their own.”, the five audience tabs and their stories) is on the <code>/audiences</code> route.</div>`;
+        } else {
+          body = `<div class="opts">${["A", "B", "C"]
+            .map((k) => {
+              const o = s[k],
+                n = countOpt(o),
+                diff = nowWords ? Math.round((1 - n / nowWords) * 100) : 0;
+              return `<article class="opt" data-k="${k}"><div class="opt-top"><span class="tag"><b>${k}</b>${NAMES[k]}</span><span class="wc">${n} words${diff > 0 ? ` · −${diff}%` : ""}</span></div><div class="pv">${preview(o)}</div></article>`;
+            })
+            .join("")}</div>`;
+          if (s.shared)
+            body += `<div class="shared"><h5>${s.shared.title}</h5><p class="hint">${s.shared.hint}</p><div class="qa">${s.shared.qa.map(([q, a]) => `<div><strong>${q}</strong><span>${a}</span></div>`).join("")}</div></div>`;
+        }
+        return `<section class="sec" id="${s.id}"><div class="sec-head"><span class="num">${s.num}</span><h2>${s.name}</h2><span class="file">${s.file}</span></div><p class="why">${s.why}</p>${now}${body}</section>`;
+      }).join("");
+
+      document.querySelectorAll(".switch button").forEach((b) =>
+        b.addEventListener("click", () => {
+          document.body.dataset.view = b.dataset.v;
+          document
+            .querySelectorAll(".switch button")
+            .forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+        }),
+      );
+    </script>
+  </body>
+</html>
