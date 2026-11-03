@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Audiences 3D Preview</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <main class="wrap">
+      <p class="note">Preview · /audiences story section · 3D figure (Creatives tab only)</p>
+
+      <div class="tabs" aria-hidden="true">
+        <span class="tab on">Creatives</span>
+        <span class="tab">Coaches &amp; educators</span>
+        <span class="tab">Local businesses</span>
+        <span class="tab">Creators</span>
+        <span class="tab">Product brands</span>
+      </div>
+
+      <section class="story" id="story">
+        <div class="visual">
+          <div class="stage">
+            <canvas id="scene" aria-label="A 3D camera on a small mountain scene takes a photo"></canvas>
+            <span class="chip tr">Illustrative</span>
+            <span class="chip tl" id="hint">Drag to turn</span>
+
+            <div class="growth" id="growth" aria-live="polite">
+              <div class="g-top">
+                <span>@originalmostertphotography</span>
+                <span class="live"><i></i>Growing</span>
+              </div>
+              <div class="g-count" id="count">+0</div>
+              <div class="g-label">recorded new followers</div>
+              <div class="ticks" id="ticks"></div>
+              <div class="g-months" id="months">Month 0 of 9</div>
+              <div class="toasts" id="toasts" aria-hidden="true"></div>
+            </div>
+          </div>
+
+          <blockquote class="quote">
+            <small>From the customer · Proposed quote</small>
+            <p>
+              Reaching 10,000 followers meant a lot. Esha understood that I
+              can’t always get out and shoot, and helped me plan around it. I
+              learned a lot working with her. I feel much more confident doing
+              this myself now.
+            </p>
+            <cite>— Ivo Mostert, landscape photographer</cite>
+          </blockquote>
+        </div>
+
+        <div class="pitch">
+          <span class="label">For creatives</span>
+          <h2>Keep making work that’s yours.</h2>
+          <p>
+            Your time goes into the photographs, the music, the next piece. We
+            help more people discover it, with ideas for sharing your work that
+            fit how you like to create.
+          </p>
+          <ul>
+            <li>Reach people who care about your work</li>
+            <li>Get practical ideas for sharing it</li>
+            <li>Keep your own voice</li>
+          </ul>
+          <a class="link" href="#">Read Ivo’s story →</a>
+        </div>
+      </section>
+
+      <button class="replay" type="button" id="replay">↺ Replay animation</button>
+
+      <footer>
+        Preview only, not part of the site. Built in code with Three.js; the
+        +6,052 and 9 months are the recorded figures, follower names are
+        illustrative.
+      </footer>
+    </main>
+
+    <script type="module">
+      import * as THREE from "three";
+      import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
+
+      const canvas = document.getElementById("scene");
+      const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // ── Renderer, scene, view ──────────────────────────────────
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+      const scene = new THREE.Scene();
+      const view = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
+
+      // soft studio light
+      scene.add(new THREE.HemisphereLight("#ffffff", "#c9d3e6", 1.6));
+      const sun = new THREE.DirectionalLight("#fff6ea", 2.4);
+      sun.position.set(4, 8, 5);
+      sun.castShadow = true;
+      sun.shadow.mapSize.set(1024, 1024);
+      sun.shadow.camera.left = -5;
+      sun.shadow.camera.right = 5;
+      sun.shadow.camera.top = 5;
+      sun.shadow.camera.bottom = -5;
+      sun.shadow.radius = 6;
+      sun.shadow.bias = -0.0005;
+      scene.add(sun);
+
+      // matte "clay" materials
+      const clay = (color, extra = {}) =>
+        new THREE.MeshStandardMaterial({ color, roughness: 0.85, metalness: 0, ...extra });
+      const flat = (color) => clay(color, { flatShading: true });
+
+      const world = new THREE.Group(); // everything that turns when dragged
+      scene.add(world);
+
+      // ── Diorama: platform + low-poly mountains ─────────────────
+      const platform = new THREE.Mesh(new THREE.CylinderGeometry(3.3, 3.4, 0.28, 64), clay("#f4f6fa"));
+      platform.position.y = -0.14;
+      platform.receiveShadow = true;
+      world.add(platform);
+
+      const rim = new THREE.Mesh(new THREE.TorusGeometry(3.32, 0.035, 8, 96), clay("#5a4ce0"));
+      rim.rotation.x = Math.PI / 2;
+      rim.position.y = 0.0;
+      world.add(rim);
+
+      function mountain(x, z, r, h, color, rot = 0) {
+        const g = new THREE.Group();
+        const base = new THREE.Mesh(new THREE.ConeGeometry(r, h, 6, 1), flat(color));
+        base.position.y = h / 2;
+        base.castShadow = base.receiveShadow = true;
+        const snow = new THREE.Mesh(new THREE.ConeGeometry(r * 0.36, h * 0.36, 6, 1), flat("#ffffff"));
+        snow.position.y = h - (h * 0.36) / 2 + 0.01;
+        snow.castShadow = true;
+        g.add(base, snow);
+        g.position.set(x, 0, z);
+        g.rotation.y = rot;
+        world.add(g);
+        return g;
+      }
+      const peaks = [
+        mountain(-1.5, -1.3, 1.25, 2.5, "#5d7fa8", 0.3),
+        mountain(-0.2, -1.9, 1.0, 1.9, "#7d9cc2", 1.1),
+        mountain(-2.4, -0.2, 0.85, 1.45, "#46688f", 0.7),
+        mountain(1.2, -1.6, 0.7, 1.1, "#93afd0", 0.2),
+      ];
+
+      // a few low-poly pine trees
+      function tree(x, z, s) {
+        const g = new THREE.Group();
+        const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.05, 0.2, 6), clay("#7b5e4a"));
+        trunk.position.y = 0.1;
+        const top = new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.55, 6), flat("#3d6b52"));
+        top.position.y = 0.45;
+        trunk.castShadow = top.castShadow = true;
+        g.add(trunk, top);
+        g.position.set(x, 0, z);
+        g.scale.setScalar(s);
+        world.add(g);
+        return g;
+      }
+      const trees = [tree(-2.6, 1.0, 1.1), tree(-2.2, 1.5, 0.8), tree(2.3, -0.6, 1), tree(2.6, 0.1, 0.75)];
+
+      // ── The camera (the figure) ────────────────────────────────
+      const cam = new THREE.Group();
+      const BODY = clay("#f1ebe2");
+      const DARK = clay("#2b2a33", { roughness: 0.6 });
+      const ACCENT = clay("#5a4ce0", { roughness: 0.55 });
+
+      const body = new THREE.Mesh(new RoundedBoxGeometry(2.1, 1.35, 0.95, 5, 0.2), BODY);
+      body.castShadow = true;
+      cam.add(body);
+
+      const grip = new THREE.Mesh(new RoundedBoxGeometry(0.42, 1.25, 1.02, 4, 0.16), DARK);
+      grip.position.set(-0.86, -0.02, 0.02);
+      cam.add(grip);
+
+      const band = new THREE.Mesh(new THREE.BoxGeometry(2.12, 0.14, 0.97), ACCENT);
+      band.position.y = 0.36;
+      cam.add(band);
+
+      const hump = new THREE.Mesh(new RoundedBoxGeometry(0.8, 0.4, 0.7, 4, 0.12), BODY);
+      hump.position.set(0.1, 0.78, 0);
+      hump.castShadow = true;
+      cam.add(hump);
+
+      const shutter = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, 0.12, 24), ACCENT);
+      shutter.position.set(-0.68, 0.73, 0.1);
+      cam.add(shutter);
+
+      const dial = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.17, 0.1, 24), DARK);
+      dial.position.set(0.72, 0.72, 0.05);
+      cam.add(dial);
+
+      // lens: a ring, a barrel that extends, and dark glass
+      const lens = new THREE.Group();
+      lens.position.set(0.12, -0.04, 0.48);
+      cam.add(lens);
+      const ring = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 0.18, 48), DARK);
+      ring.rotation.x = Math.PI / 2;
+      ring.position.z = 0.06;
+      lens.add(ring);
+      const barrel = new THREE.Group(); // scaled along z to "extend"
+      lens.add(barrel);
+      const barrelMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.46, 0.5, 0.5, 48), BODY);
+      barrelMesh.rotation.x = Math.PI / 2;
+      barrelMesh.position.z = 0.25;
+      barrel.add(barrelMesh);
+      const glass = new THREE.Mesh(
+        new THREE.CircleGeometry(0.36, 48),
+        new THREE.MeshStandardMaterial({ color: "#1b1d2b", roughness: 0.15, metalness: 0.6 }),
+      );
+      glass.position.z = 0.505;
+      barrel.add(glass);
+      const glint = new THREE.Mesh(
+        new THREE.CircleGeometry(0.08, 24),
+        new THREE.MeshBasicMaterial({ color: "#b8adff", transparent: true, opacity: 0.85 }),
+      );
+      glint.position.set(-0.12, 0.12, 0.51);
+      barrel.add(glint);
+
+      // little flash window
+      const flashWin = new THREE.Mesh(new RoundedBoxGeometry(0.42, 0.2, 0.06, 3, 0.05), clay("#fdfcf8", { emissive: "#ffffff", emissiveIntensity: 0 }));
+      flashWin.position.set(0.62, 0.42, 0.48);
+      cam.add(flashWin);
+
+      cam.position.set(0.35, 1.05, 0.7);
+      cam.rotation.y = -0.18;
+      world.add(cam);
+
+      // flash light + burst
+      const flashLight = new THREE.PointLight("#ffffff", 0, 6, 1.5);
+      flashLight.position.set(0.9, 1.5, 2);
+      world.add(flashLight);
+      const burst = new THREE.Mesh(
+        new THREE.CircleGeometry(1, 48),
+        new THREE.MeshBasicMaterial({ color: "#ffffff", transparent: true, opacity: 0, depthWrite: false }),
+      );
+      world.add(burst);
+
+      // ── The photo that comes out ───────────────────────────────
+      function photoTexture() {
+        const c = document.createElement("canvas");
+        c.width = 256;
+        c.height = 224;
+        const g = c.getContext("2d");
+        const sky = g.createLinearGradient(0, 0, 0, 224);
+        sky.addColorStop(0, "#9fc0e6");
+        sky.addColorStop(0.6, "#e8eef7");
+        sky.addColorStop(1, "#f6e7d6");
+        g.fillStyle = sky;
+        g.fillRect(0, 0, 256, 224);
+        g.fillStyle = "#ffe2a8";
+        g.beginPath();
+        g.arc(190, 70, 22, 0, Math.PI * 2);
+        g.fill();
+        const ridge = (pts, color) => {
+          g.fillStyle = color;
+          g.beginPath();
+          g.moveTo(0, 224);
+          pts.forEach(([x, y]) => g.lineTo(x, y));
+          g.lineTo(256, 224);
+          g.fill();
+        };
+        ridge([[0, 150], [60, 80], [110, 140], [160, 95], [220, 150], [256, 130]], "#7d9cc2");
+        ridge([[0, 190], [50, 140], [100, 180], [170, 125], [256, 185]], "#46688f");
+        ridge([[0, 224], [0, 205], [256, 200]], "#3d6b52");
+        const t = new THREE.CanvasTexture(c);
+        t.colorSpace = THREE.SRGBColorSpace;
+        return t;
+      }
+      const photo = new THREE.Group();
+      const frame = new THREE.Mesh(new THREE.BoxGeometry(0.9, 1.05, 0.025), clay("#ffffff"));
+      frame.castShadow = true;
+      const pic = new THREE.Mesh(new THREE.PlaneGeometry(0.78, 0.68), new THREE.MeshBasicMaterial({ map: photoTexture() }));
+      pic.position.set(0, 0.09, 0.014);
+      photo.add(frame, pic);
+      world.add(photo);
+
+      // ── Timeline helpers ───────────────────────────────────────
+      const clamp = (x) => Math.min(1, Math.max(0, x));
+      const seg = (t, a, b) => clamp((t - a) / (b - a));
+      const easeOut = (x) => 1 - Math.pow(1 - x, 3);
+      const easeInOut = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+      const backOut = (x) => {
+        const c1 = 1.70158, c3 = c1 + 1;
+        return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
+      };
+      const lerp = (a, b, t) => a + (b - a) * t;
+      const lerpV = (a, b, t) => new THREE.Vector3(lerp(a.x, b.x, t), lerp(a.y, b.y, t), lerp(a.z, b.z, t));
+
+      const PHOTO_SLOT = new THREE.Vector3(0.2, 1.75, 0.6); // just above the camera
+      const PHOTO_UP = new THREE.Vector3(0.6, 2.9, 1.0);
+      const PHOTO_REST = new THREE.Vector3(2.05, 0.58, 1.05); // leaning on the platform
+
+      // ── Pose at time t (seconds since the scene started) ───────
+      function pose(t) {
+        // 0 – 0.9s: scenery pops up
+        peaks.forEach((p, i) => p.scale.setScalar(Math.max(0.001, backOut(seg(t, 0.05 + i * 0.08, 0.6 + i * 0.08)))));
+        trees.forEach((tr, i) => {
+          const s = backOut(seg(t, 0.35 + i * 0.07, 0.8 + i * 0.07));
+          tr.children.forEach((c) => (c.visible = s > 0.01));
+          tr.scale.setScalar(Math.max(0.001, s) * [1.1, 0.8, 1, 0.75][i]);
+        });
+
+        // 0.3 – 1.1s: camera drops in with a bounce
+        const drop = backOut(seg(t, 0.3, 1.1));
+        cam.position.y = lerp(4.2, 1.05, drop);
+        cam.rotation.z = lerp(0.35, 0, drop);
+
+        // 1.1 – 1.6s: lens extends
+        barrel.scale.z = lerp(0.35, 1, easeOut(seg(t, 1.1, 1.6)));
+
+        // 1.75s: shutter press, camera kicks back a touch
+        const press = seg(t, 1.7, 1.78) - seg(t, 1.84, 1.95);
+        shutter.position.y = 0.73 - press * 0.06;
+        const kick = Math.sin(seg(t, 1.78, 2.1) * Math.PI) * (1 - seg(t, 1.78, 2.1));
+        cam.rotation.x = -kick * 0.08;
+
+        // flash
+        const f = seg(t, 1.78, 1.84) - seg(t, 1.9, 2.2);
+        flashLight.intensity = f * 40;
+        flashWin.material.emissiveIntensity = f * 3;
+        burst.material.opacity = f * 0.55;
+        burst.position.set(0.95, 1.5, 1.6);
+        burst.scale.setScalar(0.4 + seg(t, 1.78, 2.2) * 1.6);
+        burst.lookAt(view.position);
+
+        // 2.0 – 3.4s: photo slides out of the top, floats up, lands beside
+        const out = easeOut(seg(t, 2.0, 2.45));
+        const fly = easeInOut(seg(t, 2.5, 3.4));
+        photo.visible = t > 2.0;
+        if (fly === 0) {
+          photo.position.copy(lerpV(new THREE.Vector3(0.2, 1.3, 0.6), PHOTO_SLOT, out));
+          photo.rotation.set(0, -0.18, 0);
+          photo.scale.setScalar(lerp(0.6, 1, out));
+        } else {
+          // up and over in a small arc
+          const p = lerpV(lerpV(PHOTO_SLOT, PHOTO_UP, fly), lerpV(PHOTO_UP, PHOTO_REST, fly), fly);
+          photo.position.copy(p);
+          photo.rotation.set(lerp(0, -0.22, fly), lerp(-0.18, -0.55, fly), lerp(0, -0.12, fly) + Math.sin(fly * Math.PI) * 0.5);
+          photo.scale.setScalar(1);
+        }
+      }
+
+      // ── Drag to turn ───────────────────────────────────────────
+      let targetTurn = 0;
+      let turn = 0;
+      let dragging = false;
+      let lastX = 0;
+      canvas.addEventListener("pointerdown", (e) => {
+        dragging = true;
+        lastX = e.clientX;
+        canvas.setPointerCapture(e.pointerId);
+        document.getElementById("hint").style.opacity = 0;
+      });
+      canvas.addEventListener("pointermove", (e) => {
+        if (!dragging) return;
+        targetTurn = Math.max(-0.9, Math.min(0.9, targetTurn + (e.clientX - lastX) * 0.008));
+        lastX = e.clientX;
+      });
+      const stop = () => (dragging = false);
+      canvas.addEventListener("pointerup", stop);
+      canvas.addEventListener("pointercancel", stop);
+
+      // ── Growth card (counts up once the photo lands) ───────────
+      const GROWTH = 6052;
+      const MONTHS = 9;
+      const COUNT_FROM = 3.2; // s
+      const COUNT_FOR = 5; // s
+      const FOLLOWERS = ["trail.ana", "alpine_sara", "wildframes.co", "nordic.lens", "hike.with.tom", "peakseeker_", "glacier.jo"];
+      const ticks = document.getElementById("ticks");
+      ticks.innerHTML = "<span></span>".repeat(MONTHS);
+      let toastAt = 0;
+      let toastN = 0;
+
+      function addToast() {
+        const box = document.getElementById("toasts");
+        const name = FOLLOWERS[toastN++ % FOLLOWERS.length];
+        const el = document.createElement("div");
+        el.className = "toast";
+        el.innerHTML = `<span class="dot">${name[0]}</span><span><b>@${name}</b> followed you</span>`;
+        box.prepend(el);
+        [...box.children].filter((x) => !x.classList.contains("out")).slice(2).forEach((old) => {
+          old.classList.add("out");
+          setTimeout(() => old.remove(), 400);
+        });
+      }
+
+      function paintGrowth(t) {
+        document.getElementById("growth").classList.toggle("show", t > COUNT_FROM - 0.4);
+        const p = easeOut(seg(t, COUNT_FROM, COUNT_FROM + COUNT_FOR));
+        document.getElementById("count").textContent = "+" + Math.round(GROWTH * p).toLocaleString("en-US");
+        const m = Math.min(MONTHS, Math.ceil(p * MONTHS));
+        document.getElementById("months").textContent = `Month ${m} of ${MONTHS}`;
+        [...ticks.children].forEach((s, i) => s.classList.toggle("on", i < m));
+        if (t > COUNT_FROM && t < COUNT_FROM + COUNT_FOR && t >= toastAt) {
+          addToast();
+          toastAt = t + 1.1;
+        }
+      }
+
+      // ── Loop ───────────────────────────────────────────────────
+      let t = 0;
+      let lastNow = 0;
+      let onScreen = true;
+      new IntersectionObserver(([e]) => (onScreen = e.isIntersecting), { threshold: 0.2 }).observe(canvas);
+
+      function resize() {
+        const { clientWidth: w, clientHeight: h } = canvas;
+        renderer.setSize(w, h, false);
+        view.aspect = w / h;
+        // pull back a little on narrow screens so the whole diorama fits
+        view.position.set(7.6, 5.6, 10.2).multiplyScalar(w < 480 ? 1.2 : 1);
+        view.lookAt(w < 480 ? 1.6 : 1.15, w < 480 ? 1.9 : 0.35, 0);
+        view.updateProjectionMatrix();
+      }
+      addEventListener("resize", resize);
+      resize();
+
+      function frameLoop(now) {
+        const dt = lastNow ? Math.min((now - lastNow) / 1000, 0.05) : 0;
+        lastNow = now;
+        if (onScreen && !document.hidden) {
+          t += dt;
+          pose(t);
+          paintGrowth(t);
+          // idle: gentle float + slow sway, plus whatever the drag adds
+          const idle = seg(t, 3.4, 4.4);
+          cam.position.y = 1.05 + Math.sin(t * 1.6) * 0.06 * idle + (cam.position.y - 1.05);
+          if (!dragging) targetTurn *= 0.985;
+          turn += (targetTurn - turn) * 0.12;
+          world.rotation.y = turn + Math.sin(t * 0.35) * 0.18 * idle;
+          renderer.render(scene, view);
+        }
+        requestAnimationFrame(frameLoop);
+      }
+
+      function replay() {
+        t = 0;
+        toastAt = 0;
+        document.getElementById("toasts").innerHTML = "";
+      }
+      document.getElementById("replay").addEventListener("click", replay);
+
+      if (reduce) {
+        // no motion: show the finished scene once
+        t = 9;
+        pose(t);
+        paintGrowth(t);
+        for (let i = 0; i < 2; i++) addToast();
+        renderer.render(scene, view);
+      } else {
+        requestAnimationFrame(frameLoop);
+      }
+    </script>
+  </body>
+</html>

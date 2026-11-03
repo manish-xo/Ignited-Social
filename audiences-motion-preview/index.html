@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Audiences Motion Preview</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <p class="note">
+        Preview · /audiences story section · animated profile instead of photos
+      </p>
+
+      <div class="tabs" role="tablist" aria-label="Kind of work" id="tabs">
+        <span class="pill" id="pill" aria-hidden="true"></span>
+      </div>
+
+      <section class="story" id="story" aria-live="polite">
+        <div class="visual">
+          <div class="stage" id="stage">
+            <span class="illustrative">Illustrative profile</span>
+            <div class="toasts" id="toasts" aria-hidden="true"></div>
+            <div class="profile" id="profile"></div>
+          </div>
+          <blockquote class="quote" id="quote"></blockquote>
+        </div>
+
+        <div class="pitch" id="pitch"></div>
+      </section>
+
+      <button class="replay" type="button" id="replay">
+        ↺ Replay animation
+      </button>
+
+      <footer>
+        Preview only, not part of the site. Growth numbers and months are the
+        recorded figures from the page; profile posts and follower names are
+        illustrative.
+      </footer>
+    </main>
+
+    <script>
+      // ── Icons (simple line icons) ───────────────────────────────
+      const svg = (paths) =>
+        `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+      const ICONS = {
+        camera: svg(
+          '<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>',
+        ),
+        mountain: svg('<path d="m8 3 4 8 5-5 5 15H2L8 3z"/>'),
+        dumbbell: svg(
+          '<path d="m6.5 6.5 11 11"/><path d="m21 21-1-1"/><path d="m3 3 1 1"/><path d="m18 22 4-4"/><path d="m2 6 4-4"/><path d="m3 10 7-7"/><path d="m14 21 7-7"/>',
+        ),
+        play: svg('<polygon points="6 3 20 12 6 21 6 3"/>'),
+        scissors: svg(
+          '<circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/>',
+        ),
+        sparkle: svg(
+          '<path d="M12 3l1.9 5.6L19.5 10l-5.6 1.9L12 17.5l-1.9-5.6L4.5 10l5.6-1.4z"/>',
+        ),
+        utensils: svg(
+          '<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>',
+        ),
+        flame: svg(
+          '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+        ),
+        box: svg(
+          '<path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+        ),
+        target: svg(
+          '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+        ),
+      };
+
+      // ── The five audiences (copy + recorded numbers from the page) ──
+      const AUDIENCES = [
+        {
+          label: "Creatives",
+          headline: "Keep making work that’s yours.",
+          copy: "Your time goes into the photographs, the music, the next piece. We help more people discover it, with ideas for sharing your work that fit how you like to create.",
+          benefits: [
+            "Reach people who care about your work",
+            "Get practical ideas for sharing it",
+            "Keep your own voice",
+          ],
+          story: "Read Ivo’s story",
+          handle: "originalmostertphotography",
+          name: "Ivo Mostert",
+          bio: "Fine-art landscape photographer",
+          growth: 6052,
+          months: 9,
+          quote:
+            "Reaching 10,000 followers meant a lot. Esha understood that I can’t always get out and shoot, and helped me plan around it. I learned a lot working with her. I feel much more confident doing this myself now.",
+          stage: "#e3ebf3",
+          avatar: "linear-gradient(135deg,#2b4c7e,#6f9bd1)",
+          ring: "#c9d9ec",
+          icons: ["mountain", "camera"],
+          tiles: [
+            "#2b4c7e",
+            "#7aa0c8",
+            "#3d5a40",
+            "#a9c1d9",
+            "#1f3350",
+            "#6b8f71",
+            "#c7d6e6",
+            "#4a6f94",
+            "#8a9fb5",
+          ],
+          followers: [
+            "trail.ana",
+            "alpine_sara",
+            "wildframes.co",
+            "nordic.lens",
+            "hike.with.tom",
+            "peakseeker_",
+            "misty.morning.mo",
+            "glacier.jo",
+          ],
+        },
+        {
+          label: "Coaches & educators",
+          headline: "Make your expertise easier to discover.",
+          copy: "Whether you teach, coach or run a programme, people need to understand your approach. We help you reach a relevant audience and show what working with you could look like.",
+          benefits: [
+            "Reach people who could learn from you",
+            "Show how you can help",
+            "Make the next step clear",
+          ],
+          story: "Read Sav’s story",
+          handle: "savfit__",
+          name: "Sav Hill",
+          bio: "Strength and movement coach",
+          growth: 4407,
+          months: 11,
+          quote:
+            "My work was changing, and Jay was on the money about where to take the page next. He listened, helped me rethink the audience and adjusted the pace when I needed him to.",
+          stage: "#efe9e3",
+          avatar: "linear-gradient(135deg,#2a2a2e,#c2410c)",
+          ring: "#ead8c8",
+          icons: ["dumbbell", "play"],
+          tiles: [
+            "#2a2a2e",
+            "#c2410c",
+            "#57534e",
+            "#f59e0b",
+            "#3f3f46",
+            "#a8a29e",
+            "#ea580c",
+            "#292524",
+            "#78716c",
+          ],
+          followers: [
+            "liftwithlena",
+            "mobility.max",
+            "coachkayfit",
+            "strong.at.40",
+            "deadlift.dani",
+            "run.ruth",
+            "form.first.fred",
+          ],
+        },
+        {
+          label: "Local businesses",
+          headline: "Get known where you do business.",
+          copy: "We focus the outreach on people in the areas you serve. And help you show what makes your business worth a visit, an enquiry or a booking.",
+          benefits: [
+            "Reach people in the areas you serve",
+            "Show what makes you worth choosing",
+            "Make it easy to enquire or book",
+          ],
+          story: "Read the story",
+          handle: "thedenverstylist",
+          name: "The Denver Stylist",
+          bio: "Salon owner and hairstylist · Denver",
+          growth: 7728,
+          months: 15,
+          quote:
+            "Unreal growth on my salon account. I’ve loved working with you guys. I added another account, and someone on my salon team has asked about signing up too.",
+          stage: "#f5e9e8",
+          avatar: "linear-gradient(135deg,#9f4a5b,#e7b4a8)",
+          ring: "#efd2cd",
+          icons: ["scissors", "sparkle"],
+          tiles: [
+            "#e7b4a8",
+            "#9f4a5b",
+            "#f3d9c9",
+            "#c98b6b",
+            "#6d3440",
+            "#efc7bd",
+            "#b9806d",
+            "#f7e4dc",
+            "#8c5a4a",
+          ],
+          followers: [
+            "mile.high.mia",
+            "rino.rachel",
+            "denver.eats.daily",
+            "wash.park.walks",
+            "co.bride2026",
+            "lohi.lauren",
+            "denver.dani",
+          ],
+        },
+        {
+          label: "Creators",
+          headline: "Build an audience for your take on things.",
+          copy: "Recipes, reviews, travel tips or something entirely your own. We help people with those interests discover you, and work with you on ideas that give them a reason to come back.",
+          benefits: [
+            "Find people who share your interests",
+            "Give them a reason to come back",
+            "Keep creating in your own style",
+          ],
+          story: "Read the story",
+          handle: "thestationchef_",
+          name: "The Station Chef",
+          bio: "High-protein recipes · firefighter and chef",
+          growth: 7268,
+          months: 10,
+          quote:
+            "Really happy with the growth. The content feedback was specific to our recipes, even where to put the subtitles so they wouldn’t cover the food. Useful stuff.",
+          stage: "#f3ecdf",
+          avatar: "linear-gradient(135deg,#b45309,#65a30d)",
+          ring: "#eadfc6",
+          icons: ["utensils", "flame"],
+          tiles: [
+            "#b45309",
+            "#65a30d",
+            "#f59e0b",
+            "#7c2d12",
+            "#a3e635",
+            "#d97706",
+            "#3f6212",
+            "#fcd34d",
+            "#92400e",
+          ],
+          followers: [
+            "mealprep.mike",
+            "protein.pancake.pam",
+            "gymfuel.gabe",
+            "cook.with.cass",
+            "macros.marie",
+            "batchcook.ben",
+          ],
+        },
+        {
+          label: "Product brands",
+          headline: "Help people picture your product in their lives.",
+          copy: "From handmade pieces to specialist equipment, people need to understand what you sell and why it’s for them. We help likely buyers discover your brand and make your products easier to explore.",
+          benefits: [
+            "Reach people your products are for",
+            "Show what makes your products different",
+            "Make your offer easier to explore",
+          ],
+          story: "Read BlueMag’s story",
+          handle: "bluemagairsoft",
+          name: "BlueMag Airsoft",
+          bio: "Biodegradable airsoft BBs and components",
+          growth: 2046,
+          months: 5,
+          quote:
+            "We’d been stuck at roughly 4,000 followers for a long time. Seeing the audience grow was great. Seeing more people come through to the website was even better.",
+          stage: "#e3e9f2",
+          avatar: "linear-gradient(135deg,#1e3a8a,#3b82f6)",
+          ring: "#cbd8ee",
+          icons: ["box", "target"],
+          tiles: [
+            "#1e3a8a",
+            "#64748b",
+            "#3b82f6",
+            "#334155",
+            "#93c5fd",
+            "#0f172a",
+            "#475569",
+            "#2563eb",
+            "#cbd5e1",
+          ],
+          followers: [
+            "field.ops.fin",
+            "airsoft.ally",
+            "cqb.carter",
+            "tac.tom.uk",
+            "sniper.sam_",
+            "woodland.wes",
+          ],
+        },
+      ];
+
+      // ── Elements & state ───────────────────────────────────────
+      const $ = (id) => document.getElementById(id);
+      const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const fmt = (n) => n.toLocaleString("en-US");
+      const COUNT_MS = 6500; // how long the count-up takes
+      const TOAST_EVERY = 950; // a new follower notification every ~1s
+
+      let selected = 0;
+      let elapsed = 0; // ms of animation played for the current tab
+      let last = 0;
+      let raf = 0;
+      let onScreen = true;
+      let nextToast = 0;
+      let toastIndex = 0;
+
+      // ── Tabs ───────────────────────────────────────────────────
+      const tabs = $("tabs");
+      AUDIENCES.forEach((a, i) => {
+        const b = document.createElement("button");
+        b.className = "tab";
+        b.type = "button";
+        b.role = "tab";
+        b.textContent = a.label;
+        b.addEventListener("click", () => select(i));
+        b.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowRight")
+            select((selected + 1) % AUDIENCES.length, true);
+          if (e.key === "ArrowLeft")
+            select((selected - 1 + AUDIENCES.length) % AUDIENCES.length, true);
+        });
+        tabs.appendChild(b);
+      });
+
+      function movePill() {
+        const tab = tabs.querySelectorAll(".tab")[selected];
+        $("pill").style.left = tab.offsetLeft + "px";
+        $("pill").style.width = tab.offsetWidth + "px";
+      }
+
+      // ── Render one audience ────────────────────────────────────
+      function render() {
+        const a = AUDIENCES[selected];
+        tabs.querySelectorAll(".tab").forEach((t, i) => {
+          t.setAttribute("aria-selected", i === selected);
+          t.tabIndex = i === selected ? 0 : -1;
+        });
+        movePill();
+
+        const stage = $("stage");
+        stage.style.setProperty("--stage", a.stage);
+        stage.style.setProperty("--avatar", a.avatar);
+        stage.style.setProperty("--ring", a.ring);
+
+        $("profile").innerHTML = `
+          <div class="p-top">
+            <span class="handle">@${a.handle}</span>
+            <span class="live"><i></i>Growing</span>
+          </div>
+          <div class="p-head">
+            <div class="avatar">${ICONS[a.icons[0]]}</div>
+            <div class="stats">
+              <div class="stat grow"><b id="count">+0</b><span>new followers</span></div>
+              <div class="stat"><b id="month">0</b><span>of ${a.months} months</span></div>
+            </div>
+          </div>
+          <p class="p-name">${a.name}</p>
+          <p class="p-bio">${a.bio}</p>
+          <div class="months">
+            <div class="months-label"><span>Saved growth data</span><span id="month-label">Month 0 of ${a.months}</span></div>
+            <div class="ticks" id="ticks">${"<span></span>".repeat(a.months)}</div>
+          </div>
+          <div class="grid">
+            ${a.tiles
+              .map(
+                (c, i) =>
+                  `<div class="tile" style="--t:${c};animation-delay:${i * 45}ms">${ICONS[a.icons[i % 3 === 1 ? 1 : 0]]}</div>`,
+              )
+              .join("")}
+          </div>`;
+
+        $("quote").innerHTML = `
+          <small>From the customer · Proposed quote</small>
+          <p>${a.quote}</p>
+          <cite>— ${a.name}, ${a.bio.split(" · ")[0].toLowerCase()}</cite>`;
+
+        $("pitch").innerHTML = `
+          <span class="label">For ${a.label.toLowerCase()}</span>
+          <h2>${a.headline}</h2>
+          <p>${a.copy}</p>
+          <ul>${a.benefits.map((b) => `<li>${b}</li>`).join("")}</ul>
+          <a class="link" href="#">${a.story} →</a>`;
+
+        ["profile", "pitch", "quote"].forEach((id) => {
+          const el = $(id);
+          el.classList.remove("swap");
+          void el.offsetWidth;
+          el.classList.add("swap");
+        });
+
+        $("toasts").innerHTML = "";
+        elapsed = 0;
+        nextToast = 400;
+        toastIndex = 0;
+
+        if (reduce) {
+          // No motion: show the end state and three notifications.
+          paint(1);
+          for (let i = 0; i < 3; i++) addToast(false);
+        }
+      }
+
+      // ── Animation ──────────────────────────────────────────────
+      const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+
+      function paint(t) {
+        const a = AUDIENCES[selected];
+        const p = easeOut(t);
+        $("count").textContent = "+" + fmt(Math.round(a.growth * p));
+        const month = Math.min(a.months, Math.ceil(p * a.months));
+        $("month").textContent = month;
+        $("month-label").textContent = `Month ${month} of ${a.months}`;
+        [...$("ticks").children].forEach((tick, i) =>
+          tick.classList.toggle("on", i < month),
+        );
+      }
+
+      function addToast(animate = true) {
+        const a = AUDIENCES[selected];
+        const name = a.followers[toastIndex % a.followers.length];
+        toastIndex++;
+        const box = $("toasts");
+        const el = document.createElement("div");
+        el.className = "toast";
+        el.innerHTML = `<span class="dot">${name[0]}</span><span><b>@${name}</b> followed you<small>just now</small></span>`;
+        box.prepend(el);
+        // keep three on screen; the oldest drifts away
+        const all = [...box.children].filter(
+          (t) => !t.classList.contains("out"),
+        );
+        all.slice(3).forEach((old) => {
+          old.classList.add("out");
+          setTimeout(() => old.remove(), 450);
+        });
+        if (animate) {
+          const count = $("count");
+          count.classList.remove("bump");
+          void count.offsetWidth;
+          count.classList.add("bump");
+        }
+      }
+
+      function tick(now) {
+        const dt = last ? Math.min(now - last, 64) : 0;
+        last = now;
+        if (onScreen && !document.hidden) {
+          elapsed += dt;
+          paint(Math.min(elapsed / COUNT_MS, 1));
+          // notifications arrive while it's growing, then settle
+          if (elapsed < COUNT_MS && elapsed >= nextToast) {
+            addToast();
+            nextToast += TOAST_EVERY;
+          }
+        }
+        raf = requestAnimationFrame(tick);
+      }
+
+      function select(i, focus = false) {
+        if (i === selected && $("count")) return;
+        selected = i;
+        render();
+        if (focus) tabs.querySelectorAll(".tab")[i].focus();
+      }
+
+      // Only animate while the story is on screen.
+      new IntersectionObserver(([entry]) => (onScreen = entry.isIntersecting), {
+        threshold: 0.3,
+      }).observe($("story"));
+
+      $("replay").addEventListener("click", render);
+      addEventListener("resize", movePill);
+
+      selected = -1;
+      select(0);
+      if (!reduce) raf = requestAnimationFrame(tick);
+    </script>
+  </body>
+</html>

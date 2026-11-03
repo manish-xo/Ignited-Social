@@ -1,11 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import gsap from "gsap";
 import {
   AtSign,
   BarChart3,
+  Check,
   CheckCircle2,
   Clock3,
   Download,
@@ -261,55 +269,145 @@ function AuditMockup() {
   );
 }
 
+function ReviewMockup() {
+  return (
+    <MockFrame>
+      <div className="flex items-center justify-between">
+        <p className="text-sm font-bold text-ink">Progress review</p>
+        <span className="rounded-full bg-subtle-bg px-2 py-0.5 text-[10px] text-secondary">
+          Week 4
+        </span>
+      </div>
+
+      <p className="mt-4 text-[10px] font-semibold uppercase tracking-wide text-muted">
+        What we adjusted
+      </p>
+      <ul className="mt-1.5 divide-y divide-border rounded-lg border border-border text-[11px] text-ink">
+        {[
+          ["Targeting", "Added 2 accounts your audience follows"],
+          ["Outreach", "More focus on your city"],
+          ["Content", "Two Reels a week, fewer carousels"],
+        ].map(([label, change]) => (
+          <li key={label} className="flex items-start gap-2 px-3 py-2">
+            <span className="w-16 shrink-0 font-semibold">{label}</span>
+            <span className="text-secondary">{change}</span>
+          </li>
+        ))}
+      </ul>
+
+      {/* a message from the manager — the "work through it together" bit */}
+      <div className="mt-4 flex items-start gap-2.5">
+        <Image
+          src="/stock/avatar-2.jpg"
+          alt=""
+          width={56}
+          height={56}
+          className="h-7 w-7 shrink-0 rounded-full object-cover"
+        />
+        <div className="rounded-xl rounded-tl-sm bg-subtle-bg px-3 py-2 text-[11px] leading-relaxed text-ink">
+          Your Reels reach about 3× more new people than your posts. Want to try
+          two a week and see how it goes?
+        </div>
+      </div>
+      <div className="mt-2.5 flex justify-end gap-2">
+        <span className="rounded-lg border border-border px-2.5 py-1 text-[10px] font-semibold text-ink">
+          Let&apos;s talk it through
+        </span>
+        <span className="rounded-lg bg-action px-2.5 py-1 text-[10px] font-semibold text-white">
+          Let&apos;s try it
+        </span>
+      </div>
+    </MockFrame>
+  );
+}
+
 // ─── Steps ──────────────────────────────────────────────────────────────────
 
 const STEPS: Step[] = [
   {
-    title: "Tell us about your business.",
+    title: "Tell us what you’re building.",
     body: (
       <p>
-        A short form and a secure account connection. About ten minutes, all in.
+        Complete a short form about your brand, your goals and who you want to
+        reach. Then connect your Instagram account. About ten minutes, all in.
       </p>
     ),
     mockup: <FormMockup />,
   },
   {
-    title: "Your Brand Manager gets to work.",
+    title: "Your manager gets to work.",
     body: (
-      <>
-        <p>
-          Targeting is set up within 24–48 hours. Join over the weekend and we
-          start Monday.
-        </p>
-        <p className="mt-2">
-          Most accounts see their first followers within 2–3 days.
-        </p>
-      </>
+      <p>
+        They get to know your account, find people likely to care about your
+        work and begin the daily outreach that brings them to your profile.
+      </p>
     ),
     mockup: <DashboardMockup />,
   },
   {
-    title: "Get a clear view of what to improve.",
+    title: "Get a clear starting point.",
     body: (
       <p>
-        In week one, we audit your audience, content, offer and positioning. The
-        audit is yours to keep, even if you leave.
+        In your first week, you get an account audit and practical
+        recommendations on what to improve. Your manager helps you choose where
+        to start, with your time and resources in mind.
       </p>
     ),
     mockup: <AuditMockup />,
   },
+  {
+    title: "Keep things moving, together.",
+    body: (
+      <p>
+        Your manager reviews the progress, adjusts the growth strategy and
+        brings you recommendations. When a decision feels difficult, you have
+        someone to work through it with.
+      </p>
+    ),
+    mockup: <ReviewMockup />,
+  },
 ];
 
+// ─── The line ───────────────────────────────────────────────────────────────
+//
+// A straight vertical line runs through the step numbers, starting at the
+// first one. It fills from one step's number down to the next.
+
+const NODE = 28; // node diameter (px)
+
+interface Curve {
+  width: number;
+  height: number;
+  /** y and distance along the line of each step's node */
+  nodes: { y: number; s: number }[];
+  length: number;
+}
+
+function buildCurve(width: number, height: number, ys: number[]): Curve {
+  const top = ys[0] ?? 0;
+  return {
+    width,
+    height,
+    nodes: ys.map((y) => ({ y, s: y - top })),
+    length: height - top,
+  };
+}
+
 /**
- * Left: steps as an accordion that advances on its own — a line fills across
- * the top of the open step, and when it's full the next one opens. Clicking a
- * step jumps to it; hovering the list pauses. Right: the matching visual.
+ * Left: the four steps on a vertical line that advances on its own — the line
+ * grows from the open step's number to the next, and when it gets there the
+ * next step opens. Clicking a step jumps to it; hovering pauses.
+ * Right: the matching visual.
  */
 export default function FirstWeekSteps() {
   const [active, setActive] = useState(0);
-  const barRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const [curve, setCurve] = useState<Curve | null>(null);
+  const listRef = useRef<HTMLOListElement>(null);
+  const rowRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const progressRef = useRef<SVGPathElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const tweenRef = useRef<gsap.core.Tween | null>(null);
+  const tweenStepRef = useRef(-1); // which step the current tween belongs to
   const visible = useRef(false);
   const hovered = useRef(false);
 
@@ -320,35 +418,65 @@ export default function FirstWeekSteps() {
     else tween.pause();
   };
 
-  // Fill the open step's line; when full, open the next step.
+  // Measure the list and work out the arc; redo it whenever the size changes.
+  useLayoutEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
+    const measure = () => {
+      const ys = rowRefs.current.map((row) =>
+        row ? row.offsetTop + NODE / 2 : 0,
+      );
+      setCurve(buildCurve(list.clientWidth, list.clientHeight, ys));
+    };
+    measure();
+    // Rows are watched too: as a step opens/closes, the points below it move.
+    const observer = new ResizeObserver(measure);
+    observer.observe(list);
+    rowRefs.current.forEach((row) => row && observer.observe(row));
+    return () => observer.disconnect();
+  }, []);
+
+  // Grow the line from this step's point to the next; when it arrives, move on.
   useEffect(() => {
+    const path = progressRef.current;
+    if (!curve || !path) return;
+    const from = curve.nodes[active].s;
+    const to = curve.nodes[active + 1]?.s ?? curve.length;
+    const offset = (s: number) => curve.length - s;
+
+    // The curve is re-measured while a step opens; keep the line's progress
+    // instead of starting this step over each time.
+    const carry =
+      tweenRef.current && tweenStepRef.current === active
+        ? tweenRef.current.progress()
+        : 0;
+    tweenRef.current?.kill();
+    tweenStepRef.current = active;
     const reduce = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    barRefs.current.forEach((bar, i) => {
-      if (bar && i !== active) gsap.set(bar, { scaleX: 0 });
-    });
-    const bar = barRefs.current[active];
-    if (!bar || reduce) return; // reduced motion: no auto-advance
-
-    tweenRef.current?.kill();
+    if (reduce) {
+      gsap.set(path, { strokeDashoffset: offset(from) }); // no auto-advance
+      return;
+    }
     tweenRef.current = gsap.fromTo(
-      bar,
-      { scaleX: 0 },
+      path,
+      { strokeDashoffset: offset(from) },
       {
-        scaleX: 1,
+        strokeDashoffset: offset(to),
         duration: STEP_DURATION,
         ease: "none",
         paused: true,
         onComplete: () => setActive((i) => (i + 1) % STEPS.length),
       },
     );
+    tweenRef.current.progress(carry);
     syncPlayback();
 
     return () => {
       tweenRef.current?.kill();
     };
-  }, [active]);
+  }, [active, curve]);
 
   // Only run while the section is on screen.
   useEffect(() => {
@@ -365,13 +493,19 @@ export default function FirstWeekSteps() {
     return () => observer.disconnect();
   }, []);
 
+  const arc = curve
+    ? `M ${NODE / 2} ${curve.nodes[0].y} V ${curve.height}`
+    : "";
+
   return (
     <div
       ref={rootRef}
-      className="mt-16 grid grid-cols-1 items-center gap-12 md:grid-cols-[1fr_1.15fr] md:gap-14"
+      className="mt-16 grid grid-cols-1 items-center gap-12 md:grid-cols-[1fr_1.1fr] md:gap-12"
     >
-      {/* ── steps ─────────────────────────────────────────────────── */}
-      <div
+      {/* ── steps on the line ────────────────────────────────────── */}
+      <ol
+        ref={listRef}
+        className="relative space-y-7"
         onMouseEnter={() => {
           hovered.current = true;
           syncPlayback();
@@ -381,80 +515,105 @@ export default function FirstWeekSteps() {
           syncPlayback();
         }}
       >
+        {curve && (
+          <svg
+            aria-hidden
+            width={curve.width}
+            height={curve.height}
+            className="pointer-events-none absolute left-0 top-0 overflow-visible"
+          >
+            {/* track */}
+            <path
+              d={arc}
+              fill="none"
+              stroke="var(--color-border-strong)"
+              strokeWidth={1.25}
+            />
+            {/* filled part */}
+            <path
+              ref={progressRef}
+              d={arc}
+              fill="none"
+              stroke="var(--color-action)"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeDasharray={curve.length}
+              strokeDashoffset={curve.length - curve.nodes[active].s}
+            />
+          </svg>
+        )}
+
         {STEPS.map((step, i) => {
           const isOpen = active === i;
+          const isDone = i < active;
           return (
-            <div key={step.title} className="relative pb-6 pt-5">
-              {/* track + filling progress line */}
-              <span className="absolute inset-x-0 top-0 h-px bg-border" />
-              <span
-                ref={(el) => {
-                  barRefs.current[i] = el;
-                }}
-                className="absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-action"
-              />
-
+            <li
+              key={step.title}
+              ref={(el) => {
+                rowRefs.current[i] = el;
+              }}
+              className="relative flex gap-4"
+            >
               <button
                 type="button"
                 onClick={() => setActive(i)}
-                aria-expanded={isOpen}
-                aria-controls={`first-week-step-${i}`}
-                className={`flex w-full items-baseline gap-2.5 text-left text-lg font-semibold -tracking-[0.03em] transition-colors duration-300 sm:text-xl ${
-                  isOpen ? "text-ink" : "text-ink/45 hover:text-ink/70"
+                aria-current={isOpen ? "step" : undefined}
+                aria-label={`Step ${i + 1}: ${step.title}`}
+                className={`relative flex h-7 w-7 shrink-0 items-center justify-center rounded-full font-mono text-[11px] tabular-nums transition-all duration-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 ${
+                  isOpen
+                    ? "bg-action text-white shadow-[0_0_0_5px_rgb(90_76_224/0.14)]"
+                    : isDone
+                      ? "bg-action text-white"
+                      : "border border-border-strong bg-subtle-bg text-muted hover:border-action/50 hover:text-action"
                 }`}
               >
-                <span className="tabular-nums">{i + 1}.</span>
-                {step.title}
+                {isDone ? (
+                  <Check size={13} strokeWidth={3} aria-hidden />
+                ) : (
+                  String(i + 1).padStart(2, "0")
+                )}
               </button>
 
-              <div
-                id={`first-week-step-${i}`}
-                className={`grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
-                  isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                }`}
-              >
-                <div className="overflow-hidden">
-                  <div
-                    className={`pl-7 pt-3 text-sm leading-relaxed text-secondary transition-all duration-500 sm:text-base ${
-                      isOpen
-                        ? "translate-y-0 opacity-100"
-                        : "-translate-y-1 opacity-0"
-                    }`}
-                  >
-                    {step.body}
+              <div className="min-w-0 pb-1">
+                <button
+                  type="button"
+                  onClick={() => setActive(i)}
+                  tabIndex={-1}
+                  aria-expanded={isOpen}
+                  aria-controls={`first-week-step-${i}`}
+                  className={`text-left text-lg font-semibold leading-7 -tracking-[0.03em] transition-colors duration-500 sm:text-xl ${
+                    isOpen ? "text-ink" : "text-ink/40 hover:text-ink/65"
+                  }`}
+                >
+                  {step.title}
+                </button>
+                {/* only the open step shows its text; smooth height change */}
+                <div
+                  id={`first-week-step-${i}`}
+                  className={`grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
+                    isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <div
+                      className={`pt-2 text-sm leading-relaxed text-secondary transition-all duration-500 ${
+                        isOpen
+                          ? "translate-y-0 opacity-100"
+                          : "-translate-y-1 opacity-0"
+                      }`}
+                    >
+                      {step.body}
+                    </div>
                   </div>
                 </div>
               </div>
-
-              {/* phones: show the visual under the open step */}
-              <div
-                className={`grid transition-[grid-template-rows] duration-500 md:hidden ${
-                  isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-                }`}
-              >
-                <div className="overflow-hidden">
-                  <div className="pt-5">
-                    {step.image ? (
-                      <Image
-                        src={step.image}
-                        alt=""
-                        width={960}
-                        height={640}
-                        className="w-full rounded-xl border border-border object-cover"
-                      />
-                    ) : (
-                      step.mockup
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
+            </li>
           );
         })}
-      </div>
+      </ol>
 
-      {/* ── visual (tablet/desktop) ──────────────────────────────── */}
-      <figure className="hidden md:block">
+      {/* ── visual ───────────────────────────────────────────────── */}
+      <figure>
         <div className="rounded-2xl border border-dashed border-ink/20 bg-canvas/70 p-3">
           {/* stacked; the active one fades/scales in */}
           <div className="grid">
@@ -484,7 +643,8 @@ export default function FirstWeekSteps() {
           </div>
         </div>
         <figcaption className="mt-3 text-xs leading-snug text-ink">
-          See the work as it happens. Ask your Brand Manager about any of it.
+          See your account activity, performance and follower growth in one
+          place. Ask your manager about any of it.
         </figcaption>
       </figure>
     </div>
