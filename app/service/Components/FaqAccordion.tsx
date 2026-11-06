@@ -5,28 +5,81 @@ import { Plus } from "lucide-react";
 
 const FAQS = [
   {
-    q: "My account is small. Am I ready for this?",
-    a: "You don’t need a big following to begin. You need something worth sharing, a sense of who you want to reach, and a willingness to keep posting. We work with artists, coaches, local businesses, creators and product brands. Your first-week audit helps you see where to start.",
+    q: "Are the followers real people who are likely to care about my work?",
+    a: [
+      "Yes. We look for people based on your niche, interests, location and related accounts. Our outreach grabs their attention and brings them to your profile.",
+      "They decide to follow because your work interests them. Your content gives those people a reason to stay and engage.",
+      "We never buy followers or add fake accounts.",
+    ],
   },
   {
-    q: "I want customers. How do followers help?",
-    a: "A relevant follow gives someone another chance to see your work, get to know you and consider what you offer. That’s the opportunity. Your content builds trust; your offer gives them a reason to act. On Scale, we work on that path with you, from your profile to an enquiry, booking or sale.",
+    q: "What will you actually do from my account?",
+    a: [
+      "We follow relevant accounts and like their posts to help the right people discover your profile. Your Brand Manager chooses who to approach, reviews the response and regularly refines the targeting.",
+      "We also unfollow accounts added through our outreach, while protecting accounts you follow yourself. Any other action on your Instagram account requires your express approval.",
+      "You can see the activity in your dashboard and tell your manager who you want to reach or avoid.",
+    ],
   },
   {
-    q: "How will you find people who actually care?",
-    a: "We start with people already following accounts like yours, then narrow by your niche, location and other relevant signals. Your Brand Manager reviews the response and adjusts the targeting. A local photographer needs a different audience from an online coach. Your plan should reflect that.",
+    q: "Could the outreach put my account at risk?",
+    a: [
+      "Your account is in experienced hands. The team behind Ignited has managed 20,000+ accounts since 2016.",
+      "Our outreach strategy follows Instagram’s Terms of Use and Community Guidelines. Your account, brand and relationships come before growth targets.",
+      "We start gradually, adjust the pace to your account and monitor the activity. Your Brand Manager makes adjustments when needed.",
+      "Instagram can still request verification or apply restrictions. If a warning appears, we pause outreach, review the issue and guide you through the next steps.",
+    ],
   },
   {
-    q: "I’m already stretched. How much will I have to do?",
-    a: "We handle the audience research and daily outreach. You create and publish the content, answer your enquiries and make the changes you choose to take on. Your manager works with the time and resources you have. Grow includes basic content guidance; Scale gives you a monthly plan and weekly reviews.",
+    q: "What access do you need, and how do I stay in control?",
+    a: [
+      "We need access to your Instagram account to manage outreach. You connect it during setup and keep using Instagram as usual.",
+      "Access is limited to team members working on your account. We don’t edit your profile or change settings. We never read or reply to your private messages.",
+      "We carry out the outreach you’ve authorised. Any additional activity requires your express permission.",
+      "The account is yours. You can remove our access at any time.",
+    ],
   },
   {
-    q: "Will my account still sound and feel like me?",
-    a: "Yes. You stay in charge of what you make and publish. We help sharpen the message, find stronger ways to tell your story and spot what’s working. Your taste, your voice and your work remain yours.",
+    q: "Is my account ready for Ignited?",
+    a: [
+      "You can even start with zero followers. What matters is giving visitors a clear sense of what you do and a reason to follow.",
+      "A public profile, a clear bio and recent posts about what you do give us a useful starting point. If your account is new, inconsistent or still taking shape, your Brand Manager helps you identify what needs attention first.",
+      "You don’t have to figure all of that out before you get help.",
+    ],
   },
   {
-    q: "What if I’ve already tried a service like this?",
-    a: "Start with seven days free. Meet your Brand Manager, see the activity in your dashboard and get your account audit. Judge the work for yourself. If you decide to leave, cancel and your last payment is automatically refunded. You keep the audit.",
+    q: "Can Ignited work with the time and content I can realistically produce?",
+    a: [
+      "Yes. We build your content plan around your time, skills and resources.",
+      "Your Brand Manager handles outreach and helps you decide what to create next. You create and publish the content. Your voice and creative choices stay yours. The plan gives you direction and makes the work easier to manage.",
+      "Together, we build a posting routine you can maintain — one that gives new visitors a reason to follow and existing followers a reason to stay.",
+    ],
+  },
+  {
+    q: "What growth should I realistically expect, and when?",
+    a: [
+      "Our estimated monthly growth is 150–500+ new followers on Grow and 250–800+ on Scale. Your niche, target audience, profile and content affect where you land.",
+      "We usually begin targeting within 24–48 hours of setup, or on Monday if you join over the weekend. Your first new followers usually arrive within two to three days of outreach starting.",
+      "Judge progress over several weeks. Daily numbers will vary.",
+    ],
+  },
+  {
+    q: "What happens if my growth is slow or the wrong people are following?",
+    a: [
+      "Your Brand Manager takes on a pro-active role in finding what needs to change.",
+      "If the audience doesn’t fit, we adjust the targeting. If growth is slow, we review the outreach, your profile and your content, then work through the improvements with you.",
+      "You’ll know what we’re changing, why, and whether it’s helping.",
+      "If you don’t feel understood or supported by your Brand Manager, you can request a different one.",
+      "You can also cancel anytime. Your most recent payment is refunded automatically, whether it’s your first paid month or a later one.",
+    ],
+  },
+  {
+    q: "How will Ignited help turn followers into enquiries or sales?",
+    a: [
+      "We get your account in front of potential customers, then help you give them a reason to enquire, book or buy.",
+      "Both plans include a tailored content plan. Scale adds a review of your offer, landing page and the steps from first interest to purchase, with clear advice for improvement.",
+      "Your Brand Manager helps improve the opportunity to win business. You put the suggestion into practice and handle enquiries.",
+      "Results depend on your offer and how people respond – we don’t promise a fixed number of sales or bookings.",
+    ],
   },
 ];
 
@@ -86,13 +139,15 @@ export default function FaqAccordion() {
               }`}
             >
               <div className="overflow-hidden">
-                <p
-                  className={`pb-7 pr-12 text-sm leading-relaxed text-secondary transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none sm:text-base ${
+                <div
+                  className={`space-y-3 pb-7 pr-12 text-sm leading-relaxed text-secondary transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none sm:text-base ${
                     isOpen ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0"
                   }`}
                 >
-                  {item.a}
-                </p>
+                  {item.a.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

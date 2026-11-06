@@ -15,7 +15,7 @@ const Pricing = () => {
           </CornerFrame>
         </div>
 
-        <Heading
+        {/* <Heading
           as="h2"
           className="mt-5 text-center font-heading-condensed text-4xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-5xl"
         >
@@ -26,11 +26,25 @@ const Pricing = () => {
           className="text-center font-heading-condensed text-4xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-5xl"
         >
           We&apos;ll take on the daily work.
+        </Heading> */}
+
+        <Heading
+          as="h2"
+          className="mt-5 text-center font-heading-condensed text-4xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-5xl"
+        >
+          Choose how fast
+        </Heading>
+
+        <Heading
+          as="h2"
+          className="text-center font-heading-condensed text-4xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-5xl"
+        >
+          you want to grow.
         </Heading>
 
         <p className="mx-auto mt-5 max-w-xl text-center text-sm leading-relaxed text-secondary sm:text-base">
-          Both plans come with your own Brand Manager and seven days free.
-          Choose how much help you want along the way.
+          Choose the level of growth and guidance that fits you. Start with a 7
+          day free trial.
         </p>
 
         <PricingPlans />

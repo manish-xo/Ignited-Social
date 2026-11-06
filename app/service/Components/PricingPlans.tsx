@@ -13,41 +13,53 @@ import {
 import DotPattern from "@/components/ui/DotPattern";
 import { getPlan } from "@/lib/plans";
 
+interface PlanFeature {
+  text: string;
+  note?: string;
+}
+
 interface PlanCard {
   slug: "grow" | "scale";
   tagline: string;
   followers: string;
-  features: string[];
+  features: PlanFeature[];
   featured?: boolean;
 }
+
+const SUPPORT_NOTE = "Support via email, phone, or video call";
 
 // Price + name come from lib/plans.ts (same source as signup/payment), so the
 // page can never show a different price from checkout.
 const PLANS: PlanCard[] = [
   {
     slug: "grow",
-    tagline: "Steady audience growth. Practical content advice.",
+    tagline: "For accounts ready to build steady, sustainable momentum.",
     followers: "150–500+ followers",
     features: [
-      "Your personal Brand Manager",
-      "Daily outreach and core targeting",
-      "Basic content reviews",
-      "Email, phone and video support",
+      { text: "Your personal Brand Manager.", note: SUPPORT_NOTE },
+      { text: "Consistent, daily outreach." },
+      { text: "Core audience targeting." },
+      { text: "Tailored content plan." },
     ],
   },
   {
     slug: "scale",
-    tagline: "More growth. A closer look at content and sales.",
+    tagline: "For brands ready to move faster and dominate their niche.",
     followers: "250–800+ followers",
     featured: true,
     features: [
-      "Your personal Senior Brand Manager",
-      "Higher-volume outreach and advanced targeting",
-      "Monthly content plan and weekly reviews",
-      "Offer and conversion funnel review",
-      "Email, phone and video support",
+      { text: "Your own Senior Brand Manager.", note: SUPPORT_NOTE },
+      { text: "Accelerated, higher-volume outreach." },
+      { text: "Advanced audience targeting." },
+      { text: "Tailored content plan + weekly reviews." },
+      { text: "Offer, landing page and monetization funnel review." },
     ],
   },
+];
+
+const TRACK_RECORD = [
+  { value: "90%", label: "month-over-month customer retention" },
+  { value: "20,000", label: "accounts managed since 2016" },
 ];
 
 export default function PricingPlans() {
@@ -142,7 +154,7 @@ export default function PricingPlans() {
                 <span className="text-5xl font-bold leading-none -tracking-[0.04em] text-ink">
                   ${price}
                 </span>
-                <span className="pb-1.5 text-sm text-secondary">/ month</span>
+                <span className="pb-1.5 text-sm text-secondary">/month</span>
               </div>
 
               {/* growth estimate */}
@@ -172,7 +184,7 @@ export default function PricingPlans() {
               <ul className="mt-6 space-y-3">
                 {plan.features.map((feature) => (
                   <li
-                    key={feature}
+                    key={feature.text}
                     data-plan-item
                     className="flex items-start gap-3 text-sm text-ink"
                   >
@@ -185,7 +197,14 @@ export default function PricingPlans() {
                     >
                       <Check size={12} strokeWidth={3} />
                     </span>
-                    {feature}
+                    <span>
+                      {feature.text}
+                      {feature.note && (
+                        <span className="mt-0.5 block text-xs text-secondary">
+                          {feature.note}
+                        </span>
+                      )}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -207,8 +226,8 @@ export default function PricingPlans() {
                   />
                 </Link>
                 <p className="mt-3 text-center text-xs text-muted">
-                  7 days free <span className="mx-1">•</span> Billed monthly{" "}
-                  <span className="mx-1">•</span> Cancel anytime
+                  7 days free, then ${price}/month{" "}
+                  <span className="mx-1">·</span> Cancel anytime
                 </p>
               </div>
             </div>
@@ -222,14 +241,36 @@ export default function PricingPlans() {
           <RotateCcw size={24} strokeWidth={1.9} />
         </span>
         <div>
-          <p className="text-2xl font-bold -tracking-[0.04em] text-ink sm:text-3xl">
-            If you leave, your last payment comes back.
+          <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-action">
+            Our money-back promise
+          </p>
+          <p className="mt-2 text-2xl font-bold -tracking-[0.04em] text-ink sm:text-3xl">
+            Your next month is ours to earn.
           </p>
           <p className="mt-1.5 text-sm leading-relaxed text-secondary sm:text-base">
-            Cancel anytime. We automatically refund your last payment. No claim
-            to file. No explanation needed.
+            We want you to stay because you value the work. If you decide to
+            leave, cancel anytime and we&rsquo;ll automatically refund your most
+            recent payment.
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-secondary sm:text-base">
+            This applies during your first paid month and every month after. No
+            refund request. No explanation needed.
           </p>
         </div>
+      </div>
+
+      {/* track record */}
+      <div className="mx-auto mt-14 grid max-w-2xl grid-cols-2 gap-8">
+        {TRACK_RECORD.map((stat) => (
+          <div key={stat.value} className="flex flex-col items-center">
+            <p className="font-heading text-4xl font-[700] -tracking-[0.07em] text-ink sm:text-5xl">
+              {stat.value}
+            </p>
+            <p className="mt-1 max-w-[200px] text-center text-xs text-secondary sm:text-sm">
+              {stat.label}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );

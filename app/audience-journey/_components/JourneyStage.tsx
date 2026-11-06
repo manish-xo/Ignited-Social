@@ -1,14 +1,26 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element -- decorative avatars inside an animated mockup */
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import type { CSSProperties, ReactNode } from "react";
 import gsap from "gsap";
 import { MapPin, Pause, Play, RotateCcw, SkipForward } from "lucide-react";
 import { DotPattern } from "@/components/ui/DotPattern";
 import type { Niche } from "../data";
 import { buildJourney } from "./journeyTimeline";
-import { Avatar, FeedScreen, PhoneFrame, ProfileScreen, SearchScreen } from "./PhoneScreens";
+import {
+  Avatar,
+  FeedScreen,
+  PhoneFrame,
+  ProfileScreen,
+  SearchScreen,
+} from "./PhoneScreens";
 import { createStage3D, type Stage3D } from "./stage3d";
 
 const STAGE_HEIGHT = 680;
@@ -37,11 +49,27 @@ function Bubble({
   );
 }
 
-function Caption({ index, step, title, sub }: { index: number; step: string; title: string; sub: string }) {
+function Caption({
+  index,
+  step,
+  title,
+  sub,
+}: {
+  index: number;
+  step: string;
+  title: string;
+  sub: string;
+}) {
   return (
-    <div data-cap className="absolute inset-x-0 top-[12px] text-center" style={{ zIndex: 5 - index }}>
+    <div
+      data-cap
+      className="absolute inset-x-0 top-[12px] text-center"
+      style={{ zIndex: 5 - index }}
+    >
       <p className="text-[17px] font-semibold leading-tight -tracking-[0.01em] text-ink">
-        <span className="mr-1.5 font-mono text-[11px] font-medium text-action">{step}</span>
+        <span className="mr-1.5 font-mono text-[11px] font-medium text-action">
+          {step}
+        </span>
         {title}
       </p>
       <p className="mt-0.5 truncate px-6 text-[11.5px] text-secondary">{sub}</p>
@@ -60,7 +88,11 @@ export default function JourneyStage({ niche }: { niche: Niche }) {
   const userPausedRef = useRef(false);
   const visibleRef = useRef(true);
 
-  const [layout, setLayout] = useState({ width: WIDE_STAGE, scale: 1, panel: 0 });
+  const [layout, setLayout] = useState({
+    width: WIDE_STAGE,
+    scale: 1,
+    panel: 0,
+  });
   const [playing, setPlaying] = useState(true);
   const [reduced, setReduced] = useState(false);
   const [step, setStep] = useState(0);
@@ -119,7 +151,9 @@ export default function JourneyStage({ niche }: { niche: Niche }) {
     const stage3d = stageRef.current;
     if (!root || !layout.panel || !stage3d) return;
 
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     setReduced(prefersReduced);
     setHeld(0);
 
@@ -131,7 +165,9 @@ export default function JourneyStage({ niche }: { niche: Niche }) {
         width: layout.width,
         height: STAGE_HEIGHT,
         query: niche.search,
-        dots: Array.from(panelRef.current?.querySelectorAll<HTMLElement>("[data-dot]") ?? []),
+        dots: Array.from(
+          panelRef.current?.querySelectorAll<HTMLElement>("[data-dot]") ?? [],
+        ),
         onStep: setStep,
       });
       timelineRef.current = tl;
@@ -220,12 +256,24 @@ export default function JourneyStage({ niche }: { niche: Niche }) {
         role="group"
         aria-label={`Illustrative animation of the three steps, ${niche.example.toLowerCase()}`}
         className="relative w-full overflow-hidden rounded-[28px] border border-action-tint bg-action-tint-bg"
-        style={{ height: layout.panel ? STAGE_HEIGHT * layout.scale : STAGE_HEIGHT }}
+        style={{
+          height: layout.panel ? STAGE_HEIGHT * layout.scale : STAGE_HEIGHT,
+        }}
       >
         <DotPattern className="fill-action/15" />
 
-        <div ref={rootRef} aria-hidden className="absolute left-0 top-0" style={stageStyle}>
-          <Caption index={0} step="01" title="Find your audience" sub={niche.example} />
+        <div
+          ref={rootRef}
+          aria-hidden
+          className="absolute left-0 top-0"
+          style={stageStyle}
+        >
+          <Caption
+            index={0}
+            step="01"
+            title="Find your audience"
+            sub={niche.example}
+          />
           <Caption
             index={1}
             step="02"
@@ -290,7 +338,9 @@ export default function JourneyStage({ niche }: { niche: Niche }) {
               <span className="leading-tight">
                 {niche.person}
                 <br />
-                <span className="text-[10.5px] font-normal text-secondary">is visiting</span>
+                <span className="text-[10.5px] font-normal text-secondary">
+                  is visiting
+                </span>
               </span>
             </Bubble>
             <Bubble kind="followed" x={166} y={392}>
@@ -300,7 +350,9 @@ export default function JourneyStage({ niche }: { niche: Niche }) {
               <span className="leading-tight">
                 {niche.person}
                 <br />
-                <span className="text-[10.5px] font-normal text-secondary">followed you</span>
+                <span className="text-[10.5px] font-normal text-secondary">
+                  followed you
+                </span>
               </span>
             </Bubble>
           </div>
@@ -315,10 +367,16 @@ export default function JourneyStage({ niche }: { niche: Niche }) {
         <div className="absolute inset-x-4 bottom-3 z-20 flex items-center justify-between gap-3">
           <div className="flex items-center gap-1.5" aria-hidden>
             {[0, 1, 2].map((i) => (
-              <i key={i} data-dot className="block h-1.5 w-1.5 rounded-full bg-action-on-dark" />
+              <i
+                key={i}
+                data-dot
+                className="block h-1.5 w-1.5 rounded-full bg-action-on-dark"
+              />
             ))}
           </div>
-          <span className="text-[10.5px] text-secondary">Illustrative example</span>
+          <span className="text-[10.5px] text-secondary">
+            Illustrative example
+          </span>
           <div className="flex items-center gap-1">
             {reduced ? (
               <button
@@ -345,7 +403,11 @@ export default function JourneyStage({ niche }: { niche: Niche }) {
                   aria-label={playing ? "Pause animation" : "Play animation"}
                   className="flex h-7 w-7 items-center justify-center rounded-full text-secondary transition-colors hover:bg-white hover:text-action"
                 >
-                  {playing ? <Pause size={14} aria-hidden /> : <Play size={14} aria-hidden />}
+                  {playing ? (
+                    <Pause size={14} aria-hidden />
+                  ) : (
+                    <Play size={14} aria-hidden />
+                  )}
                 </button>
               </>
             )}

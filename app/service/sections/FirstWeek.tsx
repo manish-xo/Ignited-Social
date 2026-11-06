@@ -49,7 +49,7 @@ const FirstWeek = () => {
         <FirstWeekSteps />
 
         {/* CTA */}
-        <div className="mt-16 flex flex-col items-center gap-3">
+        {/* <div className="mt-16 flex flex-col items-center gap-3">
           <Link
             href="/price"
             className="group inline-flex items-center gap-2 rounded-full bg-action py-1.5 pl-6 pr-1.5 text-sm font-medium text-white transition-colors hover:bg-action-hover"
@@ -63,7 +63,7 @@ const FirstWeek = () => {
             First 7 days free <span className="mx-1.5 text-muted">·</span> Your
             audit is yours to keep
           </p>
-        </div>
+        </div> */}
 
         {/* quick answers */}
         <div className="mt-16 grid grid-cols-1 gap-8 border-t border-border pt-10 sm:grid-cols-2 sm:gap-10">

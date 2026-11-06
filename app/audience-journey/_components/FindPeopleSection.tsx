@@ -17,9 +17,13 @@ export default function FindPeopleSection() {
     const last = NICHES.length - 1;
     const next =
       e.key === "ArrowRight"
-        ? selected === last ? 0 : selected + 1
+        ? selected === last
+          ? 0
+          : selected + 1
         : e.key === "ArrowLeft"
-          ? selected === 0 ? last : selected - 1
+          ? selected === 0
+            ? last
+            : selected - 1
           : e.key === "Home"
             ? 0
             : e.key === "End"
@@ -82,7 +86,7 @@ export default function FindPeopleSection() {
               tabIndex={active ? 0 : -1}
               onClick={() => setSelected(i)}
               className={cn(
-                "rounded-full border px-4 py-2.5 text-[13px] font-medium outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
+                "rounded-full cursor-pointer border px-4 py-2.5 text-[13px] font-medium outline-none transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
                 active
                   ? "border-action bg-action text-white"
                   : "border-border text-secondary hover:border-action/40 hover:bg-action-tint-bg hover:text-ink",
@@ -104,7 +108,7 @@ export default function FindPeopleSection() {
           <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-action">
             {niche.label}
           </p>
-          <h2 className="mt-4 font-heading-condensed text-3xl font-[600] leading-[1] -tracking-[0.03em] text-ink md:text-4xl">
+          <h2 className="mt-4 text-3xl font-[600] leading-[1] -tracking-[0.05em] text-ink md:text-4xl">
             {niche.headline}
           </h2>
           <p className="mt-5 max-w-[480px] text-[15px] leading-relaxed text-secondary sm:text-base">
@@ -113,7 +117,12 @@ export default function FindPeopleSection() {
           <ul className="mt-6 space-y-2.5">
             {niche.bullets.map((b) => (
               <li key={b} className="flex items-start gap-2.5 text-sm text-ink">
-                <Check size={16} strokeWidth={2.4} aria-hidden className="mt-0.5 shrink-0 text-action" />
+                <Check
+                  size={16}
+                  strokeWidth={2.4}
+                  aria-hidden
+                  className="mt-0.5 shrink-0 text-action"
+                />
                 {b}
               </li>
             ))}
