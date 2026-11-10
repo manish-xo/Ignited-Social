@@ -1,14 +1,19 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type ComponentType } from "react";
 import { Check } from "lucide-react";
 import CornerFrame from "@/components/ui/CornerFrame";
 import Heading from "@/components/ui/Heading";
 import { cn } from "@/lib/utils";
-import { DEFAULT_NICHE, NICHES } from "../data";
+import { DEFAULT_NICHE, NICHES, type Niche } from "../data";
 import JourneyStage from "./JourneyStage";
 
-export default function FindPeopleSection() {
+/** `Stage` is the animation on the right; each review route can plug in its own. */
+export default function FindPeopleSection({
+  Stage = JourneyStage,
+}: {
+  Stage?: ComponentType<{ niche: Niche }>;
+}) {
   const [selected, setSelected] = useState(DEFAULT_NICHE);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const niche = NICHES[selected];
@@ -129,7 +134,7 @@ export default function FindPeopleSection() {
           </ul>
         </div>
 
-        <JourneyStage niche={niche} />
+        <Stage niche={niche} />
       </div>
     </section>
   );
