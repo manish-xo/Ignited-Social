@@ -4,7 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import type { CSSProperties } from "react";
 import gsap from "gsap";
 import { Pause, Play, RotateCcw, SkipForward } from "lucide-react";
-import type { Niche } from "../../audience-journey/data";
+import type { Niche } from "../data";
 import { buildCrowd } from "./crowd";
 import { buildFilterJourney } from "./filterTimeline";
 import { AudienceCard, Face, FACE, ProfilePhone, ReachOut } from "./Scenes";

@@ -1,4 +1,4 @@
-import { NICHES, photo, type Niche } from "../../audience-journey/data";
+import { NICHES, photo, type Niche } from "../data";
 
 /** Which filter removes this person: 0 interests, 1 location, 2 accounts. */
 export type DropPhase = 0 | 1 | 2;
@@ -28,8 +28,8 @@ export function buildCrowd(niche: Niche): { people: Person[]; kept: Person[] } {
 
   const kept: Person[] = [
     { key: "own", name: niche.person, src: photo(niche.id, "portrait"), drop: null },
-    { key: "jaden", name: "Jaden", src: "/audiences/journey/faces/jaden.webp", drop: null },
-    { key: "mike", name: "Mike", src: "/audiences/journey/faces/mike.webp", drop: null },
+    { key: "jaden", name: "Jaden", src: "/audiences/journey-v2/faces/jaden.webp", drop: null },
+    { key: "mike", name: "Mike", src: "/audiences/journey-v2/faces/mike.webp", drop: null },
     { key: "other", name: other.person, src: photo(other.id, "portrait"), drop: null },
   ];
 

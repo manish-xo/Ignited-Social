@@ -374,9 +374,9 @@ export default function JourneyStage({ niche }: { niche: Niche }) {
               />
             ))}
           </div>
-          <span className="text-[10.5px] text-secondary">
+          {/* <span className="text-[10.5px] text-secondary">
             Illustrative example
-          </span>
+          </span> */}
           <div className="flex items-center gap-1">
             {reduced ? (
               <button

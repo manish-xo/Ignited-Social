@@ -14,7 +14,8 @@ import Hero from "./sections/Hero";
 import BrandManager from "./sections/BrandManager";
 import Record from "./sections/Record";
 import FirstWeek from "./sections/FirstWeek";
-import Niches from "./sections/Niches";
+// import Niches from "./sections/Niches";
+import SectionV2 from "../audience-journey-v2/_components/SectionV2";
 import Transformations from "./sections/Transformations";
 import Pricing from "./sections/Pricing";
 import Faq from "./sections/Faq";
@@ -29,7 +30,8 @@ const Home = () => {
       <BrandManager />
       <Record />
       <FirstWeek />
-      <Niches />
+      {/* <Niches /> replaced by the audience journey below */}
+      <SectionV2 embedded />
       <Transformations />
       <Pricing />
       <Faq />

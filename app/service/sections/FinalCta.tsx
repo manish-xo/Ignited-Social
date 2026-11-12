@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ArrowRight, Clock3 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import DarkGradientSection from "@/components/ui/DarkGradientSection";
 
 // Hand-drawn doodles around the heading. Kept few, thin and faint so they add
@@ -170,22 +170,20 @@ export default function FinalCta() {
       <div className="relative z-10 mx-auto max-w-3xl px-6 py-24 text-center sm:py-32">
         <h2
           data-cta-reveal
-          className="font-heading-condensed text-4xl font-bold leading-[0.95] -tracking-[0.04em] text-white sm:text-5xl md:text-6xl"
+          className="text-balance font-heading-condensed text-4xl font-bold leading-[0.95] -tracking-[0.04em] text-white sm:text-5xl md:text-6xl"
         >
-          Your next followers are already out there. Let&apos;s help them find
-          you.
+          Get your work in front of the right people.
         </h2>
         <p
           data-cta-reveal
           className="mx-auto mt-5 max-w-lg text-sm leading-relaxed text-white/80 sm:text-base"
         >
-          Seven days free. Your own Brand Manager. An account audit you keep
-          either way.
+          Grow with a Brand Manager in your corner.
         </p>
 
         <div
           data-cta-reveal
-          className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4"
+          className="mt-10 flex flex-col items-center justify-center gap-4"
         >
           <Link
             href="#plans"
@@ -196,13 +194,10 @@ export default function FinalCta() {
               <ArrowRight size={16} />
             </span>
           </Link>
-          <Link
-            href="/signup?plan=grow"
-            className="inline-flex h-12 items-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 text-sm font-semibold text-white backdrop-blur-sm transition-colors duration-300 hover:bg-white/20"
-          >
-            <Clock3 size={15} className="text-white/80" />
-            About ten minutes to get started
-          </Link>
+          <p className="text-xs text-white/70 sm:text-sm">
+            About 10 mins to get started <span className="mx-1">·</span> 7 days
+            free <span className="mx-1">·</span> Cancel anytime
+          </p>
         </div>
       </div>
     </DarkGradientSection>

@@ -1,9 +1,12 @@
 "use client";
 
-import FindPeopleSection from "../../audience-journey/_components/FindPeopleSection";
-import FilterStage from "./FilterStage";
+import FindPeopleSection from "./FindPeopleSection";
 
-/** Same heading, tabs and copy as /audience-journey, with the filter-style animation. */
-export default function SectionV2() {
-  return <FindPeopleSection Stage={FilterStage} />;
+/** The v2 section, used by /audience-journey-v2 and the service page. */
+export default function SectionV2({
+  embedded = false,
+}: {
+  embedded?: boolean;
+}) {
+  return <FindPeopleSection embedded={embedded} />;
 }

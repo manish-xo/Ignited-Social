@@ -74,7 +74,9 @@ export function buildFilterJourney({ root, labels, onStep }: Options) {
   gsap.set(rowAvatars, { autoAlpha: 0 });
   gsap.set(all("[data-heart]"), { scale: 0, autoAlpha: 0, transformOrigin: "50% 50%" });
   gsap.set(all("[data-state-following]"), { autoAlpha: 0 });
-  gsap.set(one("[data-phone]"), { autoAlpha: 0, y: 50 });
+  // Scaled down so the phone fits under its heading.
+  gsap.set(one("[data-phone]"), { autoAlpha: 0, y: 50, scale: 0.82, transformOrigin: "50% 0%" });
+  gsap.set(one("[data-s3-title]"), { autoAlpha: 0, y: 14 });
   gsap.set(banners, { autoAlpha: 0, y: -84 });
   gsap.set(one("[data-count]"), { y: 0 });
 
@@ -186,7 +188,8 @@ export function buildFilterJourney({ root, labels, onStep }: Options) {
     stagger: 0.02,
   }, s3);
   showLabel(2, s3 + 0.1);
-  tl.to(one("[data-phone]"), { autoAlpha: 1, y: 0, duration: 1, ease: "power3.out" }, s3 + 0.45);
+  tl.to(one("[data-s3-title]"), { autoAlpha: 1, y: 0, duration: 0.7, ease: "power3.out" }, s3 + 0.35);
+  tl.to(one("[data-phone]"), { autoAlpha: 1, y: 0, duration: 1, ease: "power3.out" }, s3 + 0.6);
 
   const firstBanner = s3 + 1.8;
   banners.forEach((banner, i) => {
@@ -202,7 +205,7 @@ export function buildFilterJourney({ root, labels, onStep }: Options) {
   const hold3 = lastBanner + 0.9;
 
   const end = lastBanner + 4;
-  tl.to(one("[data-phone]"), { autoAlpha: 0, y: -16, duration: 0.6, ease: "power2.in" }, end);
+  tl.to([one("[data-s3-title]"), one("[data-phone]")], { autoAlpha: 0, y: "-=16", duration: 0.6, ease: "power2.in" }, end);
   tl.to(labels[2], { autoAlpha: 0, y: -8, duration: 0.35 }, end);
   tl.to({}, { duration: 0.3 }, end + 0.6);
 
