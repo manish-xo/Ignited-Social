@@ -16,7 +16,9 @@ import Record from "./sections/Record";
 import FirstWeek from "./sections/FirstWeek";
 // import Niches from "./sections/Niches";
 import SectionV2 from "../audience-journey-v2/_components/SectionV2";
-import Transformations from "./sections/Transformations";
+// import Transformations from "./sections/Transformations";
+import GrowthSection from "../audience-journey-v2/_components/GrowthSection";
+import { NicheProvider } from "../audience-journey-v2/_components/NicheContext";
 import Pricing from "./sections/Pricing";
 import Faq from "./sections/Faq";
 import FinalCta from "./sections/FinalCta";
@@ -31,8 +33,12 @@ const Home = () => {
       <Record />
       <FirstWeek />
       {/* <Niches /> replaced by the audience journey below */}
-      <SectionV2 embedded />
-      <Transformations />
+      {/* One set of niche tabs (in the audience journey) switches both sections. */}
+      <NicheProvider>
+        <SectionV2 embedded />
+        {/* <Transformations /> replaced by "The growth, up close" */}
+        <GrowthSection />
+      </NicheProvider>
       <Pricing />
       <Faq />
       <FinalCta />

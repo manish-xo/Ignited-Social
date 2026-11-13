@@ -13,11 +13,7 @@ import {
   SquareUser,
   UserPlus,
 } from "lucide-react";
-import {
-  photo,
-  type Niche,
-  type NichePhoto,
-} from "../data";
+import { photo, type Niche, type NichePhoto } from "../data";
 import type { Person } from "./crowd";
 
 export const FACE = 34;

@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { CSSProperties } from "react";
 import gsap from "gsap";
 import { Pause, Play, RotateCcw, SkipForward } from "lucide-react";
@@ -24,7 +31,11 @@ export default function FilterStage({ niche }: { niche: Niche }) {
   const userPausedRef = useRef(false);
   const visibleRef = useRef(true);
 
-  const [layout, setLayout] = useState({ width: WIDE_STAGE, scale: 1, panel: 0 });
+  const [layout, setLayout] = useState({
+    width: WIDE_STAGE,
+    scale: 1,
+    panel: 0,
+  });
   const [playing, setPlaying] = useState(true);
   const [reduced, setReduced] = useState(false);
   const [step, setStep] = useState(0);
@@ -59,7 +70,9 @@ export default function FilterStage({ niche }: { niche: Niche }) {
     const labels = labelsRef.current;
     if (!root || !labels || !layout.panel) return;
 
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     setReduced(prefersReduced);
     setHeld(0);
 
@@ -155,9 +168,16 @@ export default function FilterStage({ niche }: { niche: Niche }) {
         role="group"
         aria-label={`Illustrative animation of the three steps, ${niche.example.toLowerCase()}`}
         className="relative w-full overflow-hidden rounded-[28px] border border-action-tint bg-action-tint-bg/70"
-        style={{ height: layout.panel ? STAGE_HEIGHT * layout.scale : STAGE_HEIGHT }}
+        style={{
+          height: layout.panel ? STAGE_HEIGHT * layout.scale : STAGE_HEIGHT,
+        }}
       >
-        <div ref={rootRef} aria-hidden className="absolute left-0 top-0" style={stageStyle}>
+        <div
+          ref={rootRef}
+          aria-hidden
+          className="absolute left-0 top-0"
+          style={stageStyle}
+        >
           <div
             ref={labelsRef}
             className="absolute left-5 top-[18px] h-[28px] w-[200px]"
@@ -167,7 +187,9 @@ export default function FilterStage({ niche }: { niche: Niche }) {
                 key={s}
                 className="invisible absolute left-0 top-0 flex h-[28px] items-center gap-2 rounded-lg border border-action-tint bg-white/80 px-2.5 text-[11.5px] font-medium text-ink"
               >
-                <span className="font-mono text-[10.5px] text-action">0{i + 1}</span>
+                <span className="font-mono text-[10.5px] text-action">
+                  0{i + 1}
+                </span>
                 {s}
               </span>
             ))}
@@ -201,15 +223,27 @@ export default function FilterStage({ niche }: { niche: Niche }) {
               />
             ))}
           </div>
-          <span className="text-[10.5px] text-secondary">Illustrative example</span>
+          <span className="text-[10.5px] text-secondary">
+            Illustrative example
+          </span>
           <div className="flex items-center gap-1">
             {reduced ? (
-              <button type="button" onClick={nextHold} aria-label="Show next step" className={button}>
+              <button
+                type="button"
+                onClick={nextHold}
+                aria-label="Show next step"
+                className={button}
+              >
                 <SkipForward size={14} aria-hidden />
               </button>
             ) : (
               <>
-                <button type="button" onClick={replay} aria-label="Replay animation" className={button}>
+                <button
+                  type="button"
+                  onClick={replay}
+                  aria-label="Replay animation"
+                  className={button}
+                >
                   <RotateCcw size={14} aria-hidden />
                 </button>
                 <button
@@ -218,7 +252,11 @@ export default function FilterStage({ niche }: { niche: Niche }) {
                   aria-label={playing ? "Pause animation" : "Play animation"}
                   className={button}
                 >
-                  {playing ? <Pause size={14} aria-hidden /> : <Play size={14} aria-hidden />}
+                  {playing ? (
+                    <Pause size={14} aria-hidden />
+                  ) : (
+                    <Play size={14} aria-hidden />
+                  )}
                 </button>
               </>
             )}

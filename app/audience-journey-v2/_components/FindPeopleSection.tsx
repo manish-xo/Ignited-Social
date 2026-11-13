@@ -1,11 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Check } from "lucide-react";
 import CornerFrame from "@/components/ui/CornerFrame";
 import Heading from "@/components/ui/Heading";
 import { cn } from "@/lib/utils";
-import { DEFAULT_NICHE, NICHES } from "../data";
+import { NICHES } from "../data";
+import { useNiche } from "./NicheContext";
 import FilterStage from "./FilterStage";
 
 export default function FindPeopleSection({
@@ -14,7 +15,7 @@ export default function FindPeopleSection({
   /** Inside a longer page: an h2 and normal section spacing instead of page-top spacing. */
   embedded?: boolean;
 }) {
-  const [selected, setSelected] = useState(DEFAULT_NICHE);
+  const [selected, setSelected] = useNiche();
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const niche = NICHES[selected];
 
