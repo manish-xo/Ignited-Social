@@ -7,7 +7,6 @@ import {
   badges,
   plans,
   features,
-  trustBadges,
   pricingComparisonData,
   ComparisonCard,
   ComparisonBento,
@@ -20,6 +19,13 @@ import Comparison from "@/app/secondary/page";
 import { BothPlan } from "@/lib/plans";
 import ComparisonPlan from "./Comparison";
 import MinimalHero from "@/app/service/Components/Hero-Minimalism";
+
+/** Real customer profile pictures shown beside the "Trusted by" line. */
+const TRUSTED_AVATARS = [
+  "/audiences/journey-v2/results/local/thedenverstylist-avatar.png",
+  "/audiences/journey-v2/results/coaches/savfit__-avatar.png",
+  "/audiences/journey-v2/results/creatives/james_bosley_studio-avatar.png",
+];
 
 const Pricing = () => {
   const left = ComparisonBento.filter((card) => !card.recommendation).slice(
@@ -114,11 +120,12 @@ const Pricing = () => {
           </div>
           {/* SUBTEXTING */}
           <div>
-            <p className="mx-auto mt-5 max-w-xs text-center text-sm leading-5 font-[400] text-secondary tracking-tight sm:max-w-2xl sm:text-lg md:text-xl lg:text-[1.12rem]">
+            <p className="mx-auto mt-5 max-w-xs text-center text-sm leading-5 font-[400] text-secondary tracking-tight sm:max-w-2xl sm:text-base md:text-lg lg:text-base">
               {/* Choose a plan that fits your needs with transparent pricing,
               powerful features, and the to grow at your own pace. */}
-              Two plans. Your account. Run by a dedicated growth manager. Who
-              understands your offer. Your audience. And you.
+              Your Brand Manager handles the daily outreach and helps you decide
+              what to post and what to improve. Choose the pace and level of
+              guidance that fits you.
             </p>
           </div>
 
@@ -199,20 +206,39 @@ const Pricing = () => {
                 {plan.cta}
               </a>
 
+              <p className="mt-3 text-left text-xs font-semibold text-ink">
+                First 7 days free
+              </p>
+
               <ul className="mt-8 space-y-4">
                 <li className="text-xs font-semibold uppercase tracking-wide text-muted">
                   What's included
                 </li>
                 {plan.features.map((feature, i) => (
-                  <li key={i} className="flex items-start gap-3">
+                  <li
+                    key={i}
+                    className={`flex items-start gap-3 ${
+                      feature.highlight
+                        ? "-mx-3 rounded-xl border border-action/25 bg-action-tint-bg px-3 py-2.5"
+                        : ""
+                    }`}
+                  >
                     <i
                       className={`ri-check-line mt-0.5 shrink-0 ${
-                        plan.popular ? "text-action" : "text-ink"
+                        plan.popular || feature.highlight
+                          ? "text-action"
+                          : "text-ink"
                       }`}
                     ></i>
 
                     <div className="flex flex-col">
-                      <span className="text-sm text-ink/90">
+                      <span
+                        className={
+                          feature.highlight
+                            ? "text-sm font-semibold text-ink"
+                            : "text-sm text-ink/90"
+                        }
+                      >
                         {feature.text}
                       </span>
                       {feature.note && (
@@ -228,23 +254,25 @@ const Pricing = () => {
           ))}
         </div>
 
-        <div className="trust-badges mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 sm:gap-x-6">
-          {trustBadges.map((badge, i) => {
-            const Icon = badge.icon;
-            return (
-              <React.Fragment key={badge.label}>
-                <div className="flex items-center gap-2">
-                  <Icon size={16} className="text-action shrink-0" />
-                  <p className="text-sm font-medium text-secondary whitespace-nowrap">
-                    {badge.label}
-                  </p>
-                </div>
-                {i < trustBadges.length - 1 && (
-                  <span className="hidden h-4 w-px bg-border sm:block" />
-                )}
-              </React.Fragment>
-            );
-          })}
+        <div className="trust-badges mt-14 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
+          <div className="flex -space-x-2" aria-hidden>
+            {TRUSTED_AVATARS.map((src) => (
+              <span
+                key={src}
+                className="h-7 w-7 overflow-hidden rounded-full bg-white ring-2 ring-canvas"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element -- tiny avatar */}
+                <img
+                  src={src}
+                  alt=""
+                  className="h-full w-full scale-125 object-cover"
+                />
+              </span>
+            ))}
+          </div>
+          <p className="text-sm font-medium text-secondary">
+            Trusted by 1,100+ active brands and creators.
+          </p>
         </div>
       </div>
       {/* <PlanComparison /> */}

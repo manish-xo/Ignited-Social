@@ -15,6 +15,8 @@ import {
 export interface PlanFeature {
   text: string;
   note?: string;
+  /** Shown as a tinted, bold row so it stands out from the other features. */
+  highlight?: boolean;
 }
 
 export interface Badge {
@@ -90,12 +92,6 @@ export interface ComparisonFeature {
 
 export const badges: Badge[] = [
   {
-    icon: "ri-star-s-fill",
-    value: "4.8/5",
-    label: "Customer Rating",
-    highlight: true,
-  },
-  {
     icon: "ri-add-line",
     value: "25M",
     label: "Followers grown",
@@ -110,47 +106,40 @@ export const badges: Badge[] = [
     value: "20K",
     label: "Accounts managed",
   },
-  {
-    icon: "ri-add-line",
-    value: "1.1K",
-    label: "Active User",
-  },
 ];
 
 export const plans: Plan[] = [
   {
     title: "Grow",
-    price: 139,
+    price: 97,
     description: "For accounts ready to build steady, sustainable momentum.",
     features: [
       { text: "Consistent, organic follower growth" },
-      { text: "Estimated 150–500+ followers per month" },
+      { text: "Estimated 150–500+ followers per month", highlight: true },
       {
         text: "A dedicated Growth Manager",
         // note: "Support via email, phone, or video call",
         note: "reach them by email, phone, or video call",
       },
       { text: "Core audience targeting" },
-      { text: "Basic content review" },
-      { text: "30-day money-back guarantee" },
+      { text: "Tailored content plan" },
     ],
     cta: "Start with Grow",
   },
   {
     title: "Scale",
-    price: 199,
+    price: 147,
     description: "For brands ready to move faster and dominate their niche.",
     features: [
       { text: "Accelerated, higher-volume growth" },
-      { text: "Estimated 250–800+ followers per month" },
+      { text: "Estimated 250–800+ followers per month", highlight: true },
       {
         text: "A dedicated Senior Growth Manager",
         note: "reach them by email, phone, or video",
       },
       { text: "Advanced audience targeting" },
-      { text: "Deep + Strategic content review" },
-      { text: "Offer funnel review" },
-      { text: "30-day money-back guarantee" },
+      { text: "Tailored content plan + weekly review" },
+      { text: "Conversion funnel optimization" },
     ],
     cta: "Start with Scale",
     popular: true,
