@@ -3,7 +3,7 @@ import React from "react";
 import CornerFrame from "@/components/ui/CornerFrame";
 import Heading from "@/components/ui/Heading";
 import { testimonials, stats } from "@/data/pricing";
-import { BadgeCheck } from "lucide-react";
+import { ArrowUpRight, BadgeCheck } from "lucide-react";
 
 const Proof = () => {
   return (
@@ -105,16 +105,25 @@ const Proof = () => {
               key={i}
               className="relative grid grid-cols-1 grid-rows-4 rounded-2xl border bg-white p-4 shadow-[0px_4px_2px_rgba(0,0,0,0.25)]"
             >
-              <div className="flex items-center gap-2">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-action-tint-bg border border-action-tint font-[600] text-sm text-action">
-                  {t.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")}
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-action-tint-bg border border-action-tint font-[600] text-sm text-action">
+                    {t.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </div>
+                  <div>
+                    <p className="text-sm font-[600] text-ink">{t.name}</p>
+                    <p className="text-xs text-muted">{t.role}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-[600] text-ink">{t.name}</p>
-                  <p className="text-xs text-muted">{t.role}</p>
+
+                <div className="text-right">
+                  <p className="text-lg font-[700] leading-none text-action">
+                    {t.followersGained}
+                  </p>
+                  <p className="mt-1 text-xs text-muted">followers</p>
                 </div>
               </div>
 
@@ -139,13 +148,11 @@ const Proof = () => {
           ))}
         </div>
 
-        <div className="flex items-center justify-center gap-1.5 mt-8">
-          <div className="text-action">
-            <i className="ri-star-s-fill"></i>
-            <span className="font-[600]">Trustpilot</span>
-          </div>
-          <div>· 4.4 / 5</div>
-          <div>· 290 reviews</div>
+        <div className="flex items-center justify-center mt-8">
+          <span className="inline-flex items-center gap-2 border-b border-hairline pb-1.5 text-[15px] text-ink">
+            Explore all case studies
+            <ArrowUpRight size={18} aria-hidden className="text-action" />
+          </span>
         </div>
       </div>
     </section>

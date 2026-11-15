@@ -77,6 +77,7 @@ export interface Testimonial {
   role: string;
   quote: string;
   rating: number;
+  followersGained: string;
 }
 export interface Accordion {
   value: string;
@@ -328,12 +329,14 @@ export const testimonials: Testimonial[] = [
     role: "Boutique Owner",
     quote: "It doesn't feel automated — it feels like someone on my team.",
     rating: 5,
+    followersGained: "+7,052",
   },
   {
     name: "Ibrahim Khalid",
     role: "Podcast Host",
     quote: "Every single new follower was a real, active account in my niche.",
     rating: 5,
+    followersGained: "+4,407",
   },
   {
     name: "Sofia Almeida",
@@ -341,6 +344,7 @@ export const testimonials: Testimonial[] = [
     quote:
       "I can see exactly where my growth is coming from with the dashboard.",
     rating: 5,
+    followersGained: "+5,318",
   },
 ];
 
