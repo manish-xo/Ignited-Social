@@ -56,7 +56,7 @@ const cards: BentoCard[] = [
       "Generic growth strategies",
       "Slow communication",
     ],
-    price: "$0.8k-2.5k/mo",
+    price: "$800-2.5k/mo",
   },
   {
     tag: "PAID ADS",
@@ -66,7 +66,7 @@ const cards: BentoCard[] = [
       "Results stop when spending stops",
       "No long-term organic growth",
     ],
-    price: "$0.3k-1.5k/mo",
+    price: "$300-1.5k/mo",
   },
   {
     tag: "GROWTH TOOLS",
@@ -76,18 +76,24 @@ const cards: BentoCard[] = [
       "No strategic guidance",
       "Tools don't replace expertise",
     ],
-    price: "$0.05k-0.2k/mo",
+    price: "$50-200/mo",
   },
   {
-    tag: "DEDICATED GROWTH MANAGER",
-    title: "Your Dedicated GM",
+    tag: "DEDICATED BRAND MANAGER",
+    title: "Your Brand Manager at Ignited",
+    // description: [
+    //   "Personalized growth strategy",
+    //   "Daily execution & optimization",
+    //   "Transparent reporting",
+    //   "Sustainable, real growth",
+    // ],
     description: [
-      "Personalized growth strategy",
-      "Daily execution & optimization",
-      "Transparent reporting",
-      "Sustainable, real growth",
+      "A growth plan, built around you.",
+      "Daily outreach, refined as we go.",
+      "See the work, Track your growth.",
+      "Real people choosing to follow you.",
     ],
-    price: "$0.13k/mo",
+    price: "$99/mo",
     recommended: true,
   },
 ];
@@ -97,7 +103,7 @@ export const features: Feature[] = [
   {
     tag: "MANAGER",
     icon: UserCheck,
-    title: "A dedicated growth manager",
+    title: "A dedicated brand manager",
     description:
       "An expert who knows what works in your niche, today. They bring a proven playbook and tune it to your brand.",
     className: "md:row-span-2 md:col-span-1",
@@ -121,7 +127,7 @@ export const features: Feature[] = [
   {
     tag: "REPORT",
     icon: BarChart3,
-    title: "Transparent reporting",
+    title: "Live Dashboard.",
     description:
       "You always know exactly what you're paying for — no guesswork, no vague monthly PDFs.",
     className: "md:row-span-1 md:col-span-1",
@@ -343,28 +349,27 @@ export default function Comparison() {
             })}
           </div>
         </div>
-        <div className="conclusion mt-16 mx-auto flex items-center justify-center px-4">
+        {/* <div className="conclusion mt-16 mx-auto flex items-center justify-center px-4">
           <div className="px-6 py-4 inline-flex flex-col justify-center items-center border border-secondary border-dashed rounded-md bg-canvas">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-[700] tracking-tight space-x-1">
               <span className="text-secondary">All the Expertise.</span>
               <span className="text-ink">None of the Overhead</span>
             </h2>
             <p className="mx-auto mt-2 max-w-xs text-center leading-5 text-secondary sm:max-w-2xl text-md">
-              {/* One person, doing the job of a full team — strategist, executor,
-              and marketer in one. */}
               No hiring. No managing. No retainers. Just one person, who
               understands your business, and your audience, and what to do next.
               Then does it, without you asking.
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
-      <div className="bento mx-auto my-10 max-w-5xl px-4 md:px-0 space-y-16">
+      <div className="bento mx-auto my-20 max-w-5xl px-4 md:px-0 space-y-16">
         <div>
           <div className="eyebrow flex items-center justify-center mb-3">
             <CornerFrame className="bg-action-tint-bg">
               <p className="font-mono uppercase text-[0.6em] sm:text-xs tracking-widest">
-                Why it works
+                {/* Why it works */}
+                Your Brand Manager, At work.
               </p>
             </CornerFrame>
           </div>

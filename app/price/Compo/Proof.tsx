@@ -11,7 +11,7 @@ const Proof = () => {
       <div className="mx-auto max-w-6xl overflow-hidden p-10 sm:p-14">
         <div className="eyebrow flex items-center justify-center mb-5">
           <CornerFrame className="bg-action-tint-bg">
-            <p className="font-mono  uppercase text-xs">Proof</p>
+            <p className="font-mono  uppercase text-xs">The Results</p>
           </CornerFrame>
         </div>
         <div className="heading text-center flex flex-col items-center justify-center text-canvas font-heading text-4xl sm:text-[6vw] md:text-[7vw] lg:text-6xl font-[700] leading-[0.98] -tracking-[0.04em]">

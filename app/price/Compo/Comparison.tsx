@@ -25,13 +25,13 @@ const sharedStrip = [
 
 const features: FeatureRow[] = [
   {
-    label: "Your growth manager",
+    label: "Your Brand Manager",
     grow: {
-      title: "Growth Manager",
+      title: "Brand Manager",
       description: "One person on your account.",
     },
     scale: {
-      title: "Senior Growth Manager",
+      title: "Senior Brand Manager",
       description: "Has grown accounts in your niche",
     },
   },
@@ -42,9 +42,12 @@ const features: FeatureRow[] = [
   },
   {
     label: "Audience targeting",
-    grow: { title: "Core", description: "We find the people likely to care." },
+    grow: {
+      title: "Core Targeting",
+      description: "We find the people likely to care.",
+    },
     scale: {
-      title: "Advanced",
+      title: "Advanced Targeting",
       description: "We go after your competitors' followers.",
     },
   },
@@ -61,12 +64,13 @@ const features: FeatureRow[] = [
   {
     label: "Content support",
     grow: {
-      title: "Basic guidance",
-      description: "Simple pointers on what to post.",
+      title: "Tailored Content Plan",
+      // description: "Simple pointers on what to post.",
+      description: "delivered to your ---- every month.",
     },
     scale: {
-      title: "Monthly plan + weekly review",
-      description: "A plan, checked every week.",
+      title: "Tailored + weekly review",
+      description: "Plan delivered + weekly checkins + every post analysed.",
     },
   },
   {

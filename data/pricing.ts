@@ -315,7 +315,7 @@ export const stats: Stat[] = [
   { value: "20k", suffix: "ri-add-line", label: "Account managed" },
   {
     value: "300-500",
-    suffix: "ri-percent-line",
+    // suffix: "ri-percent-line",
     label: "average new followers per month",
     highlight: true,
   },

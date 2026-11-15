@@ -278,7 +278,7 @@ const Pricing = () => {
       {/* <PlanComparison /> */}
       <ComparisonPlan />
       <Comparison />
-      <div className="difference mx-auto pt-16 pb-10">
+      {/* <div className="difference mx-auto pt-16 pb-10">
         <div className="eyebrow flex items-center justify-center mb-3">
           <CornerFrame className="bg-action-tint-bg">
             <p className="font-mono uppercase text-xs">The difference</p>
@@ -286,13 +286,6 @@ const Pricing = () => {
         </div>
 
         <div className="heading">
-          {/* <Heading className="text-center hidden sm:block">
-            How are we different
-          </Heading>
-          <Heading className="text-center text-[9vw] sm:hidden">
-            How are we different
-          </Heading> */}
-
           <Heading
             as="h2"
             className="mt-5 text-center font-heading-condensed text-[8vw] sm:text-5xl font-[600] leading-[0.9] -tracking-[0.04em] text-ink md:text-6xl"
@@ -309,7 +302,7 @@ const Pricing = () => {
         </div>
 
         <ComparisonTable data={pricingComparisonData} />
-      </div>
+      </div> */}
     </section>
   );
 };

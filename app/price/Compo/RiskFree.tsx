@@ -50,7 +50,8 @@ const RiskFree = () => {
           })}
         </div>
         <div className="mx-auto w-full text-center mt-12 text-sm text-action-on-dark tracking-wide font-[300]">
-          Hassle Free – automated refund process. No claim to file.
+          {/* Hassle Free – automated refund process. No claim to file. */}
+          This applies to your first paid month. And every month after.
         </div>
 
         {/* <div className="mt-12 text-center">
