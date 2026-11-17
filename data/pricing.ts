@@ -75,6 +75,10 @@ export interface Stat {
 export interface Testimonial {
   name: string;
   role: string;
+  /** Instagram handle without the @. */
+  handle: string;
+  /** Profile picture path under /public. Initials are shown until it is set. */
+  photo?: string;
   quote: string;
   rating: number;
   followersGained: string;
@@ -118,9 +122,7 @@ export const plans: Plan[] = [
       { text: "Consistent, organic follower growth" },
       { text: "Estimated 150–500+ followers per month", highlight: true },
       {
-        text: "A dedicated Growth Manager",
-        // note: "Support via email, phone, or video call",
-        note: "reach them by email, phone, or video call",
+        text: "A dedicated Brand Manager",
       },
       { text: "Core audience targeting" },
       { text: "Tailored content plan" },
@@ -135,12 +137,11 @@ export const plans: Plan[] = [
       { text: "Accelerated, higher-volume growth" },
       { text: "Estimated 250–800+ followers per month", highlight: true },
       {
-        text: "A dedicated Senior Growth Manager",
-        note: "reach them by email, phone, or video",
+        text: "A dedicated Senior Brand Manager",
       },
       { text: "Advanced audience targeting" },
       { text: "Tailored content plan + weekly review" },
-      { text: "Conversion funnel optimization" },
+      { text: "Offer, landing page and monetization funnel review" },
     ],
     cta: "Start with Scale",
     popular: true,
@@ -323,28 +324,104 @@ export const stats: Stat[] = [
   { value: "2-3", label: "days to first signs of growth" },
 ];
 
+/**
+ * Customers from Ignited_Case_Studies_Batch_01. Followers gained are the
+ * recorded totals from each case study. Add `photo` (a path under /public)
+ * once the profile pictures are in; until then the card shows initials.
+ */
 export const testimonials: Testimonial[] = [
   {
-    name: "Renee Castillo",
-    role: "Boutique Owner",
-    quote: "It doesn't feel automated — it feels like someone on my team.",
+    name: "James Bosley",
+    role: "Fashion and creative direction",
+    handle: "james_bosley_studio",
+    photo: "/stock/james_bosley_studio.jpg",
+    quote:
+      "The ideas fitted my work: the studio, the design process, and how the clothes look on a model. I already had footage I could start using.",
     rating: 5,
-    followersGained: "+7,052",
+    followersGained: "+9,016",
   },
   {
-    name: "Ibrahim Khalid",
-    role: "Podcast Host",
-    quote: "Every single new follower was a real, active account in my niche.",
+    name: "Tracy Merano",
+    role: "Singer and songwriter",
+    handle: "tracy.merano",
+    quote:
+      "I wanted real people to connect with me through my music. Sushmita gave me ideas for the songs, the stories behind them, and the person listeners would meet.",
+    rating: 5,
+    followersGained: "+7,175",
+  },
+  {
+    name: "Djivan Schapira",
+    role: "Collectible design artist",
+    handle: "djivan_schapira",
+    quote:
+      "The feedback got specific: show the table sooner, explain the process, and bring more of me into the posts. That was the kind of help I’d been looking for.",
+    rating: 5,
+    followersGained: "+8,890",
+  },
+  {
+    name: "Rick Strooper",
+    role: "Photographer",
+    handle: "rickstrooper",
+    photo: "/stock/rickstrooper.jpg",
+    quote:
+      "I wanted my black-and-white nature photographs to reach more people. Rahul’s ideas for the bio, photo collections and behind-the-camera videos gave me a practical place to start.",
+    rating: 5,
+    followersGained: "+12,463",
+  },
+  {
+    name: "Sav Hill",
+    role: "Strength and mobility coach",
+    handle: "savfit__",
+    quote:
+      "I wanted to stay consistent without posting all day. Tulsi showed me which fitness audiences were responding and suggested kettlebell videos I could make without changing my style.",
     rating: 5,
     followersGained: "+4,407",
   },
   {
-    name: "Sofia Almeida",
-    role: "Fitness Creator",
+    name: "Bethany Chrobak",
+    role: "Nutrition and fitness coach",
+    handle: "coach.b_chro",
     quote:
-      "I can see exactly where my growth is coming from with the dashboard.",
+      "The examples gave me something concrete to work from: motherhood stories, nutrition tips and ways to make my Reels easier to follow. That was really helpful for planning my content.",
     rating: 5,
-    followersGained: "+5,318",
+    followersGained: "+4,716",
+  },
+  {
+    name: "Keisha Miles",
+    role: "Jamaican cooking coach",
+    handle: "iambergababy",
+    quote:
+      "The feedback was specific to my cooking videos: lower the music, move the subtitles and make the dish clear on the cover. I knew what to work on next.",
+    rating: 5,
+    followersGained: "+4,946",
+  },
+  {
+    name: "Param",
+    role: "Munch N Sip Café, Melbourne",
+    handle: "munchnsip_cafe",
+    quote:
+      "Shama gave us clear pointers on our food photos and café videos. I made the profile changes after the audit—it gave me something useful to work with.",
+    rating: 5,
+    followersGained: "+1,946",
+  },
+  {
+    name: "Karl",
+    role: "L’Artiste Coiffeur, Brisbane",
+    handle: "lartistecoiffeurhairdressers",
+    quote:
+      "Aditi’s ideas fitted the way we work—showing the consultation, the colour and the finished result. They gave me more ways to share what makes our salon different.",
+    rating: 5,
+    followersGained: "+1,302",
+  },
+  {
+    name: "Shannon Sizmur",
+    role: "Medical aesthetician",
+    handle: "medical_aesthetician_shannon",
+    photo: "/stock/medical_aesthetician_shannon.jpg",
+    quote:
+      "Tulsi helped me work through the bio and get my Highlights started. I’m loving what’s happening with the page and the new followers.",
+    rating: 5,
+    followersGained: "+4,997",
   },
 ];
 
@@ -414,7 +491,7 @@ export const accordionData: Accordion[] = [
     value: "item-10",
     question: "Couldn't I just do this myself?",
     answer:
-      "Sure. It's 2–3 hours a day, every day. Call it 75 hours a month. If an hour of your time is worth more than $1.85, you're already losing money doing it yourself.",
+      "Sure. It's 2–3 hours a day, every day. Call it 75 hours a month. If an hour of your time is worth more than $1.29, you're already losing money doing it yourself.",
   },
   {
     value: "item-11",

@@ -5,12 +5,21 @@ import Image from "next/image";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import {
-  MANAGER,
+  MANAGERS,
   cycleOf,
   msUntilNextCycle,
   workflowsFor,
+  type Manager,
   type Task,
 } from "./managerCards";
+
+/**
+ * Today's manager. It changes once a day at the 12:00 PM IST switch, taking
+ * turns through MANAGERS, so each one is shown every 6 days. The arrows don't
+ * change it; they only browse the day's 6 workflows.
+ */
+const managerOfTheDay = (cycle: number) =>
+  MANAGERS[((cycle % MANAGERS.length) + MANAGERS.length) % MANAGERS.length];
 
 // Re-check the day at the 12 PM IST switch, and whenever the tab comes back
 // into view (timers can be paused while a laptop sleeps).
@@ -50,8 +59,8 @@ const useCycle = () =>
   );
 
 /**
- * The Brand Manager card. The manager stays put; next / previous only swap
- * the workflow underneath (today's special one first, then 5 from the pool).
+ * The Brand Manager card. The manager changes once a day; next / previous only
+ * swap the workflow (today's special one first, then 5 from the pool).
  */
 export default function ManagerCard() {
   const cycle = useCycle();
@@ -60,6 +69,7 @@ export default function ManagerCard() {
   const [view, setView] = useState({ cycle, index: 0, dir: 1 });
   const index = view.cycle === cycle ? view.index : 0;
   const workflow = workflows[index];
+  const manager = managerOfTheDay(cycle);
 
   const go = (dir: 1 | -1) =>
     setView({
@@ -71,42 +81,18 @@ export default function ManagerCard() {
   return (
     <MotionConfig reducedMotion="user">
       <div className="rounded-[22px] border border-border bg-white p-5 shadow-[0_1px_0_rgba(34,31,27,0.04),0_18px_40px_-28px_rgba(34,31,27,0.35)] sm:p-6">
-        {/* ── profile (fixed) ─────────────────────────────────────── */}
-        <div className="flex items-center gap-3.5">
-          <div className="relative shrink-0">
-            <Image
-              src={MANAGER.photo}
-              alt={MANAGER.name}
-              width={112}
-              height={112}
-              className="h-14 w-14 rounded-xl object-cover ring-1 ring-ink/10"
-            />
-            <span className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full border-[2.5px] border-white bg-emerald-500" />
-          </div>
-          <div className="min-w-0">
-            <p className="truncate text-[17px] font-semibold tracking-tight text-ink">
-              {MANAGER.name}
-            </p>
-            <p className="text-xs text-secondary">
-              {MANAGER.role} · <span className="text-emerald-700">online</span>
-            </p>
-          </div>
-        </div>
-
-        <dl className="mt-5 grid grid-cols-2 divide-x divide-border rounded-xl bg-subtle-bg py-3">
-          {[
-            [MANAGER.accounts, "accounts managed"],
-            [MANAGER.experience, "experience"],
-          ].map(([value, label]) => (
-            <div key={label} className="px-4">
-              <dt className="sr-only">{label}</dt>
-              <dd className="text-base font-semibold tracking-tight text-ink">
-                {value}
-              </dd>
-              <dd className="text-[11px] text-secondary">{label}</dd>
-            </div>
-          ))}
-        </dl>
+        {/* ── profile (changes once a day at 12 PM IST) ───────────── */}
+        <AnimatePresence initial={false} mode="wait">
+          <motion.div
+            key={manager.name}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Profile manager={manager} />
+          </motion.div>
+        </AnimatePresence>
 
         {/* ── today's workflow (changes with the arrows) ────────────── */}
         <div className="mt-6">
@@ -177,6 +163,88 @@ export default function ManagerCard() {
         </NavButton>
       </div>
     </MotionConfig>
+  );
+}
+
+function Profile({ manager }: { manager: Manager }) {
+  return (
+    <>
+      <div className="flex items-center gap-3.5">
+        <div className="relative shrink-0">
+          {manager.photo ? (
+            <Image
+              src={manager.photo}
+              alt={manager.name}
+              width={112}
+              height={112}
+              className="h-14 w-14 rounded-xl object-cover object-[50%_20%] ring-1 ring-ink/10"
+            />
+          ) : (
+            <FemaleUserIcon label={manager.name} />
+          )}
+          <span className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full border-[2.5px] border-white bg-emerald-500" />
+        </div>
+        <div className="min-w-0">
+          <p className="truncate text-[17px] font-semibold tracking-tight text-ink">
+            {manager.name}
+          </p>
+          <p className="text-xs text-secondary">
+            {manager.role} · <span className="text-emerald-700">online</span>
+          </p>
+        </div>
+      </div>
+
+      <dl className="mt-5 grid grid-cols-2 divide-x divide-border rounded-xl bg-subtle-bg py-3">
+        {[
+          [manager.accounts, "accounts managed"],
+          [manager.experience, "experience"],
+        ].map(([value, label]) => (
+          <div key={label} className="px-4">
+            <dt className="sr-only">{label}</dt>
+            <dd className="text-base font-semibold tracking-tight text-ink">
+              {value}
+            </dd>
+            <dd className="text-[11px] text-secondary">{label}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <div className="mt-3 flex flex-wrap items-center gap-1.5">
+        <span className="mr-0.5 text-[11px] text-muted">Favourite niches</span>
+        {manager.niches.map((n) => (
+          <span
+            key={n}
+            className="rounded-full bg-action-tint-bg px-2 py-0.5 text-[11px] font-medium text-action"
+          >
+            {n}
+          </span>
+        ))}
+      </div>
+    </>
+  );
+}
+
+/** Stand-in until a manager's photo is added. */
+function FemaleUserIcon({ label }: { label: string }) {
+  return (
+    <span
+      role="img"
+      aria-label={label}
+      className="flex h-14 w-14 items-end justify-center overflow-hidden rounded-xl bg-action-tint-bg ring-1 ring-ink/10"
+    >
+      <svg viewBox="0 0 56 56" className="h-12 w-12 text-action/70" aria-hidden>
+        {/* hair */}
+        <path
+          d="M28 9c-9 0-14.5 6.5-14.5 15.5 0 6 1.2 10.5 3 14.5h23c1.8-4 3-8.5 3-14.5C42.5 15.5 37 9 28 9Z"
+          fill="currentColor"
+          opacity="0.55"
+        />
+        {/* face */}
+        <circle cx="28" cy="25" r="9" fill="currentColor" />
+        {/* shoulders */}
+        <path d="M10 56c0-10 8-17 18-17s18 7 18 17Z" fill="currentColor" />
+      </svg>
+    </span>
   );
 }
 

@@ -5,6 +5,13 @@ import Heading from "@/components/ui/Heading";
 import { testimonials, stats } from "@/data/pricing";
 import { ArrowUpRight, BadgeCheck } from "lucide-react";
 
+/** The three case studies shown on the page. The rest stay in data/pricing.ts. */
+const FEATURED = [
+  "rickstrooper",
+  "james_bosley_studio",
+  "medical_aesthetician_shannon",
+];
+
 const Proof = () => {
   return (
     <section>
@@ -100,22 +107,41 @@ const Proof = () => {
         </div>
 
         <div className="mt-8 mx-auto grid max-w-5xl gap-6 lg:grid-cols-3">
-          {testimonials.map((t, i) => (
+          {FEATURED.map((handle) =>
+            testimonials.find((t) => t.handle === handle)!,
+          ).map((t, i) => (
             <div
               key={i}
-              className="relative grid grid-cols-1 grid-rows-4 rounded-2xl border bg-white p-4 shadow-[0px_4px_2px_rgba(0,0,0,0.25)]"
+              className="relative flex flex-col rounded-2xl border bg-white p-4 shadow-[0px_4px_2px_rgba(0,0,0,0.25)]"
             >
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-action-tint-bg border border-action-tint font-[600] text-sm text-action">
-                    {t.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
-                  </div>
-                  <div>
+                  {t.photo ? (
+                    // eslint-disable-next-line @next/next/no-img-element -- small avatar
+                    <img
+                      src={t.photo}
+                      alt=""
+                      className="h-10 w-10 shrink-0 rounded-full border border-action-tint object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-action-tint-bg border border-action-tint font-[600] text-sm text-action">
+                      {t.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
+                    </div>
+                  )}
+                  <div className="min-w-0">
                     <p className="text-sm font-[600] text-ink">{t.name}</p>
                     <p className="text-xs text-muted">{t.role}</p>
+                    <a
+                      href={`https://www.instagram.com/${t.handle}/`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block truncate text-xs text-action underline-offset-2 hover:underline"
+                    >
+                      @{t.handle}
+                    </a>
                   </div>
                 </div>
 
@@ -129,11 +155,11 @@ const Proof = () => {
 
               <i className="ri-double-quotes-l text-3xl text-action-on-dark mt-4"></i>
 
-              <p className="text-xl text-ink font-[400] tracking-tight">
-                {t.quote}{" "}
+              <p className="flex-1 text-lg leading-snug text-ink font-[400] tracking-tight">
+                {t.quote}
               </p>
 
-              <div className="mt-12 flex items-center justify-between">
+              <div className="mt-8 flex items-center justify-between">
                 <div className="flex gap-0 5">
                   {Array.from({ length: t.rating }).map((_, i) => (
                     <i key={i} className="ri-star-fill text-action"></i>

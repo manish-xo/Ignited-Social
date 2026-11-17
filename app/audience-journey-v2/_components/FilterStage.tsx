@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  useCallback,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -10,7 +9,6 @@ import {
 } from "react";
 import type { CSSProperties } from "react";
 import gsap from "gsap";
-import { Pause, Play, RotateCcw, SkipForward } from "lucide-react";
 import type { Niche } from "../data";
 import { buildCrowd } from "./crowd";
 import { buildFilterJourney } from "./filterTimeline";
@@ -26,9 +24,6 @@ export default function FilterStage({ niche }: { niche: Niche }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const labelsRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
-  const holdsRef = useRef<number[]>([]);
-  const syncRef = useRef<() => void>(() => {});
-  const userPausedRef = useRef(false);
   const visibleRef = useRef(true);
 
   const [layout, setLayout] = useState({
@@ -36,10 +31,8 @@ export default function FilterStage({ niche }: { niche: Niche }) {
     scale: 1,
     panel: 0,
   });
-  const [playing, setPlaying] = useState(true);
   const [reduced, setReduced] = useState(false);
   const [step, setStep] = useState(0);
-  const [held, setHeld] = useState(0);
 
   const { people, kept } = useMemo(() => buildCrowd(niche), [niche]);
 
@@ -74,7 +67,6 @@ export default function FilterStage({ niche }: { niche: Niche }) {
       "(prefers-reduced-motion: reduce)",
     ).matches;
     setReduced(prefersReduced);
-    setHeld(0);
 
     const ctx = gsap.context(() => {
       const { tl, sync, holds } = buildFilterJourney({
@@ -83,12 +75,10 @@ export default function FilterStage({ niche }: { niche: Niche }) {
         onStep: setStep,
       });
       timelineRef.current = tl;
-      holdsRef.current = holds;
-      syncRef.current = sync;
       if (prefersReduced) {
         tl.pause().seek(holds[0], false);
         sync();
-      } else if (!userPausedRef.current && visibleRef.current) {
+      } else if (visibleRef.current) {
         tl.play(0);
       }
     }, [root, labels]);
@@ -108,7 +98,7 @@ export default function FilterStage({ niche }: { niche: Niche }) {
         visibleRef.current = entry.isIntersecting;
         const tl = timelineRef.current;
         if (!tl || reduced) return;
-        if (entry.isIntersecting && !userPausedRef.current) tl.play();
+        if (entry.isIntersecting) tl.play();
         else tl.pause();
       },
       { threshold: 0.15 },
@@ -116,33 +106,6 @@ export default function FilterStage({ niche }: { niche: Niche }) {
     observer.observe(panel);
     return () => observer.disconnect();
   }, [reduced]);
-
-  const togglePlay = useCallback(() => {
-    const tl = timelineRef.current;
-    if (!tl) return;
-    const next = !playing;
-    userPausedRef.current = !next;
-    setPlaying(next);
-    if (next) tl.play();
-    else tl.pause();
-  }, [playing]);
-
-  const replay = useCallback(() => {
-    const tl = timelineRef.current;
-    if (!tl) return;
-    userPausedRef.current = false;
-    setPlaying(true);
-    tl.play(0);
-  }, []);
-
-  const nextHold = useCallback(() => {
-    const tl = timelineRef.current;
-    if (!tl) return;
-    const next = (held + 1) % 3;
-    setHeld(next);
-    tl.pause().seek(holdsRef.current[next], false);
-    syncRef.current();
-  }, [held]);
 
   const stageStyle: CSSProperties = {
     width: layout.width,
@@ -157,9 +120,6 @@ export default function FilterStage({ niche }: { niche: Niche }) {
     `Step 2 of 3. Reach out: your Brand Manager follows and likes ${names.join(", ")}.`,
     `Step 3 of 3. Get discovered: ${names.length} new followers appear on your Instagram profile.`,
   ];
-
-  const button =
-    "flex h-7 w-7 items-center justify-center rounded-full text-secondary transition-colors hover:bg-white hover:text-action";
 
   return (
     <div>
@@ -212,8 +172,8 @@ export default function FilterStage({ niche }: { niche: Niche }) {
           ))}
         </div>
 
-        <div className="absolute inset-x-4 bottom-3 z-20 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-1.5" aria-hidden>
+        <div className="absolute inset-x-4 bottom-3 z-20 flex items-center">
+          <div className="flex h-7 items-center gap-1.5" aria-hidden>
             {[0, 1, 2].map((i) => (
               <i
                 key={i}
@@ -222,44 +182,6 @@ export default function FilterStage({ niche }: { niche: Niche }) {
                 }`}
               />
             ))}
-          </div>
-          <span className="text-[10.5px] text-secondary">
-            Illustrative example
-          </span>
-          <div className="flex items-center gap-1">
-            {reduced ? (
-              <button
-                type="button"
-                onClick={nextHold}
-                aria-label="Show next step"
-                className={button}
-              >
-                <SkipForward size={14} aria-hidden />
-              </button>
-            ) : (
-              <>
-                <button
-                  type="button"
-                  onClick={replay}
-                  aria-label="Replay animation"
-                  className={button}
-                >
-                  <RotateCcw size={14} aria-hidden />
-                </button>
-                <button
-                  type="button"
-                  onClick={togglePlay}
-                  aria-label={playing ? "Pause animation" : "Play animation"}
-                  className={button}
-                >
-                  {playing ? (
-                    <Pause size={14} aria-hidden />
-                  ) : (
-                    <Play size={14} aria-hidden />
-                  )}
-                </button>
-              </>
-            )}
           </div>
         </div>
       </div>

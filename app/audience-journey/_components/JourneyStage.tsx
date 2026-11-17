@@ -2,7 +2,6 @@
 
 /* eslint-disable @next/next/no-img-element -- decorative avatars inside an animated mockup */
 import {
-  useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -10,7 +9,7 @@ import {
 } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import gsap from "gsap";
-import { MapPin, Pause, Play, RotateCcw, SkipForward } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { DotPattern } from "@/components/ui/DotPattern";
 import type { Niche } from "../data";
 import { buildJourney } from "./journeyTimeline";
@@ -83,9 +82,6 @@ export default function JourneyStage({ niche }: { niche: Niche }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stageRef = useRef<Stage3D | null>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
-  const holdsRef = useRef<number[]>([]);
-  const syncRef = useRef<() => void>(() => {});
-  const userPausedRef = useRef(false);
   const visibleRef = useRef(true);
 
   const [layout, setLayout] = useState({
@@ -93,10 +89,8 @@ export default function JourneyStage({ niche }: { niche: Niche }) {
     scale: 1,
     panel: 0,
   });
-  const [playing, setPlaying] = useState(true);
   const [reduced, setReduced] = useState(false);
   const [step, setStep] = useState(0);
-  const [held, setHeld] = useState(0);
 
   /* Scale the fixed-size stage to its column. Narrow columns use a slimmer stage. */
   useLayoutEffect(() => {
@@ -155,7 +149,6 @@ export default function JourneyStage({ niche }: { niche: Niche }) {
       "(prefers-reduced-motion: reduce)",
     ).matches;
     setReduced(prefersReduced);
-    setHeld(0);
 
     stage3d.clear();
     const ctx = gsap.context(() => {
@@ -171,14 +164,12 @@ export default function JourneyStage({ niche }: { niche: Niche }) {
         onStep: setStep,
       });
       timelineRef.current = tl;
-      holdsRef.current = holds;
-      syncRef.current = sync;
 
       if (prefersReduced) {
         // No autoplay: show each settled step, and let the button move between them.
         tl.pause().seek(holds[0], false);
         sync();
-      } else if (!userPausedRef.current && visibleRef.current) {
+      } else if (visibleRef.current) {
         tl.play(0);
       }
     }, root);
@@ -198,7 +189,7 @@ export default function JourneyStage({ niche }: { niche: Niche }) {
         visibleRef.current = entry.isIntersecting;
         const tl = timelineRef.current;
         if (!tl || reduced) return;
-        if (entry.isIntersecting && !userPausedRef.current) tl.play();
+        if (entry.isIntersecting) tl.play();
         else tl.pause();
       },
       { threshold: 0.15 },
@@ -206,33 +197,6 @@ export default function JourneyStage({ niche }: { niche: Niche }) {
     observer.observe(panel);
     return () => observer.disconnect();
   }, [reduced]);
-
-  const togglePlay = useCallback(() => {
-    const tl = timelineRef.current;
-    if (!tl) return;
-    const next = !playing;
-    userPausedRef.current = !next;
-    setPlaying(next);
-    if (next) tl.play();
-    else tl.pause();
-  }, [playing]);
-
-  const replay = useCallback(() => {
-    const tl = timelineRef.current;
-    if (!tl) return;
-    userPausedRef.current = false;
-    setPlaying(true);
-    tl.play(0);
-  }, []);
-
-  const nextHold = useCallback(() => {
-    const tl = timelineRef.current;
-    if (!tl) return;
-    const next = (held + 1) % 3;
-    setHeld(next);
-    tl.pause().seek(holdsRef.current[next], false);
-    syncRef.current();
-  }, [held]);
 
   const spread = layout.width === NARROW_STAGE ? 0.72 : 1;
   const stageStyle = {
@@ -373,44 +337,6 @@ export default function JourneyStage({ niche }: { niche: Niche }) {
                 className="block h-1.5 w-1.5 rounded-full bg-action-on-dark"
               />
             ))}
-          </div>
-          {/* <span className="text-[10.5px] text-secondary">
-            Illustrative example
-          </span> */}
-          <div className="flex items-center gap-1">
-            {reduced ? (
-              <button
-                type="button"
-                onClick={nextHold}
-                aria-label="Show next step"
-                className="flex h-7 w-7 items-center justify-center rounded-full text-secondary transition-colors hover:bg-white hover:text-action"
-              >
-                <SkipForward size={14} aria-hidden />
-              </button>
-            ) : (
-              <>
-                <button
-                  type="button"
-                  onClick={replay}
-                  aria-label="Replay animation"
-                  className="flex h-7 w-7 items-center justify-center rounded-full text-secondary transition-colors hover:bg-white hover:text-action"
-                >
-                  <RotateCcw size={14} aria-hidden />
-                </button>
-                <button
-                  type="button"
-                  onClick={togglePlay}
-                  aria-label={playing ? "Pause animation" : "Play animation"}
-                  className="flex h-7 w-7 items-center justify-center rounded-full text-secondary transition-colors hover:bg-white hover:text-action"
-                >
-                  {playing ? (
-                    <Pause size={14} aria-hidden />
-                  ) : (
-                    <Play size={14} aria-hidden />
-                  )}
-                </button>
-              </>
-            )}
           </div>
         </div>
       </div>

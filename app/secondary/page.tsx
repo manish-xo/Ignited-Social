@@ -25,6 +25,8 @@ interface BentoCard {
   title: string;
   description: string[];
   price: string;
+  /** Shown as separate price blocks on the recommended card. */
+  tiers?: { name: string; price: string }[];
   recommended?: boolean;
 }
 
@@ -34,6 +36,8 @@ export interface Feature {
   title: string;
   description: string;
   className?: string;
+  /** Shows the "ACTIVE" status footer. */
+  live?: boolean;
 }
 
 const cards: BentoCard[] = [
@@ -93,7 +97,11 @@ const cards: BentoCard[] = [
       "See the work, Track your growth.",
       "Real people choosing to follow you.",
     ],
-    price: "$99/mo",
+    price: "$97/mo and $147/mo",
+    tiers: [
+      { name: "Grow", price: "$97" },
+      { name: "Scale", price: "$147" },
+    ],
     recommended: true,
   },
 ];
@@ -128,6 +136,7 @@ export const features: Feature[] = [
     tag: "REPORT",
     icon: BarChart3,
     title: "Live Dashboard.",
+    live: true,
     description:
       "You always know exactly what you're paying for — no guesswork, no vague monthly PDFs.",
     className: "md:row-span-1 md:col-span-1",
@@ -306,8 +315,34 @@ export default function Comparison() {
                           </li>
                         ))}
                       </ul>
-                      <div className="font-[700] text-action text-xl mt-10">
-                        {card.price}
+                      <div className="mt-8 flex items-end gap-6 border-t border-border pt-5 sm:gap-8">
+                        {card.tiers?.map((tier, idx) => (
+                          <React.Fragment key={tier.name}>
+                            {idx > 0 && (
+                              <span
+                                aria-hidden
+                                className="mb-1 h-8 w-px bg-border"
+                              />
+                            )}
+                            <div>
+                              <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
+                                {tier.name}
+                              </p>
+                              <p className="mt-1 flex items-baseline gap-1">
+                                <span className="font-heading text-3xl font-bold leading-none text-action">
+                                  {tier.price}
+                                </span>
+                                <span className="text-sm text-secondary">
+                                  /mo
+                                </span>
+                              </p>
+                            </div>
+                          </React.Fragment>
+                        )) ?? (
+                          <div className="text-xl font-bold text-action">
+                            {card.price}
+                          </div>
+                        )}
                       </div>
                     </div>
                   ) : (
@@ -391,20 +426,23 @@ export default function Comparison() {
               as="h2"
               className="mt-5 text-center font-heading-condensed font-[600] block text-[8vw] sm:hidden leading-[0.9] -tracking-[0.04em] text-ink"
             >
-              Explains Features as
+              {/* Explains Features as */}
+              All the expertise
             </Heading>
             <Heading
               as="h2"
               className="text-center font-heading-condensed font-[600] block text-[8vw] sm:hidden leading-[0.9] -tracking-[0.04em] text-ink"
             >
-              Benefits
+              {/* Benefits */}
+              None of the overhead.
             </Heading>
 
             <Heading
               as="h2"
               className="mt-5 text-center font-heading-condensed font-[600] hidden sm:block leading-[0.9] -tracking-[0.04em] text-ink sm:text-5xl md:text-6xl"
             >
-              Explains Features as Benefits
+              {/* Explains Features as Benefits */}
+              All the expertise. None of the overhead.
             </Heading>
           </div>
 
@@ -414,8 +452,8 @@ export default function Comparison() {
               pace, depth, and the seniority of the person working on your
               account. */}
               Think of us as hiring a great social media manager — at 5% of the
-              cost, with none of the overhead and zero risk thanks to our 30-day
-              guarantee
+              cost, with none of the overhead and zero risk thanks to our
+              money-back guarantee
             </p>
           </div>
         </div>
@@ -456,13 +494,18 @@ export default function Comparison() {
                   </p>
                 </div>
 
-                {/* footer: status */}
-                <div className="mt-5 flex items-center gap-2 border-t border-hairline pt-3">
-                  <span className="h-1.5 w-1.5 rounded-full bg-action transition-transform duration-300 group-hover:scale-125" />
-                  <span className="font-mono text-[10px] tracking-wide text-muted">
-                    ACTIVE
-                  </span>
-                </div>
+                {/* footer: status, only on the live dashboard card */}
+                {feature.live && (
+                  <div className="mt-5 flex items-center gap-2 border-t border-hairline pt-3">
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="absolute inset-0 rounded-full bg-action opacity-75 motion-safe:animate-ping" />
+                      <span className="relative h-1.5 w-1.5 rounded-full bg-action" />
+                    </span>
+                    <span className="font-mono text-[10px] tracking-wide text-muted">
+                      ACTIVE
+                    </span>
+                  </div>
+                )}
               </div>
             );
           })}

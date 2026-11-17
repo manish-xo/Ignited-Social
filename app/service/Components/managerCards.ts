@@ -1,16 +1,19 @@
-// Brand Manager card: the manager shown, and the "Today's workflow" copy.
+// Brand Manager card: the managers shown, and the "Today's workflow" copy.
 //
-// The manager stays fixed. Each day the card holds 6 workflows: one SPECIAL
-// (written to "you") shown first, then 5 from the POOL that next / previous
-// step through. A new set is picked every day at 12:00 PM IST, everyone sees
-// the same set that day, and recent days' picks aren't repeated.
+// Every day at 12:00 PM IST the card switches to the next manager and a new
+// set of 6 workflows: 1 of the 6 SPECIAL cards (written to "you") first, then
+// 5 random cards from the 15 in the POOL. Next / previous only browse those 6
+// workflows; the manager stays the same all day. Everyone sees the same set
+// that day, and recent days' picks aren't repeated.
 
 export interface Manager {
   name: string;
   role: string;
-  photo: string;
+  /** Path under /public. Without one, a placeholder icon is shown. */
+  photo?: string;
   accounts: string; // e.g. "50+"
-  experience: string; // e.g. "3+ yrs"
+  experience: string; // e.g. "3 yrs"
+  niches: string[];
 }
 
 export interface Task {
@@ -23,14 +26,57 @@ export interface Workflow {
   later: Task[];
 }
 
-// Edit the manager here.
-export const MANAGER: Manager = {
-  name: "Shambhavi Shukhla",
-  role: "Personal Brand Manager",
-  photo: "/stock/avatar-2.jpg",
-  accounts: "50+",
-  experience: "3+ yrs",
-};
+// Edit the managers here. Photos live in public/Brand Manager/. Leave
+// `photo` out to show the placeholder icon instead.
+export const MANAGERS: Manager[] = [
+  {
+    name: "Rahul Shah",
+    role: "Brand Manager",
+    photo: "/Brand Manager/Rahul.png",
+    accounts: "150+",
+    experience: "3 yrs",
+    niches: ["Photography", "Storytelling"],
+  },
+  {
+    name: "Sushmita Jena",
+    role: "Brand Manager",
+    photo: "/Brand Manager/Sushmita.png",
+    accounts: "200+",
+    experience: "4 yrs",
+    niches: ["Artists", "Content creators"],
+  },
+  {
+    name: "Tulsi Sharma",
+    role: "Brand Manager",
+    photo: "/Brand Manager/Tulsi.png",
+    accounts: "80+",
+    experience: "1.5 yrs",
+    niches: ["Travel", "Artists"],
+  },
+  {
+    name: "Shama Almeen",
+    role: "Brand Manager",
+    accounts: "70+",
+    experience: "2 yrs",
+    niches: ["Polyglots", "Painting"],
+  },
+  {
+    name: "Aditi Bharti",
+    role: "Brand Manager",
+    photo: "/Brand Manager/Aditi.png",
+    accounts: "50+",
+    experience: "1 yr",
+    niches: ["Lifestyle", "Beauty", "Painting"],
+  },
+  {
+    name: "Srishti Jha",
+    role: "Brand Manager",
+    photo: "/Brand Manager/Srishti.png",
+    accounts: "100+",
+    experience: "2 yrs",
+    niches: ["Artists", "Athletes", "Sports"],
+  },
+];
 
 // [text, time] pairs keep the copy below easy to scan against the doc.
 type Row = [string, string];

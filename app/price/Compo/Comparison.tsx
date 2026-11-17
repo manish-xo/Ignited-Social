@@ -16,11 +16,11 @@ interface FeatureRow {
 }
 
 const sharedStrip = [
-  "Dedicated growth manager",
+  "Dedicated brand manager",
   "Organic follower growth",
-  "24/6 suppor",
+  "24/6 support",
   "Cancel anytime",
-  "30-day money-back guarantee",
+  // "30-day money-back guarantee",
 ];
 
 const features: FeatureRow[] = [
@@ -28,11 +28,11 @@ const features: FeatureRow[] = [
     label: "Your Brand Manager",
     grow: {
       title: "Brand Manager",
-      description: "One person on your account.",
+      description: "Dedicated expert on your account.",
     },
     scale: {
       title: "Senior Brand Manager",
-      description: "Has grown accounts in your niche",
+      description: "Dedicated expert w/ +2 years of experience",
     },
   },
   {
@@ -66,11 +66,11 @@ const features: FeatureRow[] = [
     grow: {
       title: "Tailored Content Plan",
       // description: "Simple pointers on what to post.",
-      description: "delivered to your ---- every month.",
+      description: "delivered to you every month.",
     },
     scale: {
-      title: "Tailored + weekly review",
-      description: "Plan delivered + weekly checkins + every post analysed.",
+      title: "Tailored Plan + weekly review",
+      description: "Delivered monthly + weekly checkins + every post analysed.",
     },
   },
   {

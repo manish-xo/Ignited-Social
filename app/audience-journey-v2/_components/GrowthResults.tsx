@@ -147,7 +147,7 @@ export default function GrowthResults() {
   // Start from the first customer whenever the niche tab changes.
   const selected = state.niche === niche.id ? state.selected : 0;
   const customer = customers[selected];
-  const { label, percent, rounded } = growth(customer);
+  const { label, percent, rounded, approximate } = growth(customer);
 
   const count = NICHES.length;
   const atEnd = selected === customers.length - 1;
@@ -258,7 +258,10 @@ export default function GrowthResults() {
           {rounded && (
             <p className="mt-6 text-xs text-muted">
               Counts as Instagram shows them, which rounds anything over
-              10,000.
+              10,000
+              {approximate
+                ? ", so the followers gained is approximate."
+                : "."}
             </p>
           )}
         </div>

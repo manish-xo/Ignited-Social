@@ -14,7 +14,7 @@ import {
 import MinimalHero from "../Components/Hero-Minimalism";
 import GradientBackground from "@/components/ui/GradientBackground";
 import ProHeader from "@/components/layout/ProHeader/ProHeader";
-import { getPlan } from "@/lib/plans";
+import { plans } from "@/data/pricing";
 import Heading from "@/components/ui/Heading";
 
 // Placeholder faces for the social-proof pill — swap for real creator photos.
@@ -95,7 +95,8 @@ const FLOATING_PILLS: FloatingPill[] = [
 ];
 
 const Hero = () => {
-  const startingPrice = getPlan("grow").price;
+  // Same prices as the plan cards on /price.
+  const startingPrice = Math.min(...plans.map((p) => p.price));
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-canvas">

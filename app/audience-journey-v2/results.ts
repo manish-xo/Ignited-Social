@@ -12,6 +12,11 @@ export interface CustomerResult {
   verified: boolean;
   before: string;
   after: string;
+  /**
+   * Exact followers gained, from the case studies, where we have it. Without
+   * it the gain is worked out from the screenshot counts.
+   */
+  gained?: number;
   quote: string;
 }
 
@@ -19,6 +24,7 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
   creatives: [
     {
       handle: "originalmostertphotography",
+      gained: 6052,
       verified: true,
       before: "8,848",
       after: "14.9K",
@@ -27,6 +33,7 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
     },
     {
       handle: "james_bosley_studio",
+      gained: 9016,
       verified: false,
       before: "5,784",
       after: "14.8K",
@@ -35,6 +42,7 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
     },
     {
       handle: "tracy.merano",
+      gained: 7175,
       verified: true,
       before: "28.4K",
       after: "35.6K",
@@ -53,6 +61,7 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
   coaches: [
     {
       handle: "savfit__",
+      gained: 4407,
       verified: true,
       before: "14.8K",
       after: "19.3K",
@@ -87,6 +96,7 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
   local: [
     {
       handle: "thedenverstylist",
+      gained: 7728,
       verified: true,
       before: "9,072",
       after: "16.8K",
@@ -121,6 +131,7 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
   creators: [
     {
       handle: "thestationchef_",
+      gained: 7268,
       verified: false,
       before: "3,932",
       after: "11.2K",
@@ -201,19 +212,22 @@ const toNumber = (count: string) =>
     : Number(count.replace(/,/g, ""));
 
 /**
- * Followers gained, shown no more precisely than the screenshots allow. If
- * either count is rounded by Instagram, the difference is rounded too.
+ * Followers gained, always written out in full (no "K"). Uses the exact figure
+ * when there is one; otherwise the difference between the screenshot counts,
+ * which is approximate if Instagram rounded either of them.
  */
-export function growth({ before, after }: CustomerResult) {
-  const from = toNumber(before);
-  const to = toNumber(after);
-  const gained = to - from;
-  const rounded = before.endsWith("K") || after.endsWith("K");
+export function growth(result: CustomerResult) {
+  const from = toNumber(result.before);
+  const to = toNumber(result.after);
+  const gained = result.gained ?? to - from;
+  const rounded = result.before.endsWith("K") || result.after.endsWith("K");
+  const approximate = result.gained === undefined && rounded;
   const percent = Math.round((gained / from) * 100);
-  return { label: formatGain(gained, rounded), gained, percent, rounded };
+  return {
+    label: `+${gained.toLocaleString("en-US")}`,
+    gained,
+    percent,
+    rounded,
+    approximate,
+  };
 }
-
-export const formatGain = (value: number, rounded: boolean) =>
-  rounded
-    ? `+${(value / 1000).toFixed(1).replace(/\.0$/, "")}K`
-    : `+${Math.round(value).toLocaleString("en-US")}`;

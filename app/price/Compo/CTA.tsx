@@ -1,11 +1,49 @@
 // app/price/_components/CTA.tsx
 "use client";
 
-import React from "react";
+import React, { useSyncExternalStore } from "react";
 import { ArrowRight } from "lucide-react";
 import DarkGradientSection from "@/components/ui/DarkGradientSection";
 
+const WEEKDAYS = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+/**
+ * The day a new client starts seeing followers: two days after today, moved
+ * to Monday if that lands on a weekend. Thursday, Friday and Saturday sign-ups
+ * all see Monday.
+ */
+function firstFollowersDay(today = new Date()) {
+  const day = (today.getDay() + 2) % 7;
+  return WEEKDAYS[day === 6 || day === 0 ? 1 : day];
+}
+
+const noSubscribe = () => () => {};
+
+/** Uses the visitor's own clock, so it is only worked out in the browser. */
+function useFirstFollowersDay() {
+  return useSyncExternalStore(
+    noSubscribe,
+    () => firstFollowersDay(),
+    () => null,
+  );
+}
+
+/** Holds the space with an invisible word until the browser fills in the day. */
+function Day({ day }: { day: string | null }) {
+  return day ? <>{day}.</> : <span className="invisible">Monday.</span>;
+}
+
 export default function CTA() {
+  const day = useFirstFollowersDay();
+
   return (
     <DarkGradientSection className="px-6 py-16 sm:py-24">
       <div className="mx-auto max-w-5xl text-center space-y-4">
@@ -17,14 +55,18 @@ export default function CTA() {
         <div className="heading text-center flex flex-col items-center justify-center text-canvas font-heading text-[8vw] sm:text-5xl md:hidden font-[700] leading-[3.25rem] sm:leading-[2.8rem] tracking-tighter">
           {/* Your next 500 followers <br className="hidden sm:block" />
           start this week */}
-          <span>Start today. See</span>
+          <span>Start today, see</span>
           <span>followers by</span>
-          <span>[dynamic weekday]</span>
+          <span>
+            <Day day={day} />
+          </span>
         </div>
 
         <div className="heading text-center flex flex-col items-center justify-center text-canvas font-heading hidden md:block text-6xl font-[700] leading-[4rem] md:tracking-tighter lg:tracking-tight">
-          <span>Start today. see followers by </span>
-          <span>[dynamic weekday]</span>
+          <span>Start today, see followers by </span>
+          <span>
+            <Day day={day} />
+          </span>
         </div>
 
         <p className="mt-5 text-base text-action-on-dark max-w-lg mx-auto">
