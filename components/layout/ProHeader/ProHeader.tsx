@@ -23,8 +23,8 @@ const navLinks: NavLink[] = [
     href: "/price",
   },
   {
-    name: "Contact",
-    href: "/contact",
+    name: "Case studies",
+    href: "/case-studies",
   },
 ];
 
