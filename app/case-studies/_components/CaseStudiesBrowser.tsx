@@ -89,8 +89,11 @@ export default function CaseStudiesBrowser() {
             )}
           </label>
 
+          {/* data-lenis-prevent: the site's smooth scroll (Lenis) otherwise
+              takes every wheel event for the page, so the list never scrolls. */}
           <nav
             aria-label="Niches"
+            data-lenis-prevent
             className="-mx-1 mt-3 flex gap-1.5 overflow-x-auto px-1 pb-1 lg:mx-0 lg:min-h-0 lg:flex-1 lg:flex-col lg:gap-0.5 lg:overflow-y-auto lg:overflow-x-visible lg:px-0"
           >
             {!query && (

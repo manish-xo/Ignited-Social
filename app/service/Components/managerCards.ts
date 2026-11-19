@@ -1,9 +1,9 @@
 // Brand Manager card: the managers shown, and the "Today's workflow" copy.
 //
-// Every day at 12:00 PM IST the card switches to the next manager and a new
-// set of 6 workflows: 1 of the 6 SPECIAL cards (written to "you") first, then
-// 5 random cards from the 15 in the POOL. Next / previous only browse those 6
-// workflows; the manager stays the same all day. Everyone sees the same set
+// Every day at 12:00 PM IST the card gets a new random manager to open on and
+// a new set of 6 workflows: 1 of the 6 SPECIAL cards (written to "you") first,
+// then 5 random cards from the 15 in the POOL. Next / previous change the whole
+// card: the next manager with the next workflow. Everyone sees the same set
 // that day, and recent days' picks aren't repeated.
 
 export interface Manager {
@@ -346,4 +346,28 @@ export function workflowsFor(cycle: number): Workflow[] {
   ];
   picksCache.set(cycle, picks);
   return picks;
+}
+
+const firstManagerCache = new Map<number, number>();
+
+/**
+ * Index in MANAGERS of the manager the card opens on today: picked at random
+ * each day, never the same as the day before. The arrows then go through the
+ * others in order.
+ */
+export function firstManagerFor(cycle: number): number {
+  const cached = firstManagerCache.get(cycle);
+  if (cached !== undefined) return cached;
+
+  const ids = MANAGERS.map((_, i) => i);
+  let pick = -1;
+  for (let day = Math.min(START_CYCLE, cycle); day <= cycle; day++) {
+    // Its own seed, so it doesn't change which workflows a day gets.
+    const rand = seeded(day + 1_000_003);
+    const free = ids.filter((i) => i !== pick);
+    pick = free[Math.floor(rand() * free.length)];
+  }
+
+  firstManagerCache.set(cycle, pick);
+  return pick;
 }

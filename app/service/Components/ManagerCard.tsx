@@ -7,6 +7,7 @@ import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   MANAGERS,
   cycleOf,
+  firstManagerFor,
   msUntilNextCycle,
   workflowsFor,
   type Manager,
@@ -14,12 +15,18 @@ import {
 } from "./managerCards";
 
 /**
- * Today's manager. It changes once a day at the 12:00 PM IST switch, taking
- * turns through MANAGERS, so each one is shown every 6 days. The arrows don't
- * change it; they only browse the day's 6 workflows.
+ * The manager on card `index` today. Card 1 is the day's random pick (it
+ * changes at the 12:00 PM IST switch); the arrows then go through the others.
  */
-const managerOfTheDay = (cycle: number) =>
-  MANAGERS[((cycle % MANAGERS.length) + MANAGERS.length) % MANAGERS.length];
+const managerFor = (cycle: number, index: number) =>
+  MANAGERS[(firstManagerFor(cycle) + index) % MANAGERS.length];
+
+const slide = {
+  enter: (d: number) => ({ opacity: 0, x: d * 24 }),
+  show: { opacity: 1, x: 0 },
+  exit: (d: number) => ({ opacity: 0, x: d * -24 }),
+};
+const slideTransition = { duration: 0.32, ease: [0.22, 1, 0.36, 1] } as const;
 
 // Re-check the day at the 12 PM IST switch, and whenever the tab comes back
 // into view (timers can be paused while a laptop sleeps).
@@ -59,17 +66,18 @@ const useCycle = () =>
   );
 
 /**
- * The Brand Manager card. The manager changes once a day; next / previous only
- * swap the workflow (today's special one first, then 5 from the pool).
+ * The Brand Manager card. Next / previous change the whole card: the next
+ * manager with the next of today's workflows (the special one first). Which
+ * manager it opens on changes at random once a day.
  */
 export default function ManagerCard() {
   const cycle = useCycle();
   const workflows = workflowsFor(cycle);
-  // Reset to the special workflow when the day changes.
+  // Back to the day's first card when the day changes.
   const [view, setView] = useState({ cycle, index: 0, dir: 1 });
   const index = view.cycle === cycle ? view.index : 0;
   const workflow = workflows[index];
-  const manager = managerOfTheDay(cycle);
+  const manager = managerFor(cycle, index);
 
   const go = (dir: 1 | -1) =>
     setView({
@@ -81,18 +89,34 @@ export default function ManagerCard() {
   return (
     <MotionConfig reducedMotion="user">
       <div className="rounded-[22px] border border-border bg-white p-5 shadow-[0_1px_0_rgba(34,31,27,0.04),0_18px_40px_-28px_rgba(34,31,27,0.35)] sm:p-6">
-        {/* ── profile (changes once a day at 12 PM IST) ───────────── */}
-        <AnimatePresence initial={false} mode="wait">
-          <motion.div
-            key={manager.name}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <Profile manager={manager} />
-          </motion.div>
-        </AnimatePresence>
+        {/* ── profile (changes with the arrows) ─────────────────────── */}
+        {/* Every manager is stacked invisibly in one cell so the card keeps
+            the tallest profile's height (niche chips can wrap). */}
+        <div className="relative grid overflow-hidden">
+          {MANAGERS.map((m) => (
+            <div
+              key={`ghost-${m.name}`}
+              aria-hidden
+              className="invisible [grid-area:1/1]"
+            >
+              <Profile manager={m} />
+            </div>
+          ))}
+          <AnimatePresence initial={false} custom={view.dir} mode="popLayout">
+            <motion.div
+              key={`${cycle}-${index}`}
+              custom={view.dir}
+              variants={slide}
+              initial="enter"
+              animate="show"
+              exit="exit"
+              transition={slideTransition}
+              className="[grid-area:1/1]"
+            >
+              <Profile manager={manager} />
+            </motion.div>
+          </AnimatePresence>
+        </div>
 
         {/* ── today's workflow (changes with the arrows) ────────────── */}
         <div className="mt-6">
@@ -125,15 +149,11 @@ export default function ManagerCard() {
               <motion.div
                 key={`${cycle}-${index}`}
                 custom={view.dir}
-                variants={{
-                  enter: (d: number) => ({ opacity: 0, x: d * 24 }),
-                  show: { opacity: 1, x: 0 },
-                  exit: (d: number) => ({ opacity: 0, x: d * -24 }),
-                }}
+                variants={slide}
                 initial="enter"
                 animate="show"
                 exit="exit"
-                transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                transition={slideTransition}
                 className="[grid-area:1/1]"
               >
                 <WorkflowList
@@ -145,20 +165,20 @@ export default function ManagerCard() {
           </div>
 
           <p aria-live="polite" className="sr-only">
-            Workflow {index + 1} of {workflows.length}
+            {manager.name}, Brand Manager {index + 1} of {workflows.length}
           </p>
         </div>
       </div>
 
       {/* ── prev / next, below the card ──────────────────────────── */}
       <div className="mt-4 flex items-center justify-center gap-3">
-        <NavButton label="Previous workflow" onClick={() => go(-1)}>
+        <NavButton label="Previous Brand Manager" onClick={() => go(-1)}>
           <ChevronLeft size={17} />
         </NavButton>
         <span className="w-10 text-center font-mono text-xs tabular-nums text-muted">
           {index + 1}/{workflows.length}
         </span>
-        <NavButton label="Next workflow" onClick={() => go(1)}>
+        <NavButton label="Next Brand Manager" onClick={() => go(1)}>
           <ChevronRight size={17} />
         </NavButton>
       </div>
