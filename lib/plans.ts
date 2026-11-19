@@ -20,7 +20,7 @@ export const BothPlan: Record<string, BothPlans> = {
   grow: {
     slug: "grow",
     name: "Grow",
-    price: 139,
+    price: 97,
     features: [
       { text: "Consistent, organic follower growth" },
       { text: "Estimated 150–500+ followers per month" },
@@ -42,7 +42,7 @@ export const BothPlan: Record<string, BothPlans> = {
   scale: {
     slug: "scale",
     name: "Scale",
-    price: 199,
+    price: 147,
     originalPrice: 379,
     features: [
       { text: "Accelerated, higher-volume growth" },
