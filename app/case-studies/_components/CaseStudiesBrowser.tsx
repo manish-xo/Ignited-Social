@@ -1,12 +1,14 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { ArrowRight, Search, X } from "lucide-react";
+import { ArrowRight, ChevronDown, Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CASE_STUDIES, NICHES, type CaseStudy } from "../data";
 import CaseStudyArticle, { Avatar } from "./CaseStudyArticle";
 
 const ALL = "all";
+/** Cards per "Read more" click: 4 full rows of 3 on desktop, 6 of 2 on tablet. */
+const PAGE = 12;
 
 /**
  * Niche sidebar (search at the top, sticky on large screens) beside the case
@@ -19,6 +21,8 @@ export default function CaseStudiesBrowser() {
   const [query, setQuery] = useState("");
   // The story open in the selected niche (its first story by default).
   const [openSlug, setOpenSlug] = useState<string | null>(null);
+  // "All niches" shows the cards a page at a time.
+  const [shown, setShown] = useState(PAGE);
   const topRef = useRef<HTMLDivElement>(null);
 
   const niches = useMemo(() => {
@@ -45,6 +49,7 @@ export default function CaseStudiesBrowser() {
   const choose = (slug: string, story: string | null = null) => {
     setSelected(slug);
     setOpenSlug(story);
+    if (slug === ALL) setShown(PAGE);
     scrollUp();
   };
 
@@ -129,15 +134,33 @@ export default function CaseStudiesBrowser() {
         </header>
 
         {selected === ALL ? (
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {stories.map((c) => (
-              <StoryCard
-                key={c.slug}
-                story={c}
-                onOpen={() => choose(c.nicheSlug, c.slug)}
-              />
-            ))}
-          </div>
+          <>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {stories.slice(0, shown).map((c) => (
+                <StoryCard
+                  key={c.slug}
+                  story={c}
+                  onOpen={() => choose(c.nicheSlug, c.slug)}
+                />
+              ))}
+            </div>
+            <div className="mt-10 flex flex-col items-center gap-3">
+              <p className="text-[13px] text-muted">
+                Showing {Math.min(shown, stories.length)} of {stories.length}{" "}
+                stories
+              </p>
+              {shown < stories.length && (
+                <button
+                  type="button"
+                  onClick={() => setShown((n) => n + PAGE)}
+                  className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-6 py-3 text-sm font-semibold text-ink outline-none transition-colors hover:border-action hover:bg-action hover:text-white focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2"
+                >
+                  Read more stories
+                  <ChevronDown size={15} aria-hidden />
+                </button>
+              )}
+            </div>
+          </>
         ) : (
           <>
             <CaseStudyArticle key={open.slug} story={open} />

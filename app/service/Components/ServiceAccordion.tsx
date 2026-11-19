@@ -127,11 +127,12 @@ const ITEMS: ServiceItem[] = [
 
 /**
  * Three service blocks; each has a small toggle revealing more detail. One
- * open at a time. Opens/closes smoothly by animating grid-template-rows
- * (0fr → 1fr), which tracks the content's real height — no measuring.
+ * open at a time, and all start closed. Opens/closes smoothly by animating
+ * grid-template-rows (0fr → 1fr), which tracks the content's real height — no
+ * measuring.
  */
 export default function ServiceAccordion() {
-  const [open, setOpen] = useState<number | null>(0);
+  const [open, setOpen] = useState<number | null>(null);
   const baseId = useId();
 
   return (

@@ -18,7 +18,6 @@ import FirstWeek from "./sections/FirstWeek";
 import SectionV2 from "../audience-journey-v2/_components/SectionV2";
 // import Transformations from "./sections/Transformations";
 import GrowthSection from "../audience-journey-v2/_components/GrowthSection";
-import { NicheProvider } from "../audience-journey-v2/_components/NicheContext";
 import Pricing from "./sections/Pricing";
 import Faq from "./sections/Faq";
 import FinalCta from "./sections/FinalCta";
@@ -29,18 +28,16 @@ const Home = () => {
       {/* <ProHeader /> */}
       {/* <ServicesHero /> */}
       <Hero />
-      <BrandManager />
+      <SectionV2 embedded />
+      {/* <Transformations /> replaced by "The growth, up close" */}
+      {/* Independent of "Who you want to reach"; move it anywhere. */}
       <Record />
-      <FirstWeek />
-      {/* <Niches /> replaced by the audience journey below */}
-      {/* One set of niche tabs (in the audience journey) switches both sections. */}
-      <NicheProvider>
-        <SectionV2 embedded />
-        {/* <Transformations /> replaced by "The growth, up close" */}
-        <GrowthSection />
-      </NicheProvider>
+      <BrandManager />
+      <GrowthSection />
       <Pricing />
       <Faq />
+      <FirstWeek />
+      {/* <Niches /> replaced by the audience journey below */}
       <FinalCta />
       {/* <ProblemSection />
       <OurApproach />

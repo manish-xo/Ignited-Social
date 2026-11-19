@@ -14,7 +14,11 @@ import Heading from "@/components/ui/Heading";
 import { cn } from "@/lib/utils";
 import { NICHES, type Niche } from "../data";
 import { growth, RESULTS, resultImage, type CustomerResult } from "../results";
-import { useNiche } from "./NicheContext";
+
+/** Every account from every niche, in niche order (about 20). */
+const ACCOUNTS = NICHES.flatMap((niche) =>
+  RESULTS[niche.id].map((customer) => ({ niche, customer })),
+);
 
 function Snapshot({
   label,
@@ -63,8 +67,6 @@ function Stepper({
   customer,
   index,
   total,
-  nextNiche,
-  prevNiche,
   onPrev,
   onNext,
 }: {
@@ -72,9 +74,6 @@ function Stepper({
   customer: CustomerResult;
   index: number;
   total: number;
-  /** Set when "next" leaves this niche, so the button can say where it goes. */
-  nextNiche: Niche | null;
-  prevNiche: Niche | null;
   onPrev: () => void;
   onNext: () => void;
 }) {
@@ -83,11 +82,7 @@ function Stepper({
       <button
         type="button"
         onClick={onPrev}
-        aria-label={
-          prevNiche
-            ? `Previous: ${prevNiche.label}`
-            : "Previous account"
-        }
+        aria-label="Previous account"
         className={stepButton}
       >
         <ChevronLeft size={18} aria-hidden />
@@ -125,7 +120,7 @@ function Stepper({
       <button
         type="button"
         onClick={onNext}
-        aria-label={nextNiche ? `Next: ${nextNiche.label}` : "Next account"}
+        aria-label="Next account"
         className={stepButton}
       >
         <ChevronRight size={18} aria-hidden />
@@ -136,38 +131,18 @@ function Stepper({
 
 /**
  * Real before and after snapshots, one account at a time. Next and previous
- * step through the niche's accounts, then carry on into the neighbouring
- * niche, which also switches the tabs in "Who you want to reach".
+ * step through every account from every niche, wrapping round at the ends.
+ * It stands on its own (not tied to "Who you want to reach"), so the section
+ * can go anywhere on the page.
  */
 export default function GrowthResults() {
-  const [nicheIndex, setNicheIndex] = useNiche();
-  const niche = NICHES[nicheIndex];
-  const customers = RESULTS[niche.id];
-  const [state, setState] = useState({ niche: niche.id, selected: 0 });
-  // Start from the first customer whenever the niche tab changes.
-  const selected = state.niche === niche.id ? state.selected : 0;
-  const customer = customers[selected];
+  const [selected, setSelected] = useState(0);
+  const { niche, customer } = ACCOUNTS[selected];
   const { label, percent, rounded, approximate } = growth(customer);
 
-  const count = NICHES.length;
-  const atEnd = selected === customers.length - 1;
-  const atStart = selected === 0;
-  const nextNiche = atEnd ? NICHES[(nicheIndex + 1) % count] : null;
-  const prevNiche = atStart ? NICHES[(nicheIndex - 1 + count) % count] : null;
-
-  const goTo = (index: number, account: number) => {
-    setState({ niche: NICHES[index].id, selected: account });
-    setNicheIndex(index);
-  };
-  const onNext = () =>
-    atEnd
-      ? goTo((nicheIndex + 1) % count, 0)
-      : setState({ niche: niche.id, selected: selected + 1 });
-  const onPrev = () => {
-    if (!atStart) return setState({ niche: niche.id, selected: selected - 1 });
-    const prev = (nicheIndex - 1 + count) % count;
-    goTo(prev, RESULTS[NICHES[prev].id].length - 1);
-  };
+  const total = ACCOUNTS.length;
+  const onNext = () => setSelected((i) => (i + 1) % total);
+  const onPrev = () => setSelected((i) => (i - 1 + total) % total);
 
   return (
     <div id="results">
@@ -195,9 +170,7 @@ export default function GrowthResults() {
         niche={niche}
         customer={customer}
         index={selected}
-        total={customers.length}
-        nextNiche={nextNiche}
-        prevNiche={prevNiche}
+        total={total}
         onPrev={onPrev}
         onNext={onNext}
       />

@@ -3,9 +3,8 @@
 import GrowthResults from "./GrowthResults";
 
 /**
- * "The growth, up close" as its own page section. It has no tabs of its own:
- * it shares the selected niche with "Who you want to reach" through
- * NicheProvider, and stepping past a niche's last account moves both on.
+ * "The growth, up close" as its own page section. It steps through every
+ * account by itself, so it can sit anywhere on the page.
  */
 export default function GrowthSection() {
   return (
