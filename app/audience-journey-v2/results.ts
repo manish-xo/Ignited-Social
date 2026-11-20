@@ -3,7 +3,7 @@ import type { NicheId } from "./data";
 /**
  * Real customer accounts for "The growth, up close". The counts are copied
  * exactly as Instagram showed them in the before and after screenshots stored
- * in public/Before&After/<niche>/ (Instagram rounds anything over 10,000).
+ * in public/Before&After/Better quality/ (Instagram rounds anything over 10,000).
  * The first account in each niche is the one featured in
  * Ignited_Sections_5_6_Option_2; the others follow it.
  */
@@ -35,7 +35,7 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
       handle: "james_bosley_studio",
       gained: 9016,
       verified: false,
-      before: "5,784",
+      before: "5,786",
       after: "14.8K",
       quote:
         "The ideas fitted my work: the studio, the design process, and how the clothes look on a model. I already had footage I could start using.",
@@ -53,7 +53,7 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
       handle: "bardadim.studios",
       verified: false,
       before: "20.1K",
-      after: "25.2K",
+      after: "25.1K",
       quote:
         "We had plenty of material, but I kept putting it in Stories. Aditi gave me ideas for showing the tattoo process and encouraged me to share more of it.",
     },
@@ -63,8 +63,8 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
       handle: "savfit__",
       gained: 4407,
       verified: true,
-      before: "14.8K",
-      after: "19.3K",
+      before: "14.9K",
+      after: "19.2K",
       quote:
         "I wanted to stay consistent without posting all day. Tulsi showed me which fitness audiences were responding and suggested kettlebell videos I could make without changing my style.",
     },
@@ -72,7 +72,7 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
       handle: "coach.b_chro",
       verified: true,
       before: "2,725",
-      after: "7,441",
+      after: "7,411",
       quote:
         "The examples gave me something concrete to work from: motherhood stories, nutrition tips and ways to make my Reels easier to follow. That was really helpful for planning my content.",
     },
@@ -80,7 +80,7 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
       handle: "prestonwoody",
       verified: true,
       before: "12.7K",
-      after: "16.3K",
+      after: "16.5K",
       quote:
         "I appreciated how specific Shama’s feedback was: a clearer next step in my bio, more personal moments, and new ways to present quotes. She was responsive when I had questions.",
     },
@@ -88,7 +88,7 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
       handle: "its_fitbrit",
       verified: false,
       before: "8,677",
-      after: "14.2K",
+      after: "14.3K",
       quote:
         "The November review gave me a confidence boost. Sushmita pointed to the gym videos and conversations already on my page and gave me specific ideas I wanted to try next.",
     },
@@ -98,8 +98,8 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
       handle: "thedenverstylist",
       gained: 7728,
       verified: true,
-      before: "9,072",
-      after: "16.8K",
+      before: "9,067",
+      after: "16.7K",
       quote:
         "Unreal growth on my salon account. I’ve loved working with you guys. I added another account.",
     },
@@ -107,7 +107,7 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
       handle: "drakeabshirerealtor",
       verified: true,
       before: "18.9K",
-      after: "24.4K",
+      after: "24.8K",
       quote:
         "Rahul’s reviews gave me specific ideas for my property videos—buyer questions, clearer text and room for my sense of humour. I had useful things to work on.",
     },
@@ -115,14 +115,14 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
       handle: "majesticpoolsbarrie",
       verified: false,
       before: "4,112",
-      after: "8,040",
+      after: "8,009",
       quote:
         "I appreciated having the outreach managed for me. I could focus the brief on Ontario builders and landscapers, and get practical feedback on how we showed our projects.",
     },
     {
       handle: "mrhudsonexplores",
       verified: true,
-      before: "47.4K",
+      before: "47.5K",
       after: "53.2K",
       quote:
         "The itinerary ideas fitted the kind of trips we sell. I could start with hotel-partner videos and build towards filming more of our own trips.",
@@ -133,8 +133,8 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
       handle: "thestationchef_",
       gained: 7268,
       verified: false,
-      before: "3,932",
-      after: "11.2K",
+      before: "3,920",
+      after: "11.1K",
       quote:
         "Really happy with the growth. The content feedback was specific to our recipes, even where to put the subtitles so they wouldn’t cover the food.",
     },
@@ -158,7 +158,7 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
       handle: "iambergababy",
       verified: false,
       before: "3,270",
-      after: "8,216",
+      after: "8,210",
       quote:
         "The feedback was specific to my cooking videos: lower the music, move the subtitles and make the dish clear on the cover. I knew what to work on next.",
     },
@@ -168,7 +168,7 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
       handle: "bluemagairsoft",
       verified: false,
       before: "6,958",
-      after: "9,004",
+      after: "8,988",
       quote:
         "We’d been stuck at roughly 4,000 followers for a long time. Seeing the audience grow was great. Seeing more people come through to the website was even better.",
     },
@@ -176,14 +176,14 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
       handle: "beardoctane",
       verified: true,
       before: "23.7K",
-      after: "26.9K",
+      after: "27K",
       quote:
         "The feedback gave us practical ideas beyond product shots: beard-care routines, styling tips and how to start our videos. We could see more ways to show the products.",
     },
     {
       handle: "favoritebikesofficial",
       verified: false,
-      before: "5,767",
+      before: "5,788",
       after: "13.2K",
       quote:
         "We wanted people already interested in e-bikes. Tulsi worked with competitor audiences and suggested showing the features, assembly and riding experience, giving us more to explain than a product photo.",

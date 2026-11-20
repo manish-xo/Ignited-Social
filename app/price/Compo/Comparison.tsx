@@ -4,6 +4,7 @@ import React from "react";
 import { Check } from "lucide-react";
 import CornerFrame from "@/components/ui/CornerFrame";
 import Heading from "@/components/ui/Heading";
+import { BothPlan } from "@/lib/plans";
 
 interface FeatureValue {
   title: string;
@@ -167,7 +168,7 @@ const ComparisonPlan = () => {
           <div className="border-l border-hairline p-6">
             <p className="font-heading text-lg font-bold text-ink">Grow</p>
             <p className="mt-1 font-heading text-2xl font-extrabold text-ink">
-              $139<span className="text-sm font-medium text-muted">/mo</span>
+              ${BothPlan.grow.price}<span className="text-sm font-medium text-muted">/mo</span>
             </p>
             <p className="mt-2 text-xs leading-relaxed text-secondary">
               For individuals &amp; brands ready to build steady, sustainable
@@ -180,7 +181,7 @@ const ComparisonPlan = () => {
             </span>
             <p className="font-heading text-lg font-bold text-action">Scale</p>
             <p className="mt-1 font-heading text-2xl font-extrabold text-ink">
-              $199<span className="text-sm font-medium text-muted">/mo</span>
+              ${BothPlan.scale.price}<span className="text-sm font-medium text-muted">/mo</span>
             </p>
             <p className="mt-2 text-xs leading-relaxed text-secondary">
               For creators &amp; brands ready to move faster and dominate their
@@ -262,7 +263,7 @@ const ComparisonPlan = () => {
                   {isScale ? "Scale" : "Grow"}
                 </p>
                 <p className="mt-1 font-heading text-2xl font-extrabold text-ink">
-                  ${isScale ? "199" : "139"}
+                  ${isScale ? BothPlan.scale.price : BothPlan.grow.price}
                   <span className="text-sm font-medium text-muted">/mo</span>
                 </p>
                 <p className="mt-2 text-xs leading-relaxed text-secondary">

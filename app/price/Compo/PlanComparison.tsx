@@ -3,6 +3,7 @@ import { Check, Minus } from "lucide-react";
 import CornerFrame from "@/components/ui/CornerFrame";
 import Heading from "@/components/ui/Heading";
 import { comparisonFeatures } from "@/data/pricing";
+import { BothPlan } from "@/lib/plans";
 
 const renderCell = (value: string | boolean) => {
   if (typeof value === "boolean") {
@@ -64,13 +65,13 @@ const PlanComparison = () => {
           <div className="flex-1 px-2 py-3 text-center text-[11px] font-semibold text-ink sm:text-sm sm:px-4 sm:py-4">
             Grow
             <p className="mt-0.5 text-[9px] font-normal text-muted sm:text-xs">
-              $139/mo
+              ${BothPlan.grow.price}/mo
             </p>
           </div>
           <div className="flex-1 border-l border-action/20 bg-action-tint-bg px-2 py-3 text-center text-[11px] font-semibold text-action sm:text-sm sm:px-4 sm:py-4">
             Scale
             <p className="mt-0.5 text-[9px] font-normal text-action/70 sm:text-xs">
-              $199/mo
+              ${BothPlan.scale.price}/mo
             </p>
           </div>
         </div>
