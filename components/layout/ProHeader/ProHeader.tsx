@@ -5,7 +5,9 @@ import Hamburger from "@/components/ui/Hamburger";
 import MobileMenu from "@/components/custom/MobileMenu";
 import { TextReveal } from "@/components/custom/TextReveal";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Logo from "@/components/Logo/Logo";
+import { isActiveLink } from "@/lib/nav";
 
 interface NavLink {
   name: string;
@@ -32,6 +34,7 @@ const mobileLinks = navLinks.map(({ name, href }) => ({ name, href }));
 
 const ProHeader = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleResize = () => {
@@ -60,20 +63,25 @@ const ProHeader = () => {
         </Link>
         {/* CENTER LINKS */}
         <div className="hidden gap-1 md:flex items-center justify-center">
-          {navLinks.map((link) => (
-            <div key={link.name} className="relative">
-              <div className="text-ink flex items-center gap-1 rounded-full px-4 font-light tracking-wider text-sm sm:text-base md:text-[0.95] lg:text-[1.08em] overflow-hidden">
-                {/* {link.name} */}
-                <TextReveal
-                  as={Link}
-                  href={link.href}
-                  hoverColor="var(--color-action)"
-                  className="text-sm font-[300] tracking-wide text-ink"
-                  text={link.name}
-                />
+          {navLinks.map((link) => {
+            const active = isActiveLink(pathname, link.href);
+            return (
+              <div key={link.name} className="relative">
+                <div className="text-ink flex items-center gap-1 rounded-full px-4 font-light tracking-wider text-sm sm:text-base md:text-[0.95] lg:text-[1.08em] overflow-hidden">
+                  <TextReveal
+                    as={Link}
+                    href={link.href}
+                    // The current page's link stays in the action colour.
+                    color={active ? "var(--color-action)" : "inherit"}
+                    hoverColor="var(--color-action)"
+                    current={active}
+                    className="text-sm font-[300] tracking-wide text-ink"
+                    text={link.name}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         {/* right side actions */}
         <div className="flex items-center justify-end gap-2">

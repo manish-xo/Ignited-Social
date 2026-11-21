@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import gsap from "gsap";
+import { isActiveLink } from "@/lib/nav";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -12,6 +14,7 @@ const MobileMenu = ({ isOpen, onClose, links }: MobileMenuProps) => {
   const panelRef = useRef<HTMLDivElement>(null);
   const linkRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -90,19 +93,23 @@ const MobileMenu = ({ isOpen, onClose, links }: MobileMenuProps) => {
         isOpen ? "flex" : "hidden"
       }`}
     >
-      {links.map((link, i) => (
-        <a
-          key={link.name}
-          ref={(el) => {
-            linkRefs.current[i] = el;
-          }}
-          href={link.href}
-          onClick={onClose}
-          className="py-3 text-xl text-ink"
-        >
-          {link.name}
-        </a>
-      ))}
+      {links.map((link, i) => {
+        const active = isActiveLink(pathname, link.href);
+        return (
+          <a
+            key={link.name}
+            ref={(el) => {
+              linkRefs.current[i] = el;
+            }}
+            href={link.href}
+            onClick={onClose}
+            aria-current={active ? "page" : undefined}
+            className={`py-3 text-xl ${active ? "text-action" : "text-ink"}`}
+          >
+            {link.name}
+          </a>
+        );
+      })}
 
       <a
         href="#contact"

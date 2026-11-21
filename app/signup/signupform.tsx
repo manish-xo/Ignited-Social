@@ -1,13 +1,12 @@
 "use client";
 
+import { useEffect, useTransition } from "react";
 import { ArrowRight } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import InstagramUsernameInput from "@/components/signup/InstagramUsernameInput";
-import { useDispatch, useSelector } from "react-redux";
-import { setSignup, setStatus, setError } from "@/libs/dataslice";
+import { useSelector } from "react-redux";
 import { RootState } from "@/libs/store";
 import { signupSchema, SignupFormValues } from "@/schema/signup.schema";
 import { useSignup } from "@/hook/useSignup";
@@ -18,7 +17,6 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { showSuccessToast } from "@/components/custom/Toaster/SuccessToast";
 import { showErrorToast } from "@/components/custom/Toaster/ErrorToast";
 
 interface SignupFormProps {
@@ -26,8 +24,9 @@ interface SignupFormProps {
 }
 
 const Signupform = ({ plan }: SignupFormProps) => {
-  const dispatch = useDispatch();
   const router = useRouter();
+  // True while the payment page is loading after a successful signup.
+  const [redirecting, startRedirect] = useTransition();
   const status = useSelector((state: RootState) => state.dataSlice.status);
   const error = useSelector((state: RootState) => state.dataSlice.error);
 
@@ -49,47 +48,24 @@ const Signupform = ({ plan }: SignupFormProps) => {
 
   const { signup } = useSignup();
 
-  const onSubmit = async (values: SignupFormValues) => {
-    console.log("FORM VALUES:", values);
-    console.log("PLAN:", plan);
+  // Start loading the payment page's code while the user fills in the form.
+  useEffect(() => {
+    router.prefetch("/payment");
+  }, [router]);
 
+  const onSubmit = async (values: SignupFormValues) => {
     const result = await signup({
       username: values.username,
       profilePicUrl: values.profilePicUrl,
       email: values.email,
       plan,
     });
-    console.log("SIGNUP RESULT:", result);
 
     if (result.success) {
-      // The server checks the signup exists and issues the pass for /payment.
-      // Without it, the payment page redirects back here.
-      let next = `/payment?${new URLSearchParams({
-        plan,
-        username: values.username,
-      })}`;
-      try {
-        const { data } = await axios.post("/api/flow/start", {
-          signupId: result.data?.signupId,
-        });
-        next = data.next ?? next;
-      } catch {
-        showErrorToast({
-          title: "Couldn't continue to payment",
-          description: "Please try again in a moment.",
-        });
-        return;
-      }
-
-      showSuccessToast({
-        title: "Signup successful",
-        description:
-          "Your account has been created. Let's continue to payment.",
-      });
-
-      // replace, not push: Back shouldn't return to a submitted signup form.
-      router.replace(next);
-    } else if ("code" in result && result.code === "already_registered") {
+      // Straight to payment (the server already unlocked it). replace, not
+      // push: Back shouldn't return to a submitted signup form.
+      startRedirect(() => router.replace(result.next));
+    } else if (result.code === "already_registered") {
       showErrorToast({
         title: "Already registered",
         description: `${result.error} Try a different one, or log in if it's yours.`,
@@ -102,6 +78,9 @@ const Signupform = ({ plan }: SignupFormProps) => {
     }
   };
 
+  // Saving, or already on the way to the payment page.
+  const busy = status === "submitting" || redirecting;
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-8">
       <FieldGroup>
@@ -113,6 +92,10 @@ const Signupform = ({ plan }: SignupFormProps) => {
               <InstagramUsernameInput
                 invalid={!!errors.username}
                 onSelect={(selectedUsername, suggestion) => {
+                  // The input reports "nothing selected" as soon as it loads
+                  // (and while typing). Only tell the form when the choice
+                  // really changes, so no error shows before the user acts.
+                  if (selectedUsername === field.value) return;
                   field.onChange(selectedUsername);
                   setValue("profilePicUrl", suggestion?.profilePicUrl ?? "");
                 }}
@@ -143,11 +126,11 @@ const Signupform = ({ plan }: SignupFormProps) => {
         <Field>
           <button
             type="submit"
-            disabled={status === "submitting" || !isValid}
+            disabled={busy || !isValid}
             className="flex h-12 w-full items-center justify-center gap-1.5 rounded-xl bg-action text-sm font-semibold text-white transition-colors hover:bg-action-hover disabled:opacity-60"
           >
-            {status === "submitting" ? "Submitting..." : "Continue to payment"}
-            {status !== "submitting" && <ArrowRight size={15} />}
+            {busy ? "Continuing…" : "Continue to payment"}
+            {!busy && <ArrowRight size={15} />}
           </button>
           {status === "error" && error && (
             <FieldDescription className="text-center text-danger">

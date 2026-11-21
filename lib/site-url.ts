@@ -1,15 +1,14 @@
+/** The live site's address. */
+export const PRODUCTION_URL = "https://www.ignited.social";
+
 /**
- * The site's public address, used by sitemap.xml and robots.txt.
+ * The site's public address, used by sitemap.xml, robots.txt and the
+ * canonical / share-card links in page metadata.
  *
- * Set NEXT_PUBLIC_SITE_URL (e.g. https://yourdomain.com) in Vercel once the
- * domain is connected. Until then it falls back to Vercel's production domain,
- * then to localhost for local development.
+ * Uses NEXT_PUBLIC_SITE_URL if it's set (e.g. to test another domain),
+ * otherwise the live domain above.
  */
 export function siteUrl(): string {
-  const url =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    (process.env.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-      : "http://localhost:3000");
+  const url = process.env.NEXT_PUBLIC_SITE_URL || PRODUCTION_URL;
   return url.replace(/\/+$/, "");
 }

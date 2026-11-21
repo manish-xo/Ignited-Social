@@ -22,6 +22,8 @@ export interface TextRevealProps {
   hoverColor?: string;
   direction?: "up" | "down";
   onClick?: (e: React.MouseEvent) => void;
+  /** Marks the link as the current page for screen readers. */
+  current?: boolean;
 }
 
 const TextReveal = React.memo(function TextReveal({
@@ -39,6 +41,7 @@ const TextReveal = React.memo(function TextReveal({
   hoverColor = "#b2c73a",
   direction = "up",
   onClick,
+  current = false,
 }: TextRevealProps) {
   const [hovered, setHovered] = useState(false);
 
@@ -72,6 +75,7 @@ const TextReveal = React.memo(function TextReveal({
   if (href) {
     rootProps.href = href;
   }
+  if (current) rootProps["aria-current"] = "page";
   if (target) rootProps.target = target;
   if (target === "_blank") rootProps.rel = "noopener noreferrer";
 
