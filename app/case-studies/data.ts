@@ -36,7 +36,7 @@ export interface CaseStudy {
   approach: {
     heading: string;
     paragraphs: string[];
-    /** First name, matching a manager in app/service/Components/managerCards.ts. */
+    /** First name, matching a manager in app/service/Components/brandManagers.ts. */
     manager: string;
     managerFocus: string;
     steps: CaseStep[];

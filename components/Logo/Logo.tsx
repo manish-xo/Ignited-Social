@@ -6,6 +6,8 @@ interface LogoProps extends React.SVGProps<SVGSVGElement> {
   mainLogoTxt?: string;
   outerTxt?: string;
   circleStroke?: string;
+  /** What screen readers and search engines read for the logo. */
+  title?: string;
 }
 
 const Logo = ({
@@ -14,6 +16,7 @@ const Logo = ({
   mainLogoTxt = "#faf9f6",
   outerTxt = "#221f1b",
   circleStroke = "#faf9f6",
+  title = "Ignited Social",
 }: LogoProps) => {
   return (
     <svg
@@ -22,7 +25,10 @@ const Logo = ({
       viewBox="0 0 679 280"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      role="img"
+      aria-label={title}
     >
+      <title>{title}</title>
       <circle cx="134.5" cy="140.5" r="134.5" fill="#5A4CE0" />
       <circle cx="134.5" cy="140.5" r="134.5" stroke={circleStroke} />
       <path

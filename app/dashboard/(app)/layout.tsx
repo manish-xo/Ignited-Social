@@ -6,7 +6,7 @@ import MobileNav from "../_components/shell/MobileNav";
 import DashboardHeader from "../_components/shell/DashboardHeader";
 
 export const metadata: Metadata = {
-  title: "Dashboard · Ignited Social",
+  title: "Dashboard",
 };
 
 export default async function DashboardLayout({

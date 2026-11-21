@@ -12,7 +12,7 @@ import {
   workflowsFor,
   type Manager,
   type Task,
-} from "./managerCards";
+} from "./brandManagers";
 
 /**
  * The manager on card `index` today. Card 1 is the day's random pick (it

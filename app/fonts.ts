@@ -21,47 +21,47 @@ export const jetbrainsMono = JetBrains_Mono({
 export const sfPro = localFont({
   src: [
     {
-      path: "../public/font/SF-Pro-Display-Ultralight.otf",
+      path: "../public/font/SF-Pro-Display-Ultralight.woff2",
       weight: "100",
       style: "normal",
     },
     {
-      path: "../public/font/SF-Pro-Display-Thin.otf",
+      path: "../public/font/SF-Pro-Display-Thin.woff2",
       weight: "200",
       style: "normal",
     },
     {
-      path: "../public/font/SF-Pro-Display-Light.otf",
+      path: "../public/font/SF-Pro-Display-Light.woff2",
       weight: "300",
       style: "normal",
     },
     {
-      path: "../public/font/SF-Pro-Display-Regular.otf",
+      path: "../public/font/SF-Pro-Display-Regular.woff2",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../public/font/SF-Pro-Display-Medium.otf",
+      path: "../public/font/SF-Pro-Display-Medium.woff2",
       weight: "500",
       style: "normal",
     },
     {
-      path: "../public/font/SF-Pro-Display-Semibold.otf",
+      path: "../public/font/SF-Pro-Display-Semibold.woff2",
       weight: "600",
       style: "normal",
     },
     {
-      path: "../public/font/SF-Pro-Display-Bold.otf",
+      path: "../public/font/SF-Pro-Display-Bold.woff2",
       weight: "700",
       style: "normal",
     },
     {
-      path: "../public/font/SF-Pro-Display-Heavy.otf",
+      path: "../public/font/SF-Pro-Display-Heavy.woff2",
       weight: "800",
       style: "normal",
     },
     {
-      path: "../public/font/SF-Pro-Display-Black.otf",
+      path: "../public/font/SF-Pro-Display-Black.woff2",
       weight: "900",
       style: "normal",
     },

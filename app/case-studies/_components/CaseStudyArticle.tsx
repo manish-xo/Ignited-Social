@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { MANAGERS } from "@/app/service/Components/managerCards";
+import { MANAGERS } from "@/app/service/Components/brandManagers";
 import type { CaseStudy } from "../data";
 
 const initials = (name: string) =>

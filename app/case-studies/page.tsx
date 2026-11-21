@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
+import { publicPage } from "@/lib/seo";
 import ProHeader from "@/components/layout/ProHeader/ProHeader";
 import CaseStudiesBrowser from "./_components/CaseStudiesBrowser";
 
-export const metadata: Metadata = {
-  title: "Ignited — Case studies",
+export const metadata: Metadata = publicPage({
+  title: "Case studies",
   description:
-    "How Ignited Brand Managers helped creators, coaches and businesses reach the right people on Instagram.",
-};
+    "Real accounts, real numbers. See how our Brand Managers helped 110+ creators, coaches and businesses grow on Instagram.",
+  path: "/case-studies",
+});
 
 export default function CaseStudiesPage() {
   return (

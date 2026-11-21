@@ -14,7 +14,7 @@ const COLUMNS: { title: string; links: FooterLink[] }[] = [
   {
     title: "Quick Links",
     links: [
-      { name: "Services", href: "/service" },
+      { name: "Home", href: "/" },
       { name: "Pricing", href: "/price" },
       { name: "Contact", href: "/contact" },
     ],
@@ -37,7 +37,11 @@ const COLUMNS: { title: string; links: FooterLink[] }[] = [
 ];
 
 const socialLinks = [
-  { icon: "ri-instagram-line", href: "#", label: "Follow us on Instagram" },
+  {
+    icon: "ri-instagram-line",
+    href: "https://www.instagram.com/ignited.social/",
+    label: "Follow us on Instagram",
+  },
   { icon: "ri-twitter-x-fill", href: "#", label: "Follow us on X" },
   { icon: "ri-linkedin-box-line", href: "#", label: "Follow us on LinkedIn" },
 ];
@@ -176,6 +180,10 @@ const Footer = () => {
                 key={label}
                 href={href}
                 aria-label={label}
+                // Real profile links open in a new tab; "#" placeholders stay put.
+                {...(href.startsWith("http")
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
                 className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-secondary transition-colors duration-300 hover:border-ink hover:bg-ink hover:text-canvas"
               >
                 <i className={icon}></i>

@@ -15,7 +15,7 @@ interface NavLink {
 
 const navLinks: NavLink[] = [
   {
-    name: "Services",
+    name: "Home",
     href: "/",
   },
   {
@@ -50,13 +50,14 @@ const ProHeader = () => {
     <header className="fixed z-[70] inset-x-0 flex justify-center px-3">
       <nav className="mx-auto z-50 grid grid-cols-2 md:grid-cols-3 w-full max-w-5xl bg-subtle-bg border-hairline rounded-2xl items-center justify-between px-6 py-2 mt-3">
         {/* LOGO */}
-        <a
-          href="#"
+        <Link
+          href="/"
+          aria-label="Ignited Social home"
           className="font-heading font-semibold text-ink text-xl justify-self-start"
         >
           {/* STS */}
           <Logo width={100} height={40} />
-        </a>
+        </Link>
         {/* CENTER LINKS */}
         <div className="hidden gap-1 md:flex items-center justify-center">
           {navLinks.map((link) => (
