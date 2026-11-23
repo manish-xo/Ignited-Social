@@ -19,6 +19,7 @@ export default function robots(): MetadataRoute.Robots {
         "/upsell",
         "/Addons",
         "/Dashboard-Setup",
+        "/prototype",
         // Old preview pages that aren't part of the live site.
         "/audience-journey",
         "/audiences",

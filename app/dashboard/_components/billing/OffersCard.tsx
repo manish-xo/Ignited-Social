@@ -21,14 +21,16 @@ export default function OffersCard({
         subtitle="Tell us which one you'd like and your manager sets it up."
       />
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {offers.map((o) => (
           <div
             key={o.slug}
             className="glass-inset group flex flex-col rounded-2xl p-4 transition-colors duration-300 hover:border-border-strong"
           >
             <div className="flex items-start justify-between gap-3">
-              <p className="font-heading text-sm font-bold text-ink">{o.name}</p>
+              <p className="font-heading text-sm font-bold text-ink">
+                {o.name}
+              </p>
               <p className="shrink-0 font-heading text-sm font-bold text-action">
                 {formatMoney(o.monthlyPrice)}
                 <span className="text-[11px] font-medium text-muted">/mo</span>

@@ -28,6 +28,8 @@ export default function SetupForm({ plan, username, addons }: SetupFormProps) {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  // The email already has a login (a returning customer): send them to log in.
+  const [hasAccount, setHasAccount] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   // The login must use the signup email, so take it from Redux and lock the
@@ -98,10 +100,11 @@ export default function SetupForm({ plan, username, addons }: SetupFormProps) {
 
       // replace: Back mustn't return to the create-password form.
       router.replace("/onboarding");
-    } catch (err: any) {
+    } catch (err) {
+      const body = axios.isAxiosError(err) ? err.response?.data : undefined;
+      setHasAccount(body?.code === "account_exists");
       setServerError(
-        err.response?.data?.message ??
-          "Couldn't create your account. Please try again.",
+        body?.message ?? "Couldn't create your account. Please try again.",
       );
       setSubmitting(false);
     }
@@ -153,11 +156,23 @@ export default function SetupForm({ plan, username, addons }: SetupFormProps) {
           <FieldError errors={[errors.password]} />
         </Field>
 
-        {serverError && (
-          <p className="rounded-lg bg-danger/10 px-3 py-2.5 text-sm text-danger">
-            {serverError}
-          </p>
-        )}
+        {serverError &&
+          (hasAccount ? (
+            <div className="rounded-lg bg-action-tint-bg px-3 py-3 text-sm text-ink">
+              <p>{serverError}</p>
+              <button
+                type="button"
+                onClick={() => router.replace("/dashboard/login")}
+                className="mt-2 font-semibold text-action underline underline-offset-4"
+              >
+                Log in
+              </button>
+            </div>
+          ) : (
+            <p className="rounded-lg bg-danger/10 px-3 py-2.5 text-sm text-danger">
+              {serverError}
+            </p>
+          ))}
 
         <div className="flex gap-3 pt-2">
           <button

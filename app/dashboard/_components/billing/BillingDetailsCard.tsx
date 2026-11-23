@@ -23,7 +23,10 @@ export default function BillingDetailsCard({
 
       <dl className="mt-4 divide-y divide-ink/5 text-sm">
         {rows.map((r) => (
-          <div key={r.label} className="flex items-center justify-between gap-4 py-3">
+          <div
+            key={r.label}
+            className="flex items-center justify-between gap-4 py-3"
+          >
             <dt className="text-muted">{r.label}</dt>
             <dd className="truncate text-right font-semibold text-ink">
               {r.value ?? <Muted>—</Muted>}

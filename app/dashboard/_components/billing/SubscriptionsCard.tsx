@@ -2,6 +2,10 @@ import { Layers } from "lucide-react";
 import { formatDate, formatMoney } from "../../lib/format";
 import type { SubscriptionLine } from "../../lib/types";
 import { CardHeader, GlassCard, StatusChip } from "../ui";
+import { CancelTrigger } from "./CancelSubscriptions";
+import PaperCard from "./PaperCard";
+
+const CANCELLABLE = new Set(["ACTIVE", "APPROVED", "SUSPENDED"]);
 
 const KIND: Record<SubscriptionLine["kind"], string> = {
   plan: "Growth plan",
@@ -9,12 +13,15 @@ const KIND: Record<SubscriptionLine["kind"], string> = {
   addon: "Add-on",
 };
 
+/** Each subscription as a numbered note-paper card, with the monthly total. */
 export default function SubscriptionsCard({
   subscriptions,
   monthlyTotal,
+  asOf,
 }: {
   subscriptions: SubscriptionLine[];
   monthlyTotal: number;
+  asOf: number;
 }) {
   return (
     <GlassCard>
@@ -22,6 +29,18 @@ export default function SubscriptionsCard({
         icon={Layers}
         title="Subscriptions"
         subtitle="Each one renews monthly through PayPal."
+        action={
+          subscriptions.length > 0 ? (
+            <p className="text-right">
+              <span className="block text-[11px] text-muted">
+                Monthly total (active)
+              </span>
+              <span className="font-heading text-lg font-bold text-ink">
+                {formatMoney(monthlyTotal)}
+              </span>
+            </p>
+          ) : undefined
+        }
       />
 
       {subscriptions.length === 0 ? (
@@ -29,42 +48,54 @@ export default function SubscriptionsCard({
           We couldn&apos;t find a subscription on this account yet.
         </p>
       ) : (
-        <ul className="mt-5 space-y-2">
-          {subscriptions.map((s) => (
-            <li
-              key={s.id}
-              className="glass-inset flex flex-wrap items-center justify-between gap-3 rounded-2xl p-3.5 transition-[translate] duration-300 hover:translate-x-1"
-            >
-              <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-ink">
-                  {s.name}
-                </p>
-                <p className="mt-0.5 text-[11px] text-muted">
-                  {KIND[s.kind]}
-                  {s.nextBillingDate && s.status === "ACTIVE"
-                    ? ` · renews ${formatDate(s.nextBillingDate)}`
-                    : ""}
-                </p>
-              </div>
-              <div className="flex items-center gap-3">
-                <StatusChip status={s.status} />
-                <p className="w-20 text-right font-heading text-sm font-bold text-ink">
-                  {formatMoney(s.monthlyPrice)}
-                  <span className="text-[11px] font-medium text-muted">/mo</span>
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+        <ul className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {subscriptions.map((s, i) => {
+            const cancelled = s.status === "CANCELLED";
+            const endsOn =
+              cancelled && s.paidUntil && Date.parse(s.paidUntil) > asOf
+                ? s.paidUntil
+                : null;
+            return (
+              <li key={s.id}>
+                <PaperCard number={i + 1} dimmed={cancelled} className="h-full">
+                  <p className="text-sm font-light text-secondary">
+                    {KIND[s.kind]}
+                  </p>
+                  <p className="mt-0.5 text-xl font-bold leading-tight tracking-tight text-ink">
+                    {s.name}
+                  </p>
 
-      {subscriptions.length > 0 && (
-        <div className="mt-4 flex items-center justify-between border-t border-ink/5 pt-4 text-sm">
-          <span className="text-secondary">Monthly total (active)</span>
-          <span className="font-heading text-lg font-bold text-ink">
-            {formatMoney(monthlyTotal)}
-          </span>
-        </div>
+                  <p className="mt-4 text-2xl font-bold leading-none tracking-tight text-ink">
+                    {formatMoney(s.monthlyPrice)}
+                    <span className="ml-1 text-xs font-light text-secondary">
+                      / month
+                    </span>
+                  </p>
+
+                  <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
+                    <StatusChip status={s.status} />
+                    <span className="text-[11px] text-muted">
+                      {s.nextBillingDate && s.status === "ACTIVE"
+                        ? `Renews ${formatDate(s.nextBillingDate)}`
+                        : endsOn
+                          ? `Ends ${formatDate(endsOn)}`
+                          : ""}
+                    </span>
+                  </div>
+
+                  {CANCELLABLE.has(s.status) && (
+                    <CancelTrigger
+                      ids={[s.id]}
+                      className="mt-4 text-xs font-semibold text-secondary underline decoration-transparent underline-offset-2 transition-colors hover:text-ink hover:decoration-current"
+                    >
+                      Cancel {s.kind === "plan" ? "plan" : "this"}
+                    </CancelTrigger>
+                  )}
+                </PaperCard>
+              </li>
+            );
+          })}
+        </ul>
       )}
     </GlassCard>
   );

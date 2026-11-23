@@ -30,8 +30,18 @@ interface PayPalSubscription {
       address?: { country_code?: string; postal_code?: string };
     };
   };
-  billing_info?: { next_billing_time?: string };
+  billing_info?: {
+    next_billing_time?: string;
+    last_payment?: { time?: string };
+  };
 }
+
+/** Same day next month (PayPal bills monthly from the payment date). */
+const addMonth = (iso: string) => {
+  const d = new Date(iso);
+  d.setUTCMonth(d.getUTCMonth() + 1);
+  return d.toISOString();
+};
 
 interface PayPalTransaction {
   id: string;
@@ -42,7 +52,7 @@ interface PayPalTransaction {
   };
 }
 
-const paypalGet = <T,>(path: string) =>
+const paypalGet = <T>(path: string) =>
   paypalFetch(path, {
     signal: AbortSignal.timeout(PAYPAL_TIMEOUT_MS),
   }) as Promise<T>;
@@ -71,13 +81,17 @@ export async function getBillingData(): Promise<BillingPageData> {
     signupId
       ? supabaseAdmin
           .from("paypal_upsells")
-          .select("paypal_subscription_id, offer, monthly_amount, status, created_at")
+          .select(
+            "paypal_subscription_id, offer, monthly_amount, status, created_at",
+          )
           .eq("signup_id", signupId)
       : Promise.resolve({ data: [] }),
     signupId
       ? supabaseAdmin
           .from("paypal_addons")
-          .select("paypal_subscription_id, addons, monthly_amount, status, created_at")
+          .select(
+            "paypal_subscription_id, addons, monthly_amount, status, created_at",
+          )
           .eq("signup_id", signupId)
       : Promise.resolve({ data: [] }),
   ]);
@@ -149,15 +163,26 @@ export async function getBillingData(): Promise<BillingPageData> {
     }),
   );
 
-  const subscriptions: SubscriptionLine[] = live.map(({ row, sub }) => ({
-    id: row.id,
-    name: row.name,
-    kind: row.kind,
-    monthlyPrice: row.monthlyPrice,
-    status: sub?.status ?? row.dbStatus ?? "UNKNOWN",
-    nextBillingDate: sub?.billing_info?.next_billing_time ?? null,
-    startedAt: sub?.start_time ?? row.createdAt,
-  }));
+  const subscriptions: SubscriptionLine[] = live.map(({ row, sub }) => {
+    const status = sub?.status ?? row.dbStatus ?? "UNKNOWN";
+    const lastPaid = sub?.billing_info?.last_payment?.time ?? null;
+    const next = sub?.billing_info?.next_billing_time ?? null;
+    const periodStart = lastPaid ?? sub?.start_time ?? row.createdAt;
+    return {
+      id: row.id,
+      name: row.name,
+      kind: row.kind,
+      monthlyPrice: row.monthlyPrice,
+      status,
+      nextBillingDate: next,
+      startedAt: sub?.start_time ?? row.createdAt,
+      periodStart,
+      // Once cancelled PayPal drops the next billing date, so the paid period
+      // runs a month from the last payment.
+      paidUntil: next ?? (periodStart ? addMonth(periodStart) : null),
+      inTrial: status === "ACTIVE" && !!sub && !lastPaid,
+    };
+  });
 
   const payments: Payment[] = live
     .flatMap(({ row, transactions }) =>
@@ -236,5 +261,6 @@ export async function getBillingData(): Promise<BillingPageData> {
     paypalReachable,
     paypalManageUrl: PAYPAL_MANAGE_URL,
     offers,
+    asOf: Date.now(),
   };
 }

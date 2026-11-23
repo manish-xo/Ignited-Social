@@ -66,6 +66,12 @@ export interface SubscriptionLine {
   status: string; // PayPal status: ACTIVE, APPROVAL_PENDING, SUSPENDED, CANCELLED…
   nextBillingDate: string | null; // ISO
   startedAt: string | null; // ISO
+  /** Start of the period the customer has paid for (last payment, or signup). */
+  periodStart: string | null; // ISO
+  /** End of that paid period: the next charge, or when access ends once cancelled. */
+  paidUntil: string | null; // ISO
+  /** Active but nothing charged yet, i.e. still in the free trial. */
+  inTrial: boolean;
 }
 
 export interface Payment {
@@ -107,4 +113,6 @@ export interface BillingPageData {
   /** Where the customer manages / cancels PayPal payments */
   paypalManageUrl: string;
   offers: OfferCard[];
+  /** When this data was loaded (ms). Pages use it as "now" so renders stay pure. */
+  asOf: number;
 }

@@ -15,7 +15,8 @@ function targetingFrom(answers: Record<string, unknown>): TargetingStrategy {
   return {
     targetAudience: text(answers.targetAudience),
     niche: text(answers.customNiche) ?? text(answers.niche),
-    maxFollowing: Number.isFinite(limit) && limit > 0 ? limit.toLocaleString() : null,
+    maxFollowing:
+      Number.isFinite(limit) && limit > 0 ? limit.toLocaleString() : null,
     targetGender: text(answers.targetGender),
     locationAccuracy:
       answers.locationScope === "local"

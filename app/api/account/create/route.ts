@@ -14,6 +14,34 @@ const accountCreateSchema = setupSchema.extend({
 // the LIKE wildcards so an "_" in an email only matches a literal "_".
 const escapeLike = (value: string) => value.replace(/[\\%_]/g, "\\$&");
 
+/**
+ * A new purchase has its own onboarding (answers are stored per signup), so a
+ * reused login starts the wizard again instead of skipping to the dashboard.
+ */
+const freshOnboarding = (appMetadata: Record<string, unknown> | undefined) => ({
+  ...appMetadata,
+  onboarding_completed: false,
+  onboarding_completed_at: null,
+});
+
+/** The Supabase login for an email, if there is one. */
+async function findAuthUserByEmail(email: string) {
+  for (let page = 1; page <= 50; page++) {
+    const { data, error } = await supabaseAdmin.auth.admin.listUsers({
+      page,
+      perPage: 1000,
+    });
+    if (error) {
+      console.error("listUsers error:", error);
+      return null;
+    }
+    const match = data.users.find((u) => u.email?.toLowerCase() === email);
+    if (match) return match;
+    if (data.users.length < 1000) return null;
+  }
+  return null;
+}
+
 export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();
@@ -57,14 +85,13 @@ export const POST = async (req: NextRequest) => {
     }
 
     // ...and only once they've actually paid for a plan.
-    const { data: subscription, error: subscriptionError } =
-      await supabaseAdmin
-        .from("paypal_subscriptions")
-        .select("paypal_subscription_id")
-        .ilike("email", escapeLike(email))
-        .in("status", ["ACTIVE", "APPROVED"])
-        .limit(1)
-        .maybeSingle();
+    const { data: subscription, error: subscriptionError } = await supabaseAdmin
+      .from("paypal_subscriptions")
+      .select("paypal_subscription_id")
+      .ilike("email", escapeLike(email))
+      .in("status", ["ACTIVE", "APPROVED"])
+      .limit(1)
+      .maybeSingle();
 
     if (subscriptionError) {
       console.error("Subscription lookup error:", subscriptionError);
@@ -81,35 +108,41 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
+    // What the login points at: this signup and its paid subscription.
+    const metadata = {
+      signup_id: signup.id,
+      instagram_username:
+        signup.instagram_username || instagramUsername || null,
+      plan: signup.plan || plan || null,
+      addons: addons ? addons.split(",") : [],
+      paypal_subscription_id: subscription.paypal_subscription_id,
+    };
+
+    // Account made (or picked up): the password form is done; onboarding
+    // is behind login now.
+    const finish = async (body: object, status: number) => {
+      const response = NextResponse.json(body, { status });
+      const flow = await readFlow(req);
+      return flow
+        ? writeFlow(response, { ...flow, stage: "account_created" })
+        : response;
+    };
+
     const { data: created, error: createError } =
       await supabaseAdmin.auth.admin.createUser({
         email,
         password,
         // They already proved the email by signing up and paying.
         email_confirm: true,
-        user_metadata: {
-          signup_id: signup.id,
-          instagram_username:
-            signup.instagram_username || instagramUsername || null,
-          plan: signup.plan || plan || null,
-          addons: addons ? addons.split(",") : [],
-          paypal_subscription_id: subscription.paypal_subscription_id,
-        },
+        user_metadata: metadata,
       });
 
-    if (createError) {
-      if (
-        createError.code === "email_exists" ||
-        createError.code === "user_already_exists"
-      ) {
-        return NextResponse.json(
-          {
-            message:
-              "An account with this email already exists. Please log in instead.",
-          },
-          { status: 409 },
-        );
-      }
+    if (!createError) return finish({ userId: created.user.id }, 201);
+
+    if (
+      createError.code !== "email_exists" &&
+      createError.code !== "user_already_exists"
+    ) {
       console.error("createUser error:", createError);
       return NextResponse.json(
         { message: "Couldn't create your account. Please try again." },
@@ -117,15 +150,66 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    const response = NextResponse.json(
-      { userId: created.user.id },
-      { status: 201 },
+    // This email already has a login, e.g. a customer who cancelled and
+    // bought again, or an old login whose signup was deleted.
+    const existing = await findAuthUserByEmail(email);
+    if (!existing) {
+      return NextResponse.json(
+        { message: "Couldn't create your account. Please try again." },
+        { status: 500 },
+      );
+    }
+
+    const oldSignupId = existing.user_metadata?.signup_id as string | undefined;
+    const { data: oldSignup } = oldSignupId
+      ? await supabaseAdmin
+          .from("Signup")
+          .select("id")
+          .eq("id", oldSignupId)
+          .maybeSingle()
+      : { data: null };
+
+    if (!oldSignup) {
+      // Orphaned login: its signup no longer exists, so there's nothing on it
+      // to protect. Reuse it with the new password and the new purchase.
+      const { error } = await supabaseAdmin.auth.admin.updateUserById(
+        existing.id,
+        {
+          password,
+          email_confirm: true,
+          user_metadata: { ...existing.user_metadata, ...metadata },
+          app_metadata: freshOnboarding(existing.app_metadata),
+        },
+      );
+      if (error) {
+        console.error("reuse orphaned login error:", error);
+        return NextResponse.json(
+          { message: "Couldn't create your account. Please try again." },
+          { status: 500 },
+        );
+      }
+      return finish({ userId: existing.id }, 201);
+    }
+
+    // A real existing customer. Never change their password here (anyone can
+    // type an email), but link the new purchase so their dashboard shows it,
+    // and send them to log in.
+    const { error: linkError } = await supabaseAdmin.auth.admin.updateUserById(
+      existing.id,
+      {
+        user_metadata: { ...existing.user_metadata, ...metadata },
+        app_metadata: freshOnboarding(existing.app_metadata),
+      },
     );
-    // Account made — the password form is done; onboarding is behind login now.
-    const flow = await readFlow(req);
-    return flow
-      ? writeFlow(response, { ...flow, stage: "account_created" })
-      : response;
+    if (linkError) console.error("link purchase to login error:", linkError);
+    return finish(
+      {
+        code: "account_exists",
+        message:
+          "You already have an account with this email. Log in with your existing password to see your new plan.",
+      },
+      409,
+    );
   } catch (err) {
     console.error("account/create error:", err);
 
