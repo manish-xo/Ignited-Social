@@ -58,10 +58,13 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    // Prefer the email typed into the form (that's what signup used); the
+    // The signup email wins: the dashboard login is created with it. The
     // PayPal account email can be different.
+    const flow = await readFlow(req);
     const email: string | null =
-      formEmail ?? subscription.subscriber?.email_address ?? null;
+      (flow?.email || formEmail || subscription.subscriber?.email_address)
+        ?.trim()
+        .toLowerCase() ?? null;
 
     if (!email) {
       console.error(
@@ -77,13 +80,20 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    const { data: signup, error: signupError } = await supabaseAdmin
-      .from("Signup")
-      .select("id")
-      .eq("email", email)
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
+    // The checkout cookie names the exact signup; fall back to the email.
+    const { data: signup, error: signupError } = flow?.signupId
+      ? await supabaseAdmin
+          .from("Signup")
+          .select("id")
+          .eq("id", flow.signupId)
+          .maybeSingle()
+      : await supabaseAdmin
+          .from("Signup")
+          .select("id")
+          .ilike("email", email.replace(/[\\%_]/g, "\\$&"))
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
 
     if (signupError) {
       console.error("Signup lookup error:", signupError);
@@ -121,7 +131,6 @@ export const POST = async (req: NextRequest) => {
       );
     }
     // Payment verified with PayPal — unlock the upsell step (and lock /payment).
-    const flow = await readFlow(req);
     return writeFlow(
       NextResponse.json({ customerId: subscriptionID, status: "active" }),
       {

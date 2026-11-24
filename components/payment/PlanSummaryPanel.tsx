@@ -1,6 +1,6 @@
 import { Check, Star } from "lucide-react";
 import Link from "next/link";
-import { getPlan } from "@/lib/plans";
+import { getPlan, TRIAL_DAYS } from "@/lib/plans";
 
 interface PlanSummaryPanelProps {
   plan: ReturnType<typeof getPlan>;
@@ -74,7 +74,9 @@ export default function PlanSummaryPanel({
             </span>
           )}
         </div>
-        <p className="mt-1 text-xs text-white/50">per month · cancel anytime</p>
+        <p className="mt-1 text-xs text-white/50">
+          per month after a {TRIAL_DAYS}-day free trial · cancel anytime
+        </p>
 
         <ul className="mt-5 space-y-3">
           {plan.features.map((f) => (

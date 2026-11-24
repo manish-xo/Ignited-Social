@@ -16,6 +16,9 @@ export interface BothPlans {
   };
 }
 
+/** Free days before the first charge. Must match the PayPal plans' TRIAL cycle. */
+export const TRIAL_DAYS = 7;
+
 export const BothPlan: Record<string, BothPlans> = {
   grow: {
     slug: "grow",

@@ -1,10 +1,10 @@
-import { FileCheck2, Lock, ShieldCheck } from "lucide-react";
-import { getPlan } from "@/lib/plans";
+import { cookies } from "next/headers";
+import { Lock, RotateCcw, ShieldCheck } from "lucide-react";
+import { getPlan, TRIAL_DAYS } from "@/lib/plans";
 import PlanSummaryPanel from "@/components/payment/PlanSummaryPanel";
 import PaymentForm from "./PaymentForm";
 import { getPaypalPlanId } from "@/lib/paypal/plans";
-
-// import PayPalCheckout from "@/components/PayPalCheckout";
+import { FLOW_COOKIE, readFlowToken } from "@/lib/flow/session";
 
 interface PaymentPageProps {
   searchParams: Promise<{ plan?: string; username?: string }>;
@@ -14,16 +14,20 @@ export default async function PaymentPage({ searchParams }: PaymentPageProps) {
   const params = await searchParams;
   const plan = getPlan(params.plan);
 
-  // In the real flow this comes from the signup step (Redux store / query
-  // param). Falling back to a placeholder so this page still renders on
-  // its own while signup is being worked on separately.
-  const username = params.username ?? "yourhandle";
+  // proxy.ts only lets people here after signup, so the signed checkout
+  // cookie holds the email and handle they signed up with.
+  const flow = await readFlowToken((await cookies()).get(FLOW_COOKIE)?.value);
+  const username = flow?.username || params.username || "";
+  const email = flow?.email ?? "";
 
-  const nextChargeDate = new Date();
-  nextChargeDate.setMonth(nextChargeDate.getMonth() + 1);
-  const nextChargeLabel = nextChargeDate.toLocaleDateString("en-US", {
+  // PayPal starts the plan with a free trial, so the first charge is
+  // TRIAL_DAYS from today, not a month.
+  const firstCharge = new Date();
+  firstCharge.setDate(firstCharge.getDate() + TRIAL_DAYS);
+  const firstChargeLabel = firstCharge.toLocaleDateString("en-US", {
     day: "numeric",
     month: "short",
+    year: "numeric",
   });
 
   return (
@@ -33,7 +37,7 @@ export default async function PaymentPage({ searchParams }: PaymentPageProps) {
         <PlanSummaryPanel
           plan={plan}
           switchBasePath="/payment"
-          username={params.username}
+          username={username || undefined}
         />
       </div>
 
@@ -44,11 +48,16 @@ export default async function PaymentPage({ searchParams }: PaymentPageProps) {
             Payment
           </p>
           <h1 className="mt-3 text-4xl font-[700] tracking-tighter text-ink sm:text-4xl">
-            Complete your subscription
+            Start your free trial
           </h1>
-          <p className="mt-2 text-md mt-3 text-secondary">
-            You&apos;re subscribing as{" "}
-            <span className="font-semibold text-ink">@{username}</span>.
+          <p className="mt-3 text-md text-secondary">
+            {username ? (
+              <>
+                For{" "}
+                <span className="font-semibold text-ink">@{username}</span>.{" "}
+              </>
+            ) : null}
+            Nothing is charged today.
           </p>
 
           <PaymentForm
@@ -56,22 +65,21 @@ export default async function PaymentPage({ searchParams }: PaymentPageProps) {
             planName={plan.name}
             price={plan.price}
             username={username}
-            nextChargeLabel={nextChargeLabel}
+            signupEmail={email}
+            trialDays={TRIAL_DAYS}
+            firstChargeLabel={firstChargeLabel}
             paypalPlanId={getPaypalPlanId(plan.slug as "grow" | "scale")}
           />
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[11px] text-muted">
             <span className="flex items-center gap-1">
-              <Lock size={12} /> 256-bit SSL
+              <Lock size={12} /> Paid securely through PayPal
+            </span>
+            <span className="flex items-center gap-1">
+              <RotateCcw size={12} /> Cancel anytime from your dashboard
             </span>
             <span className="flex items-center gap-1">
               <ShieldCheck size={12} /> 30-day guarantee
-            </span>
-            <span className="flex items-center gap-1">
-              <FileCheck2 size={12} /> PCI DSS
-            </span>
-            <span>
-              Powered by <strong className="text-ink">Stripe</strong>
             </span>
           </div>
         </div>

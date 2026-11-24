@@ -13,7 +13,11 @@ interface PaymentFormProps {
   planName: string;
   price: number;
   username: string;
-  nextChargeLabel: string;
+  /** The email they signed up with (from the checkout cookie), if known. */
+  signupEmail: string;
+  trialDays: number;
+  /** When PayPal takes the first payment, e.g. "Dec 1, 2026". */
+  firstChargeLabel: string;
   paypalPlanId: string;
 }
 
@@ -28,50 +32,52 @@ const COUNTRIES = [
   { code: "AE", name: "United Arab Emirates" },
 ];
 
+const inputClass =
+  "w-full rounded-xl border border-border bg-white px-3.5 py-3 text-sm text-ink placeholder:text-placeholder focus:outline-none focus:ring-2 focus:ring-action/30";
+
 export default function PaymentForm({
   plan,
   planName,
   price,
-  username: usernameFromUrl,
-  nextChargeLabel,
+  username: usernameFromServer,
+  signupEmail,
+  trialDays,
+  firstChargeLabel,
   paypalPlanId,
 }: PaymentFormProps) {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  // Signup stores the user in Redux; prefer that over the URL fallback.
+  // Fallback for when the checkout cookie is missing: signup also keeps the
+  // user in Redux.
   const signup = useAppSelector((state) => state.dataSlice.signup);
-  const username = signup?.username || usernameFromUrl;
+  const username = usernameFromServer || signup?.username || "";
   const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
+  const [typedEmail, setTypedEmail] = useState("");
   const [country, setCountry] = useState("US");
-  const [postalCode, setPostalCode] = useState("");
-  const [couponOpen, setCouponOpen] = useState(false);
-  const [couponInput, setCouponInput] = useState("");
-  const [couponCode, setCouponCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  // Redux rehydrates from localStorage after first render, so prefill the
-  // email once it arrives (without overwriting anything already typed).
-  useEffect(() => {
-    if (signup?.email) setEmail((current) => current || signup.email);
-  }, [signup?.email]);
+  // The account is created with the signup email, so it can't be changed
+  // here. Only ask for one if we somehow don't know it.
+  const knownEmail = signupEmail || signup?.email || "";
+  const email = knownEmail || typedEmail;
 
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const formValid =
-    emailValid && fullName.trim().length > 0 && postalCode.trim().length > 0;
+  const formValid = emailValid && fullName.trim().length > 0;
 
   // PayPalButtons can hold on to the callbacks from its first render, which
   // would see the empty initial form. Read the latest values through a ref.
-  const formRef = useRef({ fullName, email, country, postalCode, couponCode });
-  formRef.current = { fullName, email, country, postalCode, couponCode };
+  const formRef = useRef({ fullName, email, country });
+  useEffect(() => {
+    formRef.current = { fullName, email, country };
+  }, [fullName, email, country]);
 
   return (
     <div className="mt-8 space-y-6">
       {/* From PayPal closing until the next page opens (or an error). */}
       {submitting && (
         <FullScreenLoader
-          title="Confirming your payment…"
+          title="Confirming your subscription…"
           description="This takes a few seconds. Please don't close or refresh this page."
         />
       )}
@@ -87,10 +93,11 @@ export default function PaymentForm({
           id="fullName"
           type="text"
           required
+          autoComplete="name"
           placeholder="Your full name"
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
-          className="w-full rounded-xl border border-border bg-white px-3.5 py-3 text-sm text-ink placeholder:text-placeholder focus:outline-none focus:ring-2 focus:ring-action/30"
+          className={inputClass}
         />
       </div>
 
@@ -101,87 +108,74 @@ export default function PaymentForm({
         >
           Email{" "}
           <span className="font-normal text-muted-foreground">
-            — for receipts &amp; updates
+            for receipts and your login
           </span>
         </label>
-        <input
-          id="payment-email"
-          type="email"
-          required
-          placeholder="you@company.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-xl border border-border bg-white px-3.5 py-3 text-sm text-ink placeholder:text-placeholder focus:outline-none focus:ring-2 focus:ring-action/30"
-        />
+        {knownEmail ? (
+          <p
+            id="payment-email"
+            className="rounded-xl border border-border bg-subtle-bg px-3.5 py-3 text-sm text-ink"
+          >
+            {knownEmail}
+          </p>
+        ) : (
+          <input
+            id="payment-email"
+            type="email"
+            required
+            autoComplete="email"
+            placeholder="you@company.com"
+            value={typedEmail}
+            onChange={(e) => setTypedEmail(e.target.value)}
+            className={inputClass}
+          />
+        )}
       </div>
 
       <div>
-        <label className="mb-2 block text-sm font-semibold text-ink">
-          Billing address
+        <label
+          htmlFor="country"
+          className="mb-2 block text-sm font-semibold text-ink"
+        >
+          Country
         </label>
-        <div className="overflow-hidden rounded-xl border border-border bg-white">
-          <select
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            className="w-full border-0 bg-transparent px-3.5 py-3 text-sm text-ink focus:outline-none focus:ring-2 focus:ring-action/30"
-          >
-            {COUNTRIES.map((c) => (
-              <option key={c.code} value={c.code}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-          <input
-            type="text"
-            required
-            placeholder="Postal code"
-            value={postalCode}
-            onChange={(e) => setPostalCode(e.target.value)}
-            className="w-full border-0 border-t border-border bg-transparent px-3.5 py-3 text-sm text-ink placeholder:text-placeholder focus:outline-none focus:ring-2 focus:ring-action/30"
-          />
-        </div>
+        <select
+          id="country"
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+          className={inputClass}
+        >
+          {COUNTRIES.map((c) => (
+            <option key={c.code} value={c.code}>
+              {c.name}
+            </option>
+          ))}
+        </select>
       </div>
 
-      <div className="flex items-center justify-between rounded-xl border border-border bg-white px-4 py-3.5 text-sm">
-        <div>
-          <p className="font-medium text-ink">{planName} · billed monthly</p>
-          <p className="text-xs text-muted">Next charge {nextChargeLabel}</p>
-        </div>
-        <p className="font-heading font-bold text-ink">${price.toFixed(2)}</p>
-      </div>
-
-      <div className="text-sm">
-        {!couponOpen ? (
-          <button
-            type="button"
-            onClick={() => setCouponOpen(true)}
-            className="text-action underline underline-offset-2"
-          >
-            Have a coupon? Add code
-          </button>
-        ) : (
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={couponInput}
-              onChange={(e) => setCouponInput(e.target.value)}
-              placeholder="Coupon code"
-              className="flex-1 rounded-xl border border-border bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-placeholder focus:outline-none focus:ring-2 focus:ring-action/30"
-            />
-            <button
-              type="button"
-              onClick={() => setCouponCode(couponInput.trim())}
-              className="rounded-xl border border-border px-4 text-sm font-medium text-ink hover:bg-border/30"
-            >
-              Apply
-            </button>
+      {/* What they pay and when */}
+      <div className="divide-y divide-border rounded-xl border border-border bg-white text-sm">
+        <div className="flex items-center justify-between px-4 py-3.5">
+          <div>
+            <p className="font-semibold text-ink">Due today</p>
+            <p className="text-xs text-muted">
+              {trialDays}-day free trial of {planName}
+            </p>
           </div>
-        )}
-        {couponCode && (
-          <p className="mt-1 text-xs text-muted">
-            Coupon &ldquo;{couponCode}&rdquo; noted — not yet applied to price.
+          <p className="font-heading text-lg font-bold text-ink">$0.00</p>
+        </div>
+        <div className="flex items-center justify-between px-4 py-3.5">
+          <div>
+            <p className="font-medium text-ink">Then {planName}, monthly</p>
+            <p className="text-xs text-muted">
+              First charge {firstChargeLabel} unless you cancel before
+            </p>
+          </div>
+          <p className="font-medium text-ink">
+            ${price.toFixed(2)}
+            <span className="text-xs font-normal text-muted">/mo</span>
           </p>
-        )}
+        </div>
       </div>
 
       {error && (
@@ -192,13 +186,14 @@ export default function PaymentForm({
 
       {!formValid && (
         <p className="text-center text-xs text-muted">
-          Fill in your name, email, and postal code above to continue.
+          Add your name{knownEmail ? "" : " and email"} above to continue.
         </p>
       )}
 
       <div>
-        <p className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-muted">
-          Secure checkout via PayPal
+        <p className="mb-2 text-xs text-muted">
+          You&apos;ll approve the subscription in a PayPal window. Pay with your
+          PayPal account or a card.
         </p>
         <div
           className={
@@ -230,13 +225,11 @@ export default function PaymentForm({
                       email: form.email,
                       fullName: form.fullName,
                       country: form.country,
-                      postalCode: form.postalCode,
-                      instagramUsername: username,
-                      couponCode: form.couponCode || undefined,
+                      instagramUsername: username || undefined,
                     },
                   );
 
-                  // Saved to Supabase by the API — keep a copy in Redux too
+                  // Saved to Supabase by the API; keep a copy in Redux too
                   // so the upsell/success pages can read it.
                   dispatch(
                     setPayment({
@@ -249,8 +242,6 @@ export default function PaymentForm({
                       status: "active",
                       fullName: form.fullName,
                       country: form.country,
-                      postalCode: form.postalCode,
-                      couponCode: form.couponCode || undefined,
                     }),
                   );
 
@@ -263,13 +254,13 @@ export default function PaymentForm({
                   router.replace(
                     `/upsell/payment/success?${params.toString()}`,
                   );
-                } catch (err: any) {
-                  console.error(
-                    "create-subscription failed:",
-                    err.response?.data ?? err,
-                  );
+                } catch (err) {
+                  const message = axios.isAxiosError(err)
+                    ? err.response?.data?.message
+                    : undefined;
+                  console.error("create-subscription failed:", err);
                   setError(
-                    err.response?.data?.message ??
+                    message ??
                       "Something went wrong confirming your subscription.",
                   );
                   setSubmitting(false);

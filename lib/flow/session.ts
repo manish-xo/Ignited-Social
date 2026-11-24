@@ -137,7 +137,13 @@ async function verify(token: string): Promise<FlowState | null> {
 // ── request / response helpers ───────────────────────────────────────────
 
 export async function readFlow(req: NextRequest): Promise<FlowState | null> {
-  const token = req.cookies.get(FLOW_COOKIE)?.value;
+  return readFlowToken(req.cookies.get(FLOW_COOKIE)?.value);
+}
+
+/** For server components, which get the cookie value from `cookies()`. */
+export async function readFlowToken(
+  token: string | undefined,
+): Promise<FlowState | null> {
   return token ? verify(token) : null;
 }
 
