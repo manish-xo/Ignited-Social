@@ -26,10 +26,16 @@ export function buildCrowd(niche: Niche): { people: Person[]; kept: Person[] } {
   const index = NICHES.findIndex((n) => n.id === niche.id);
   const other = NICHES[(index + 1) % NICHES.length];
 
+  const nina: Person = { key: "nina", name: "Nina", src: "/audiences/journey-v2/faces/nina.webp", drop: null };
+
   const kept: Person[] = [
     { key: "own", name: niche.person, src: photo(niche.id, "portrait"), drop: null },
-    { key: "jaden", name: "Jaden", src: "/audiences/journey-v2/faces/jaden.webp", drop: null },
-    { key: "mike", name: "Mike", src: "/audiences/journey-v2/faces/mike.webp", drop: null },
+    niche.id === "creators"
+      ? nina
+      : { key: "jaden", name: "Jaden", src: "/audiences/journey-v2/faces/jaden.webp", drop: null },
+    niche.id === "local" || niche.id === "products"
+      ? nina
+      : { key: "mike", name: "Mike", src: "/audiences/journey-v2/faces/mike.webp", drop: null },
     { key: "other", name: other.person, src: photo(other.id, "portrait"), drop: null },
   ];
 

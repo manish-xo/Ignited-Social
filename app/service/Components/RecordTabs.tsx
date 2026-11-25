@@ -25,6 +25,7 @@ interface RecordTab {
     image?: string;
     placeholderTitle: string;
     placeholderText: string;
+    /** Alt text for the image; not shown on the page. */
     caption: string;
   };
   stories: [Story, Story];
@@ -33,7 +34,7 @@ interface RecordTab {
 const TABS: RecordTab[] = [
   {
     label: "Business results",
-    eyebrow: "Business results • First growth",
+    eyebrow: "Business results",
     featured: {
       title: "“I’m already seeing a return.”",
       quote:
@@ -62,7 +63,7 @@ const TABS: RecordTab[] = [
   },
   {
     label: "Follower growth",
-    eyebrow: "Follower growth • 20 days",
+    eyebrow: "Follower growth",
     featured: {
       title: "150 new followers in 20 days.",
       quote:
@@ -91,7 +92,7 @@ const TABS: RecordTab[] = [
   },
   {
     label: "The right audience",
-    eyebrow: "Audience quality • Shared interests",
+    eyebrow: "Audience quality",
     featured: {
       title: "People who care about what to do.",
       quote:
@@ -120,7 +121,7 @@ const TABS: RecordTab[] = [
   },
   {
     label: "Content & reach",
-    eyebrow: "Content & reach • One post",
+    eyebrow: "Content & reach",
     featured: {
       title: "1.2K+ views within an hour.",
       quote:
@@ -150,7 +151,7 @@ const TABS: RecordTab[] = [
   },
   {
     label: "Personal support",
-    eyebrow: "Personal support • Useful feedback",
+    eyebrow: "Personal support",
     featured: {
       title: "“I’m taking notes already.”",
       quote:
@@ -450,9 +451,6 @@ export default function RecordTabs() {
                 </div>
               )}
             </div>
-            <figcaption className="mt-3 text-xs leading-snug text-ink">
-              {tab.proof.caption}
-            </figcaption>
           </figure>
         </div>
 

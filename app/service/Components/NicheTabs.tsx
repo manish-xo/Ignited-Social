@@ -30,7 +30,11 @@ const NICHES: Niche[] = [
     icon: Clapperboard,
     image: "/stock/content-creator.png",
     imagePosition: "30% center",
-    outcomes: ["Engaged followers", "Higher reach per post", "Brand-deal ready"],
+    outcomes: [
+      "Engaged followers",
+      "Higher reach per post",
+      "Brand-deal ready",
+    ],
     description:
       "Grow an audience that actually watches. We reach people who already follow creators like you, and help your content earn the follow.",
     linkLabel: "More about creators",
@@ -56,7 +60,11 @@ const NICHES: Niche[] = [
     icon: Store,
     image: "/stock/small-business.png",
     imagePosition: "45% center",
-    outcomes: ["Local customers", "More bookings & visits", "Neighbourhood reach"],
+    outcomes: [
+      "Local customers",
+      "More bookings & visits",
+      "Neighbourhood reach",
+    ],
     description:
       "Get found by the people nearby. We target your area and the accounts local customers already follow, then help turn profile visits into real visits.",
     linkLabel: "More about local businesses",
@@ -124,9 +132,13 @@ export default function NicheTabs() {
     const last = NICHES.length - 1;
     const next =
       e.key === "ArrowDown" || e.key === "ArrowRight"
-        ? active === last ? 0 : active + 1
+        ? active === last
+          ? 0
+          : active + 1
         : e.key === "ArrowUp" || e.key === "ArrowLeft"
-          ? active === 0 ? last : active - 1
+          ? active === 0
+            ? last
+            : active - 1
           : null;
     if (next === null) return;
     e.preventDefault();

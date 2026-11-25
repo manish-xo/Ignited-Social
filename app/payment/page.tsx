@@ -53,8 +53,8 @@ export default async function PaymentPage({ searchParams }: PaymentPageProps) {
           <p className="mt-3 text-md text-secondary">
             {username ? (
               <>
-                For{" "}
-                <span className="font-semibold text-ink">@{username}</span>.{" "}
+                For <span className="font-semibold text-ink">@{username}</span>
+                .{" "}
               </>
             ) : null}
             Nothing is charged today.

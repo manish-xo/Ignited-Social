@@ -255,9 +255,6 @@ const Hero = () => {
             </div>
           ))}
         </div>
-        <p className="mt-6 text-center text-xs text-muted">
-          The track record of the team behind Ignited.
-        </p>
       </div>
     </section>
   );

@@ -22,9 +22,9 @@ const COLUMNS: { title: string; links: FooterLink[] }[] = [
   {
     title: "Legal & Trust",
     links: [
-      { name: "Privacy Policy", href: "/privacy" },
-      { name: "Terms of Service", href: "/terms" },
-      { name: "Refund Policy", href: "/refund" },
+      { name: "Privacy Policy", href: "/Legal&Trust/Privacy" },
+      { name: "Terms of Service", href: "/Legal&Trust/Terms" },
+      { name: "Refund Policy", href: "/Legal&Trust/Refund" },
     ],
   },
   {
@@ -112,7 +112,11 @@ const Footer = () => {
         <div className="grid grid-cols-2 gap-x-8 gap-y-12 md:grid-cols-12">
           {/* BRAND */}
           <div className="col-span-2 md:col-span-5">
-            <Link href="/" aria-label="Ignited Social home" className="inline-block">
+            <Link
+              href="/"
+              aria-label="Ignited Social home"
+              className="inline-block"
+            >
               <Logo
                 mainLogoTxt="#faf9f6"
                 outerTxt="#221f1b"

@@ -2,7 +2,12 @@
 // kept separate from /audience-journey so the two can change independently. Every person and account
 // shown inside the phone is an illustrative example, not a real Instagram user.
 
-export type NicheId = "creatives" | "coaches" | "local" | "creators" | "products";
+export type NicheId =
+  | "creatives"
+  | "coaches"
+  | "local"
+  | "creators"
+  | "products";
 
 export interface Niche {
   id: NicheId;
@@ -30,11 +35,11 @@ export const NICHES: Niche[] = [
     id: "creatives",
     label: "Artists & creatives",
     headline: "Build an audience around what you make.",
-    body: "Your style and subject matter give us a starting point. We look at artists, publications and communities with related audiences, then help more of those people discover your work.",
+    body: "Your style and artistic vision give us a starting point. We look at artists, publications and communities with related audiences, then help more of those people discover your work.",
     bullets: [
-      "Reach people drawn to your subject matter",
+      "Reach people drawn to your creative universe",
       "Put your work in front of new people",
-      "Keep your time for creating",
+      "Protect your time to create",
     ],
     example: "For a landscape photographer",
     search: "landscape photography",
@@ -55,7 +60,7 @@ export const NICHES: Niche[] = [
     id: "coaches",
     label: "Coaches & educators",
     headline: "Reach more people who want to learn what you teach.",
-    body: "The people you help have questions, goals and interests in common. We look at the topics and educators they already follow to find a starting point for your outreach.",
+    body: "The people you help have questions, goals and interests in common. We look at the topics and educators they already follow starting point for your outreach.",
     bullets: [
       "Reach people interested in what you teach",
       "Shape the outreach around who you help",
@@ -86,7 +91,11 @@ export const NICHES: Niche[] = [
     search: "hair colour denver",
     interests: ["Hair colour", "Styling", "Local beauty services"],
     place: "Denver & nearby",
-    accounts: ["Local salons", "Denver lifestyle accounts", "Local beauty creators"],
+    accounts: [
+      "Local salons",
+      "Denver lifestyle accounts",
+      "Local beauty creators",
+    ],
     person: "Maya",
     personPlace: "Denver",
     handle: "yoursalon",
@@ -101,7 +110,7 @@ export const NICHES: Niche[] = [
     bullets: [
       "Reach people interested in your topics",
       "Help new people discover your perspective",
-      "Keep your time for making content",
+      "Protect your time for creating content",
     ],
     example: "For a high-protein recipe creator",
     search: "high protein recipes",
