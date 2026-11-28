@@ -29,7 +29,7 @@ export const RESULTS: Record<NicheId, CustomerResult[]> = {
       before: "8,848",
       after: "14.9K",
       quote:
-        "Reaching 10,000 followers meant a lot. Esha understood that I can’t always get out and shoot, and helped me plan around it.",
+        "Reaching 10,000 followers meant a lot. Rahul understood that I can’t always get out and shoot, and helped me plan around it.",
     },
     {
       handle: "james_bosley_studio",

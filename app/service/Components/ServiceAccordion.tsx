@@ -46,7 +46,7 @@ const ITEMS: ServiceItem[] = [
     title: "We help the right people discover you.",
     description:
       "We find people who are most likely to care about your work. Handle the daily outreach. And this directly brings new interested people to your profile.",
-    toggleLabel: "How we find your audience +",
+    toggleLabel: "How we find your audience",
     answer: (
       <>
         <p>
@@ -58,7 +58,7 @@ const ITEMS: ServiceItem[] = [
           items={[
             "Target by location, language, gender and relevant accounts.",
             "Set exclusions for people you don't want us to approach.",
-            "Improve your profile so more visitors have a reason to follow.",
+            // "Improve your profile so more visitors have a reason to follow.",
           ]}
         />
       </>
@@ -69,7 +69,7 @@ const ITEMS: ServiceItem[] = [
     title: "We help you create content that earns their trust.",
     description:
       "Every niche, every audience is different. We study & share practical suggestions for what to say, how to present it and what to try next. Our advice fits the time and resources you have.",
-    toggleLabel: "See what the content help includes +",
+    toggleLabel: "See what the content help includes",
     answer: (
       <>
         <p>
@@ -77,10 +77,10 @@ const ITEMS: ServiceItem[] = [
           <strong>Scale</strong> adds weekly reviews and deeper strategy on top.
         </p>
         <p className="mt-3">
-          We study your niche, what your audience watches. Then look at your
+          We study your niche and what your audience watches. Then look at your
           posts and what the analytics tell us. Only after that we go to the
           drawing board to brainstorm topics, hooks, formats and a mix of posts
-          that will
+          that will help you:
         </p>
         <Points
           items={[
@@ -93,7 +93,10 @@ const ITEMS: ServiceItem[] = [
 
         <Note>
           You stay in charge, of course. And you continue to create and publish.
-          (Scriptwriting & Editing services – Coming Soon.)
+          {/* its own line, under the sentence above */}
+          <span className="block">
+            (Scriptwriting & Editing services – Coming Soon.)
+          </span>
         </Note>
       </>
     ),
@@ -103,7 +106,7 @@ const ITEMS: ServiceItem[] = [
     title: "We help you enhance your follower→customer journey.",
     description:
       "To make it easier for interested followers to enquire, book or buy. We review your offer, landing page & conversion sequence. All the steps someone takes from visiting your profile to becoming your customer. And help you decide what to change.",
-    toggleLabel: "What we look at +",
+    toggleLabel: "What we look at",
     answer: (
       <>
         <p>
@@ -113,7 +116,7 @@ const ITEMS: ServiceItem[] = [
         </p>
         <p className="mt-3">
           Your manager looks for places where interested people could get stuck,
-          then recommends changes—such as explaining your offer more clearly or
+          then recommends changes such as explaining your offer more clearly or
           making your booking link easier to find.
         </p>
         <Note>
@@ -163,22 +166,20 @@ export default function ServiceAccordion() {
               aria-expanded={isOpen}
               aria-controls={panelId}
               onClick={() => setOpen(isOpen ? null : i)}
-              className={`group mt-4 inline-flex items-center gap-2 rounded-full border py-1.5 pl-2 pr-3.5 text-xs font-semibold transition-colors duration-300 ${
-                isOpen
-                  ? "border-action/30 bg-action-tint-bg text-action"
-                  : "border-border bg-white text-ink hover:border-action/30 hover:text-action"
+              className={`mt-4 inline-flex items-center gap-1.5 rounded-sm text-sm font-semibold transition-colors duration-300 hover:text-action focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-action ${
+                isOpen ? "text-action" : "text-ink"
               }`}
             >
-              <span
-                className={`flex h-5 w-5 items-center justify-center rounded-full transition-all duration-300 ${
-                  isOpen
-                    ? "rotate-90 bg-action text-white"
-                    : "bg-subtle-bg text-ink group-hover:bg-action-tint-bg group-hover:text-action"
-                }`}
-              >
-                <ChevronRight size={12} strokeWidth={2.5} />
+              <span className="underline decoration-1 underline-offset-4">
+                {item.toggleLabel}
               </span>
-              {item.toggleLabel}
+              {/* points down while the panel is open */}
+              <ChevronRight
+                aria-hidden
+                size={16}
+                strokeWidth={2.25}
+                className={`transition-transform duration-300 ${isOpen ? "rotate-90" : ""}`}
+              />
             </button>
 
             <div

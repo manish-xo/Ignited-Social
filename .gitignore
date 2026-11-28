@@ -44,3 +44,11 @@ next-env.d.ts
 
 # video editing tools (installed locally, large)
 /Motion/Tools/
+
+# video files stay on this computer (GitHub rejects files over 100 MB);
+# only each folder's README is committed
+/Motion/Raw/*
+/Motion/References/*
+/Motion/Approved Videos/*
+/Motion/Exports/*
+!/Motion/**/README.md

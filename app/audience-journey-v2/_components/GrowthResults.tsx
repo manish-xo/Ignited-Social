@@ -78,7 +78,7 @@ function Stepper({
   onNext: () => void;
 }) {
   return (
-    <div className="mx-auto mt-9 flex max-w-xl items-center gap-3">
+    <div className="mx-auto mt-14 flex max-w-xl items-center gap-3">
       <button
         type="button"
         onClick={onPrev}
@@ -138,7 +138,7 @@ function Stepper({
 export default function GrowthResults() {
   const [selected, setSelected] = useState(0);
   const { niche, customer } = ACCOUNTS[selected];
-  const { label, percent, rounded, approximate } = growth(customer);
+  const { label, rounded, approximate } = growth(customer);
 
   const total = ACCOUNTS.length;
   const onNext = () => setSelected((i) => (i + 1) % total);
@@ -165,15 +165,6 @@ export default function GrowthResults() {
           A closer look at accounts the team behind Ignited has helped grow.
         </p>
       </header>
-
-      <Stepper
-        niche={niche}
-        customer={customer}
-        index={selected}
-        total={total}
-        onPrev={onPrev}
-        onNext={onNext}
-      />
 
       <div className="mx-auto mt-12 grid max-w-5xl items-center gap-10 lg:grid-cols-[minmax(0,420px)_minmax(0,1fr)] lg:gap-20">
         <div className="mx-auto w-full max-w-[420px]">
@@ -205,10 +196,6 @@ export default function GrowthResults() {
             {label}
           </p>
           <p className="mt-3 text-lg font-semibold text-ink">followers gained</p>
-          <p className="mt-1.5 text-sm text-secondary">
-            From {customer.before} to {customer.after} followers, {percent}%
-            more than before.
-          </p>
 
           <figure className="mt-8 border-t border-border pt-7">
             <blockquote className="text-pretty text-lg leading-relaxed -tracking-[0.01em] text-ink md:text-xl">
@@ -239,6 +226,16 @@ export default function GrowthResults() {
           )}
         </div>
       </div>
+
+      {/* Account picker sits under the story, as the way to the next one. */}
+      <Stepper
+        niche={niche}
+        customer={customer}
+        index={selected}
+        total={total}
+        onPrev={onPrev}
+        onNext={onNext}
+      />
     </div>
   );
 }

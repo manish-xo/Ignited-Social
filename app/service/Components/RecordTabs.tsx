@@ -50,13 +50,13 @@ const TABS: RecordTab[] = [
       {
         title: "New clients",
         quote:
-          "I’ve got clients from the Instagram growth. Thank you! I hope we can keep working together.",
+          "I’ve got two clients from the Instagram outreach. Thank you! I hope we can keep working together.",
         date: "7 September 2024",
       },
       {
         title: "More website traffic",
         quote:
-          "Our following has grown dramatically, we’re getting a lot more traffic to our. You’re doing a great job with account.",
+          "Our following has grown dramatically, we’re getting a lot more traffic to our website. You’re doing a great job with my account.",
         date: "13 January 2025",
       },
     ],
@@ -65,9 +65,9 @@ const TABS: RecordTab[] = [
     label: "Follower growth",
     eyebrow: "Follower growth",
     featured: {
-      title: "150 new followers in 20 days.",
+      title: "350 new followers in 20 days.",
       quote:
-        "In 20 days. I’ve gained 150 new followers. I’m so so happy with my numbers.",
+        "In 20 days. I’ve gained 350 new followers. I’m so so happy with my numbers.",
       date: "14 June 2024",
     },
     proof: {
@@ -77,9 +77,9 @@ const TABS: RecordTab[] = [
     },
     stories: [
       {
-        title: "From 7 to nearly 200",
+        title: "From 7 to nearly 2000",
         quote:
-          "You took my account from 7 followers to nearly 200. I’m very happy with the results so far. The hardest part is getting that first following.",
+          "You took my account from 7 followers to nearly 2000. I’m very happy with the results so far. The hardest part is getting that first following.",
         date: "12 January 2024",
       },
       {
@@ -94,7 +94,7 @@ const TABS: RecordTab[] = [
     label: "The right audience",
     eyebrow: "Audience quality",
     featured: {
-      title: "People who care about what to do.",
+      title: "People who care about what you do.",
       quote:
         "I’d much rather have followers who care about hosting, entertaining and home decor. You’re doing a good job of finding the right people, and I really appreciate it.",
       date: "11 April 2026",
@@ -155,7 +155,7 @@ const TABS: RecordTab[] = [
     featured: {
       title: "“I’m taking notes already.”",
       quote:
-        "Thanks you for taking such a deep look at my work. You’ve spotted what’s working and what could be better. I’m taking notes already. I’m very happy working with you.",
+        "Thank you for taking such a deep look at my work. You’ve spotted what’s working and what could be better. I’m taking notes already. I’m very happy working with you.",
       date: "8 September 2023",
     },
     proof: {
